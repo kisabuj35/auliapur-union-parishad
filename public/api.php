@@ -9,12 +9,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 // 🟢 TiDB Cloud ডাটাবেস কানেকশন
-$host = getenv('DB_HOST') ?: 'gateway01.ap-southeast-1.prod.aws.tidbcloud.com';
-$port = getenv('DB_PORT') ?: '4000';
-$db   = getenv('DB_DATABASE') ?: 'test';
-$user = getenv('DB_USERNAME') ?: 'GPq6zIukdIBtnU1.root';
-$pass = getenv('DB_PASSWORD') ?: '';
-
+$host = 'gateway01.ap-southeast-1.prod.aws.tidbcloud.com';
+$port = '4000';
+$db   = 'test';
+$user = 'GPq6ziukdiBtnU1.root'; 
+$pass = 'GvhCfDZtnVJL3noh';
 try {
     $pdo = new PDO("mysql:host=$host;port=$port;dbname=$db;charset=utf8mb4", $user, $pass, [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
