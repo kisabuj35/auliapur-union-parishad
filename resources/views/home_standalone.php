@@ -438,14 +438,44 @@
   </div>
 
   <!-- 🟢 ৫. মডিউল লোডার কন্টেইনার -->
+  <!-- 🟢 ৫. সকল মডিউল সরাসরি লোড -->
   <div id="mainContent">
-    <div id="module-Home"></div>
-    <div id="module-Citizen"></div>
-    <div id="module-TradeLicense"></div>
-    <div id="module-FamilyWarishan"></div>
-    <div id="module-Warishan"></div>
-    <div id="module-GeneralCertificate"></div>
-    <div id="module-AdminPanel"></div>
+    
+    <!-- 🏠 হোম পেজ মডিউল -->
+    <div id="module-Home">
+      <?php include __DIR__ . '/Home.html'; ?>
+    </div>
+
+    <!-- 🆔 নাগরিকত্ব সনদ মডিউল -->
+    <div id="module-Citizen">
+      <?php include __DIR__ . '/Citizen.html'; ?>
+    </div>
+
+    <!-- 💼 ট্রেড লাইসেন্স মডিউল -->
+    <div id="module-TradeLicense">
+      <?php include __DIR__ . '/TradeLicense.html'; ?>
+    </div>
+
+    <!-- 👨‍👩‍👦 পারিবারিক ও উত্তরাধিকারী সনদ মডিউল -->
+    <div id="module-FamilyWarishan">
+      <?php include __DIR__ . '/Family_Warishan.html'; ?>
+    </div>
+
+    <!-- 📜 ওয়ারিশান সনদ মডিউল -->
+    <div id="module-Warishan">
+      <?php include __DIR__ . '/Warishan.html'; ?>
+    </div>
+
+    <!-- 📝 সাধারণ প্রত্যয়নপত্র মডিউল -->
+    <div id="module-GeneralCertificate">
+      <?php include __DIR__ . '/General_Certificate.html'; ?>
+    </div>
+
+    <!-- ⚙️ এডমিন প্যানেল মডিউল -->
+    <div id="module-AdminPanel">
+      <?php include __DIR__ . '/Admin_Panel.html'; ?>
+    </div>
+
   </div>
 
   <!-- 🟢 নতুন: যোগাযোগ ও গুগল ম্যাপ সেকশন (CONTACT US SECTION) -->
