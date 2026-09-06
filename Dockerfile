@@ -1,25 +1,23 @@
-# অফিসিয়াল প্রি-কনফিগার্ড ফুল PHP + Nginx এনভায়রনমেন্ট
-FROM richarvey/nginx-php-fpm:latest
+FROM php:8.2-cli-alpine
 
-# মেমোরি লিমিট বাড়ানো
-ENV PHP_MEM_LIMIT=512M
-ENV RUN_SCRIPTS=1
-ENV REAL_IP_HEADER=1
+# প্রয়োজনীয় ডাটাবেজ ও সিস্টেম টুলস
+RUN apk add --no-cache mysql-client git zip unzip curl libpng-dev libzip-dev oniguruma-dev \
+    && docker-php-ext-install pdo pdo_mysql mbstring gd zip bcmath
 
-WORKDIR /var/www/html
+# Composer ইনস্টল
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+ENV COMPOSER_ALLOW_SUPERUSER=1
 
-# আমাদের প্রজেক্ট কপি করা
-COPY . /var/www/html
+WORKDIR /var/www
 
-# লারাভেলের প্রয়োজনীয় রুট ও ক্যাশ ডিরেক্টরি সেটআপ
-RUN mkdir -p /var/www/html/storage/framework/cache \
-    && mkdir -p /var/www/html/storage/framework/sessions \
-    && mkdir -p /var/www/html/storage/framework/views \
-    && mkdir -p /var/www/html/bootstrap/cache \
-    && chown -R nginx:nginx /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+# প্রজেক্ট কপি
+COPY . /var/www
 
-# Nginx ওয়েব রুট সেট করা (লারাভেলের public ফোল্ডার)
-ENV WEBROOT=/var/www/html/public
+# ক্যাশ ও স্টোরেজ তৈরি
+RUN mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views bootstrap/cache \
+    && chmod -R 777 storage bootstrap/cache
 
-EXPOSE 80
+EXPOSE 10000
+
+# বিল্ট-ইন পিএইচপি সার্ভার দিয়ে সরাসরি রেন্ডার পোর্টে চালানো (যা কখনো ক্র্যাশ করবে না)
+CMD php -S 0.0.0.0:${PORT:-10000} -t public
