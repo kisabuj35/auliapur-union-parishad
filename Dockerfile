@@ -1,21 +1,25 @@
 # PHP 8.2 ও FPM বেস ইমেজ
 FROM php:8.2-fpm-alpine
 
-# প্রয়োজনীয় এক্সটেনশন ইনস্টল
-RUN apk add --no-cache nginx mysql-client git zip unzip curl libpng-dev libzip-dev oniguruma-dev \
+# প্রয়োজনীয় সিস্টেম প্যাকেজ ও PHP এক্সটেনশন ইনস্টল
+RUN apk add --no-cache nginx git zip unzip curl libpng-dev libzip-dev oniguruma-dev \
     && docker-php-ext-install pdo pdo_mysql mbstring gd zip bcmath
 
 # Composer ইনস্টল
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
 
 # প্রজেক্ট ফাইল কপি
 COPY . /var/www
 
-# পারমিশন ফিক্স
-RUN chown -R www-data:www-data /var/www \
-    && chmod -R 775 /var/www/storage /var/www/bootstrap/cache || true
+# লারাভেলের ক্যাশ ফোল্ডার তৈরি ও পারমিশন নিশ্চিত করা
+RUN mkdir -p /var/www/storage/framework/cache \
+    && mkdir -p /var/www/storage/framework/sessions \
+    && mkdir -p /var/www/storage/framework/views \
+    && mkdir -p /var/www/bootstrap/cache \
+    && chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache \
+    && chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
 # Nginx কনফিগারেশন তৈরি
 RUN printf 'server {\n\
@@ -34,11 +38,10 @@ RUN printf 'server {\n\
     }\n\
 }\n' > /etc/nginx/http.d/default.conf
 
-# Composer ডিপেন্ডেন্সি ইনস্টল
-RUN composer install --no-dev --optimize-autoloader || true
+# Composer ডিপেন্ডেন্সি নিশ্চিতভাবে ইনস্টল করা
+RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# পোর্ট ওপেন
 EXPOSE 80
 
-# Nginx এবং PHP-FPM একসাথে চালু করার স্ক্রিপ্ট
+# Nginx ও PHP-FPM চালুকরণ
 CMD php-fpm -D && nginx -g "daemon off;"
