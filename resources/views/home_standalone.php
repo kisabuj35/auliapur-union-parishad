@@ -646,7 +646,7 @@
 
   <!-- 🟢 ৭. মাস্টার এপিআই ও মডিউল স্ক্রিপ্ট ব্রিজ -->
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxyoOe2wWpX3SXHsO8ePFjWS7rQ9tG4HPretpWfu7cmfJ6G1paTbUoEKiRBoTKejM19JA/exec";
+    const SCRIPT_URL = "/api.php";
 
     document.getElementById('currentYear').innerText = new Date().getFullYear();
 
