@@ -1,23 +1,25 @@
 FROM php:8.2-fpm-alpine
 
-# প্রয়োজনীয় সিস্টেম প্যাকেজ ও পিএইচপি এক্সটেনশন ইনস্টল
+# সিস্টেমের প্রয়োজনীয় প্যাকেজ ও PHP এক্সটেনশন
 RUN apk add --no-cache nginx git zip unzip curl libpng-dev libzip-dev oniguruma-dev \
     && docker-php-ext-install pdo pdo_mysql mbstring gd zip bcmath
 
-# Composer ইনস্টল
+# Composer গ্লোবালি আনা
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
 WORKDIR /var/www
 
-# সম্পূর্ণ ফাইল কপি
+# ১. সরাসরি অফিসিয়াল ফ্রেশ লারাভেল ফ্রেমওয়ার্ক ইনস্টল করা
+RUN composer create-project --prefer-dist laravel/laravel:^10.0 /var/www/temp_app \
+    && cp -r /var/www/temp_app/vendor /var/www/ \
+    && cp -r /var/www/temp_app/bootstrap /var/www/ \
+    && rm -rf /var/www/temp_app
+
+# ২. আমাদের নিজস্ব কোড ফাইলগুলো কপি করা
 COPY . /var/www
 
-# নিশ্চিতভাবে কম্পোজার প্যাকেজ ইনস্টল করা (কোনো স্কিপ ছাড়া)
-RUN composer update --no-dev --optimize-autoloader --no-interaction
-
-# ফোল্ডার পারমিশন ঠিক করা
+# ৩. ফোল্ডার পারমিশন ঠিক করা
 RUN mkdir -p /var/www/storage/framework/cache \
     && mkdir -p /var/www/storage/framework/sessions \
     && mkdir -p /var/www/storage/framework/views \
@@ -25,7 +27,7 @@ RUN mkdir -p /var/www/storage/framework/cache \
     && chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache \
     && chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
-# Nginx কনফিগারেশন
+# ৪. Nginx কনফিগারেশন
 RUN printf 'server {\n\
     listen 80;\n\
     server_name _;\n\
