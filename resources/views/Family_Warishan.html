@@ -1,0 +1,689 @@
+<!-- ======================================================= -->
+<!-- 11NO AULIAPUR UP - FAMILY & SUCCESSION MODULE           -->
+<!-- File: Family_Warishan.html (Dedicated Family Module)    -->
+<!-- ======================================================= -->
+
+<style>
+  .family-cert-container {
+    border: 3px double #7c3aed !important;
+    outline: 1px solid #f59e0b;
+    outline-offset: -7px;
+    min-height: 295mm;
+    padding: 12mm 15mm 10mm;
+    font-family: 'Nikosh', sans-serif !important;
+  }
+  .family-cert-container::before { content: ""; position: absolute; inset: 4mm; border: 1px solid rgba(124,58,237,.35); pointer-events: none; z-index: 3; }
+  .cert-watermark-bg { width: 500px !important; max-width: 88%; opacity: .09 !important; }
+  .family-cert-container .cert-main-content, .family-cert-container .cert-main-content * { font-family: 'Nikosh', sans-serif !important; }
+  .family-cert-container img[alt="UP Logo"] { width: 82px !important; height: 82px !important; }
+  .family-cert-footer { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 8mm; padding: 3mm 2mm 0; border-top: 1.5px solid #7c3aed; color: #4c1d95; font-size: 13px; font-weight: bold; text-align: center; }
+  .family-cert-footer > * { flex: 1; }
+  .family-cert-container .ribbon-center-box { background: linear-gradient(180deg, #2563eb 0%, #1e3a8a 100%) !important; background-color: #2563eb !important; color: #ffffff !important; border: 2px solid #ffffff !important; outline: 2px solid #1d4ed8 !important; box-shadow: 0 3px 0 #991b1b !important; }
+  .family-cert-container .ribbon-wing-left, .family-cert-container .ribbon-wing-right { background: #991b1b !important; }
+  .family-cert-container .family-cert-footer { justify-content: center; border-top-color: #b91c1c !important; color: #1e3a8a !important; white-space: nowrap; }
+  .family-cert-container { border-color: #b91c1c !important; outline-color: #dc2626 !important; }
+  .family-cert-container .ribbon-center-box { background: linear-gradient(180deg, #2563eb, #1e3a8a) !important; outline-color: #1d4ed8 !important; }
+  .family-cert-container .ribbon-wing-left, .family-cert-container .ribbon-wing-right { background-color: #991b1b !important; }
+  .family-cert-footer { border-top-color: #b91c1c; color: #1e3a8a; white-space: nowrap; }
+  .ribbon-wrapper-12 { position: relative; display: inline-block; margin: 8px 0 12px 0; }
+  .ribbon-center-box {
+    position: relative;
+    background-color: #3b71ca !important;
+    color: #ffffff !important;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 6px 36px;
+    border: 2px solid #ffffff !important;
+    outline: 2px solid #3b71ca !important;
+    box-shadow: 0 0 0 1px #2a5298;
+    z-index: 2;
+    display: inline-block;
+    letter-spacing: 1px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .ribbon-wing-left {
+    position: absolute; top: 6px; left: -22px; width: 32px; height: 100%;
+    background-color: #2a5298 !important; clip-path: polygon(100% 0, 0 50%, 100% 100%); z-index: 1;
+    -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;
+  }
+  .ribbon-wing-right {
+    position: absolute; top: 6px; right: -22px; width: 32px; height: 100%;
+    background-color: #2a5298 !important; clip-path: polygon(0 0, 100% 50%, 0 100%); z-index: 1;
+    -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;
+  }
+
+  .family-cert-container {
+    width: 210mm; min-height: 290mm; margin: 0 auto; background: #ffffff !important;
+    padding: 12mm 15mm; border: 1.5px solid #222222; position: relative; box-sizing: border-box;
+    display: flex; flex-direction: column; justify-content: space-between;
+    font-family: 'Nikosh', 'Kalpurush', 'Tiro Bangla', sans-serif;
+  }
+  .cert-watermark-bg {
+    position: absolute; top: 52%; left: 50%; transform: translate(-50%, -50%);
+    width: 330px !important; opacity: 0.12 !important; pointer-events: none; z-index: 1;
+    -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;
+  }
+  .cert-main-content { position: relative; z-index: 2; }
+  .cert-table-exact { width: 100%; border-collapse: collapse !important; margin: 10px 0; }
+  .cert-table-exact th {
+    background-color: #f8fafc !important; color: #000000 !important; text-align: center;
+    border: 1.5px solid #000000 !important; padding: 6px 4px; font-size: 14px; font-weight: bold;
+    -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;
+  }
+  .cert-table-exact td { border: 1.5px solid #000000 !important; padding: 6px 4px; font-size: 13.5px; color: #000000; }
+  .table-input-clean { border: 1px solid #ced4da; padding: 4px 8px; border-radius: 4px; width: 100%; font-size: 14px; }
+  .family-cert-container { border: 3px double #b91c1c !important; outline: 1px solid #dc2626 !important; outline-offset: -7px !important; min-height: 295mm !important; padding: 12mm 15mm 10mm !important; font-family: 'Nikosh', sans-serif !important; }
+  .family-cert-container .cert-watermark-bg { width: 500px !important; max-width: 88% !important; opacity: .09 !important; }
+  .family-cert-container img[alt="UP Logo"] { width: 82px !important; height: 82px !important; }
+  .family-cert-container .ribbon-center-box { background: linear-gradient(180deg, #2563eb, #1e3a8a) !important; font-size: 23px !important; padding: 7px 42px !important; border-color: #fef3c7 !important; outline: 2px solid #1d4ed8 !important; box-shadow: 0 3px 0 #991b1b !important; }
+  .family-cert-container .ribbon-wing-left, .family-cert-container .ribbon-wing-right { background-color: #991b1b !important; }
+  .family-cert-container, .family-cert-container * { font-family: 'Nikosh', sans-serif !important; }
+  .family-cert-footer { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 8mm; padding: 3mm 2mm 0; border-top: 1.5px solid #7c3aed; color: #4c1d95; font-size: 13px; font-weight: bold; text-align: center; }
+  .family-cert-footer > * { flex: 1; }
+
+  @media (max-width: 767.98px) {
+    .family-cert-container {
+      width: 100%;
+      min-height: auto;
+      padding: 8mm 6mm;
+      font-size: 13px;
+    }
+
+    .family-cert-container .ribbon-center-box {
+      font-size: 16px !important;
+      padding: 6px 18px !important;
+    }
+
+    .cert-table-exact th,
+    .cert-table-exact td {
+      font-size: 11.5px;
+      padding: 4px 2px;
+    }
+
+    .card-header.bg-success {
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      gap: 8px;
+      padding: 12px 14px;
+    }
+  }
+</style>
+
+<!-- ১. পারিবারিক ও উত্তরাধিকারী সনদের মূল আবেদন ফর্ম -->
+<div id="familyWarishanView" class="view-section container my-4 d-none">
+
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-header bg-success text-white py-3 d-flex justify-content-between align-items-center">
+          <h5 class="fw-bold m-0" id="fwFormMainHeading"><i class="fa fa-people-roof me-2"></i> পারিবারিক সনদের আবেদন ফরম</h5>
+          <button class="btn btn-sm btn-light text-success fw-bold" onclick="navToSection('publicHome')"><i class="fa fa-arrow-left me-1"></i> হোম পেজ</button>
+        </div>
+        <div class="card-body p-4">
+          <form id="familyWarishanForm" onsubmit="event.preventDefault(); submitFamilyForm();">
+            <input type="hidden" id="fwServiceType" value="পারিবারিক সনদ">
+
+            <div class="bg-light p-3 border rounded mb-4 text-secondary" style="font-size: 14.5px; line-height: 1.8;">
+              <strong>বরাবর,</strong><br>
+              চেয়ারম্যান<br>
+              ১১নং আউলিয়াপুর ইউনিয়ন পরিষদ কার্যালয়<br>
+              পটুয়াখালী সদর, পটুয়াখালী।<br>
+              <strong>বিষয়: <span id="fwSubjectText" class="text-success fw-bold">পারিবারিক সনদপত্র</span> পাওয়ার জন্য আবেদন।</strong>
+            </div>
+
+            <div id="fwTypeGuidance" class="alert alert-success py-2 mb-4" role="status">
+              পারিবারিক সনদ: জীবিত পরিবারের প্রধানের পরিবারের বর্তমান সদস্যদের তথ্যের জন্য।
+            </div>
+
+            <!-- ১২নং ছবির উত্তরাধিকারী / মৃত ব্যক্তির ফর্ম ফিল্ডস 🟢 -->
+            <div id="fwDeceasedFields" class="row g-3 mb-4 d-none">
+              <div class="col-md-6"><label class="form-label fw-bold">মৃত ব্যক্তির পূর্ণ নাম *</label><input type="text" id="fwDeceasedName" class="form-control" placeholder="যাঁর অবর্তমানে উত্তরাধিকারী সনদ প্রয়োজন"></div>
+              <div class="col-md-6"><label class="form-label fw-bold">মৃত্যুর তারিখ *</label><input type="text" id="fwDeceasedDate" class="form-control" placeholder="দিন-মাস-সাল (যেমন: ১২-০৫-২০২৩)"></div>
+              <div class="col-md-6"><label class="form-label fw-bold">মৃত ব্যক্তির পিতার নাম *</label><input type="text" id="fwDeceasedFather" class="form-control" placeholder="পিতার নাম"></div>
+              <div class="col-md-6"><label class="form-label fw-bold">মৃত ব্যক্তির মাতার নাম *</label><input type="text" id="fwDeceasedMother" class="form-control" placeholder="মাতার নাম"></div>
+              <div class="col-md-4"><label class="form-label fw-bold">মৃত ব্যক্তির সঙ্গে আবেদনকারীর সম্পর্ক *</label><input type="text" id="fwApplicantRelation" class="form-control" placeholder="যেমন: বাবা / স্বামী / ভাই"></div>
+              <div class="col-md-4"><label class="form-label fw-bold">মৃত ব্যক্তির ওয়ার্ড *</label><select id="fwDeceasedWard" class="form-select"><option value="০১">ওয়ার্ড-০১</option><option value="০২">ওয়ার্ড-০২</option><option value="০৩">ওয়ার্ড-০৩</option><option value="০৪">ওয়ার্ড-০৪</option><option value="০৫">ওয়ার্ড-০৫</option><option value="০৬">ওয়ার্ড-০৬</option><option value="০৭">ওয়ার্ড-০৭</option><option value="০৮">ওয়ার্ড-০৮</option><option value="০৯">ওয়ার্ড-০৯</option></select></div>
+              <div class="col-md-4"><label class="form-label fw-bold">মৃত ব্যক্তির গ্রাম *</label><input type="text" id="fwDeceasedVillage" class="form-control" placeholder="গ্রামের নাম"></div>
+              <div class="col-md-4"><label class="form-label fw-bold">মৃত ব্যক্তির ডাকঘর *</label><input type="text" id="fwDeceasedPost" class="form-control" value="বাদুরা হাট"></div>
+              <div class="col-md-4"><label class="form-label fw-bold">মৃত ব্যক্তির ইউনিয়ন *</label><input type="text" id="fwDeceasedUnion" class="form-control" value="১১নং আউলিয়াপুর ইউনিয়ন"></div>
+              <div class="col-md-4"><label class="form-label fw-bold">মৃত ব্যক্তির উপজেলা *</label><input type="text" id="fwDeceasedUpazila" class="form-control" value="পটুয়াখালী সদর"></div>
+              <div class="col-md-4"><label class="form-label fw-bold">মৃত ব্যক্তির জেলা *</label><input type="text" id="fwDeceasedDistrict" class="form-control" value="পটুয়াখালী"></div>
+            </div>
+
+            <h6 class="fw-bold text-success border-bottom pb-2 mb-3"><i class="fa fa-user me-2"></i> ১. আবেদনকারীর ব্যক্তিগত তথ্য</h6>
+            <div class="row g-3 mb-4">
+              <div class="col-md-6"><label class="form-label fw-bold">আবেদনকারীর পূর্ণ নাম *</label><input type="text" id="fwApplicantName" class="form-control" placeholder="জাতীয় পরিচয়পত্র অনুযায়ী" required></div>
+              <div class="col-md-6"><label class="form-label fw-bold">এনআইডি / জন্ম নিবন্ধন নম্বর *</label><input type="text" id="fwApplicantNid" class="form-control" placeholder="১০, ১৩ বা ১৭ ডিজিট" required></div>
+              <div class="col-md-6"><label class="form-label fw-bold">পিতার নাম *</label><input type="text" id="fwFatherName" class="form-control" required></div>
+              <div class="col-md-6"><label class="form-label fw-bold">মাতার নাম *</label><input type="text" id="fwMotherName" class="form-control" required></div>
+              <div class="col-md-4"><label class="form-label fw-bold">মোবাইল নম্বর *</label><input type="tel" id="fwMobile" class="form-control" placeholder="০১XXXXXXXXX" required></div>
+              <div class="col-md-4"><label class="form-label fw-bold">ওয়ার্ড নম্বর *</label><select id="fwWardNo" class="form-select" required><option value="০১">ওয়ার্ড-০১</option><option value="০২">ওয়ার্ড-০২</option><option value="০৩">ওয়ার্ড-০৩</option><option value="০৪">ওয়ার্ড-০৪</option><option value="০৫">ওয়ার্ড-০৫</option><option value="০৬">ওয়ার্ড-০৬</option><option value="০৭">ওয়ার্ড-০৭</option><option value="০৮">ওয়ার্ড-০৮</option><option value="০৯">ওয়ার্ড-০৯</option></select></div>
+              <div class="col-md-4"><label class="form-label fw-bold">গ্রাম/মহল্লা *</label><input type="text" id="fwVillage" class="form-control" required></div>
+              <div class="col-md-6"><label class="form-label fw-bold">ডাকঘর *</label><input type="text" id="fwPostOffice" class="form-control" value="বাদুরা হাট" required></div>
+              <div class="col-md-6"><label class="form-label fw-bold">উপজেলা ও জেলা</label><input type="text" class="form-control" value="পটুয়াখালী সদর, পটুয়াখালী" readonly></div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+              <h6 class="fw-bold text-success m-0"><i class="fa fa-users me-2"></i> ২. পরিবারের সদস্য / উত্তরাধিকারীদের বিবরণ</h6>
+              <button type="button" class="btn btn-sm btn-success fw-bold" onclick="addFwMemberRow()"><i class="fa fa-plus-circle me-1"></i> নতুন সদস্য যোগ করুন</button>
+            </div>
+            
+            <div class="table-responsive mb-4">
+              <table class="table table-bordered align-middle text-center" id="fwMembersTable">
+                <thead class="table-dark">
+                  <tr>
+                    <th style="width: 55px;">ক্রমিক</th>
+                    <th>সদস্যের নাম *</th>
+                    <th>ভোটার আইডি / জন্ম নিবন্ধন নম্বর</th>
+                    <th style="width: 140px;">জন্ম তারিখ</th>
+                    <th style="width: 130px;">সম্পর্ক *</th>
+                    <th style="width: 120px;">মন্তব্য</th>
+                    <th style="width: 50px;">অ্যাকশন</th>
+                  </tr>
+                </thead>
+                <tbody id="fwMembersTbody"></tbody>
+              </table>
+            </div>
+
+            <div class="bg-light p-3 border rounded mb-4">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="fwDeclaration" required checked>
+                <label class="form-check-label fw-bold" for="fwDeclaration">
+                  আমি অঙ্গীকার করিতেছি যে, উপরে বর্ণিত সকল তথ্য সম্পূর্ণ সত্য ও সঠিক।
+                </label>
+              </div>
+            </div>
+
+            <div class="text-end">
+              <button type="button" class="btn btn-secondary me-2" onclick="navToSection('publicHome')">বাতিল</button>
+              <button type="submit" class="btn btn-success px-5 fw-bold" id="fwSubmitBtn"><i class="fa fa-paper-plane me-1"></i> আবেদন দাখিল করুন</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ২. অফিসিয়াল পারিবারিক ও উত্তরাধিকারী সনদ প্রিন্ট মোডাল -->
+<div class="modal fade" id="familyCertPrintModal" tabindex="-1" data-bs-backdrop="static">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-dark text-white no-print">
+        <h5 class="modal-title fw-bold" id="fwModalHeaderTitle"><i class="fa fa-print me-2"></i> অফিসিয়াল সনদ প্রিন্ট প্রিভিউ</h5>
+        <div class="d-flex gap-2">
+          <button class="btn btn-success fw-bold btn-sm px-3" onclick="printExactCertificate()"><i class="fa fa-print me-1"></i> সরাসরি প্রিন্ট করুন</button>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+      </div>
+      <div class="modal-body p-3 bg-secondary bg-opacity-10 overflow-auto">
+        <div class="family-cert-container shadow" id="printableFamilyCert">
+          <img src="https://lh3.googleusercontent.com/d/1_LMOoAtirVZeGxE4sz_CVQtQpInPPQTs" class="cert-watermark-bg" alt="Watermark">
+
+          <div class="cert-main-content">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <div style="width: 75px;"><img src="https://lh3.googleusercontent.com/d/1_LMOoAtirVZeGxE4sz_CVQtQpInPPQTs" alt="UP Logo" width="68" height="68"></div>
+              <div class="text-center flex-grow-1 px-2">
+                <h2 class="fw-bold m-0 text-dark" style="font-size: 26px; font-weight: 800;">১১নং আউলিয়াপুর ইউনিয়ন পরিষদ কার্যালয়</h2>
+                <h5 class="m-0 text-dark fw-bold" style="font-size: 16px; margin-top: 2px;">ডাকঘরঃ আউলিয়াপুর ময়দান, উপজেলা ও জেলাঃ পটুয়াখালী ।</h5>
+              </div>
+              <div style="width: 75px; text-align: right;"><div style="width: 65px; height: 60px; border: 1.5px dashed #444; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; color: #555;">সিল / ছবি</div></div>
+            </div>
+
+            <div style="border-top: 2px solid #000; border-bottom: 1px solid #000; height: 4px; margin: 6px 0 8px 0;"></div>
+
+            <div class="d-flex justify-content-between align-items-center mb-2" style="font-size: 15px; font-weight: bold; color: #000;">
+              <div>স্মারক নং- আ/ইউ/পটুয়া/সদর/<span id="prSmarakYear"></span>/<span id="prAppIdShort"></span></div>
+              <div>তারিখঃ <span id="prIssueDate"></span>ইং</div>
+            </div>
+
+            <div class="text-center my-2">
+              <div class="ribbon-wrapper-12">
+                <div class="ribbon-wing-left"></div>
+                <div class="ribbon-center-box" id="prCertTitle">পারিবারিক সনদপত্র</div>
+                <div class="ribbon-wing-right"></div>
+              </div>
+            </div>
+
+            <!-- পারিবারিক সনদ ন্যারেটিভ -->
+            <div id="prFamilyNarrative" class="my-3 text-justify text-dark" style="font-size: 15.5px; line-height: 2.3; text-indent: 45px; font-weight: 500;">
+              এই মর্মে পারিবারিক সনদ পত্র প্রদান করা যাইতেছে যে, <strong id="prName"></strong>, পিতা- <strong id="prFather"></strong>, মাতা- <strong id="prMother"></strong>, গ্রাম- <strong id="prVillage"></strong>, ডাকঘর- <strong id="prPost"></strong>, উপজেলা- <strong>পটুয়াখালী সদর</strong>, জেলা- <strong>পটুয়াখালী</strong>। আমি তার পরিবারকে ব্যক্তিগতভাবে চিনি ও জানি। আমার জানা মতে তাহারা বাংলাদেশের নাগরিক এবং পরিবারের সকলের মধ্যে সুসম্পর্ক বিদ্যমান। তাদের পরিবারের সকল সদস্যদের নাম নিম্নে দেওয়া হলোঃ-
+            </div>
+            
+            <!-- উত্তরাধিকারী সনদ ন্যারেটিভ 🟢 -->
+            <div id="prSuccessionNarrative" class="my-3 text-justify text-dark d-none" style="font-size: 15.5px; line-height: 2.3; text-indent: 45px; font-weight: 500;">
+              এই মর্মে উত্তরাধিকারী সনদপত্র প্রদান করা যাইতেছে যে, <strong id="prDeceasedName"></strong>, পিতা- <strong id="prDeceasedFather"></strong>, মাতা- <strong id="prDeceasedMother"></strong>, ওয়ার্ড-<strong id="prDeceasedWard"></strong>, গ্রাম- <strong id="prDeceasedVillage"></strong>, ডাকঘর- <strong id="prDeceasedPost"></strong>, ইউনিয়ন- <strong id="prDeceasedUnion"></strong>, উপজেলা- <strong id="prDeceasedUpazila"></strong>, জেলা- <strong id="prDeceasedDistrict"></strong> তিনি গত <strong id="prDeceasedDate"></strong> তারিখে মৃত্যুবরণ করেন। আমি তাকে ব্যক্তিগতভাবে চিনিতাম ও জানিতাম। আমার জানামতে তাহার অবর্তমানে তিনি নিম্নলিখিত ব্যক্তিবর্গকে বৈধ উত্তরাধিকারী হিসেবে রেখে যান।
+            </div>
+
+            <div class="my-2">
+              <table class="cert-table-exact text-center">
+                <thead>
+                  <tr>
+                    <th style="width: 55px;">ক্রমিক</th>
+                    <th>পরিবারের সদস্য / উত্তরাধিকারীর নাম</th>
+                    <th>ভোটার আইডি / জন্ম নিবন্ধন নম্বর</th>
+                    <th style="width: 125px;">জন্ম তারিখ</th>
+                    <th style="width: 100px;">সম্পর্ক</th>
+                    <th style="width: 95px;">স্বাক্ষর</th>
+                  </tr>
+                </thead>
+                <tbody id="prMembersTbody"></tbody>
+              </table>
+            </div>
+
+            <p class="mt-3 mb-2 text-dark" style="font-size: 14.5px; font-weight: bold;">
+              আমার জানা মতে উপরোক্ত সদস্য/সদস্যগণ ব্যতিত <strong id="prApplicantFooterName"></strong> এর পরিবারে আর কোন সদস্য/উত্তরাধিকারী নেই।
+            </p>
+
+            <p class="mt-3 mb-2 text-dark" style="font-size: 14px; font-weight: bold; text-decoration: underline;">
+              সংশ্লিষ্ট গ্রাম পুলিশ ও ওয়ার্ড মেম্বার এর প্রত্যয়ন মতে
+            </p>
+          </div>
+
+          <div class="cert-main-content pt-3">
+            <div class="d-flex justify-content-between align-items-end text-center text-dark" style="font-size: 14px; font-weight: bold;">
+              <div><div style="height: 40px;"></div><div class="border-top border-dark pt-1 px-2">গ্রাম পুলিশ<br><small class="fw-normal">আউলিয়াপুর ইউনিয়ন পরিষদ</small></div></div>
+              <div><div style="height: 40px;"></div><div class="border-top border-dark pt-1 px-2">ইউপি সদস্য<br><small class="fw-normal">আউলিয়াপুর ইউনিয়ন পরিষদ</small></div></div>
+              <div><div style="height: 40px;"></div><div class="border-top border-dark pt-1 px-2"><span id="prChairName">(অ্যাড. মোঃ হুমায়ুন কবির)</span><br><span id="prSignRole">চেয়ারম্যান</span><br><small class="fw-normal">আউলিয়াপুর ইউনিয়ন পরিষদ</small></div></div>
+            </div>
+            <div class="family-cert-footer"><span>তথ্য যাচাই করতে ভিজিট করুন: www.aup.auliapur.com</span></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<iframe id="secretFamilyPrintFrame" style="display:none; width:0; height:0; border:0;"></iframe>
+
+<!-- ৩. পারিবারিক / উত্তরাধিকারী আবেদন সংশোধন এডিট মোডাল 🟢 -->
+<div class="modal fade" id="familyEditModal" tabindex="-1" data-bs-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered"><div class="modal-content">
+    <div class="modal-header bg-success text-white"><h5 class="modal-title fw-bold">পারিবারিক / উত্তরাধিকারী আবেদন সংশোধন</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+    <div class="modal-body"><form id="familyEditForm" onsubmit="event.preventDefault(); saveEditedFamilyData();">
+      <input type="hidden" id="editFwAppId">
+      <div class="row g-3">
+        <div class="col-md-6"><label class="form-label fw-bold">আবেদনের ধরন</label><select id="editFwType" class="form-select"><option value="পারিবারিক সনদ">পারিবারিক সনদ</option><option value="উত্তরাধিকারী সনদ">উত্তরাধিকারী সনদ</option></select></div>
+        <div class="col-md-6"><label class="form-label fw-bold">আবেদনকারীর নাম</label><input id="editFwName" class="form-control" required></div>
+        <div class="col-md-6"><label class="form-label fw-bold">এনআইডি / জন্ম নিবন্ধন</label><input id="editFwNid" class="form-control"></div>
+        <div class="col-md-6"><label class="form-label fw-bold">পিতার নাম</label><input id="editFwFather" class="form-control"></div>
+        <div class="col-md-6"><label class="form-label fw-bold">মাতার নাম</label><input id="editFwMother" class="form-control"></div>
+        <div class="col-md-6"><label class="form-label fw-bold">মোবাইল</label><input id="editFwMobile" class="form-control"></div>
+        <div class="col-md-4"><label class="form-label fw-bold">ওয়ার্ড</label><input id="editFwWard" class="form-control"></div>
+        <div class="col-md-4"><label class="form-label fw-bold">গ্রাম/মহল্লা</label><input id="editFwVillage" class="form-control"></div>
+        <div class="col-md-4"><label class="form-label fw-bold">ডাকঘর</label><input id="editFwPost" class="form-control"></div>
+        
+        <!-- মৃত ব্যক্তির ফিল্ডস -->
+        <div class="col-md-8"><label class="form-label fw-bold">মৃত ব্যক্তির নাম (উত্তরাধিকারী হলে)</label><input id="editFwDeceasedName" class="form-control"></div>
+        <div class="col-md-4"><label class="form-label fw-bold">মৃত্যুর তারিখ</label><input id="editFwDeceasedDate" class="form-control"></div>
+        <div class="col-md-6"><label class="form-label fw-bold">মৃত ব্যক্তির পিতার নাম</label><input id="editFwDeceasedFather" class="form-control"></div>
+        <div class="col-md-6"><label class="form-label fw-bold">মৃত ব্যক্তির মাতার নাম</label><input id="editFwDeceasedMother" class="form-control"></div>
+        <div class="col-md-4"><label class="form-label fw-bold">আবেদনকারীর সঙ্গে সম্পর্ক</label><input id="editFwApplicantRelation" class="form-control"></div>
+        <div class="col-md-4"><label class="form-label fw-bold">মৃত ব্যক্তির ওয়ার্ড</label><input id="editFwDeceasedWard" class="form-control"></div>
+        <div class="col-md-4"><label class="form-label fw-bold">মৃত ব্যক্তির গ্রাম</label><input id="editFwDeceasedVillage" class="form-control"></div>
+        <div class="col-md-4"><label class="form-label fw-bold">মৃত ব্যক্তির ডাকঘর</label><input id="editFwDeceasedPost" class="form-control"></div>
+        <div class="col-md-4"><label class="form-label fw-bold">মৃত ব্যক্তির ইউনিয়ন</label><input id="editFwDeceasedUnion" class="form-control"></div>
+        <div class="col-md-4"><label class="form-label fw-bold">মৃত ব্যক্তির উপজেলা</label><input id="editFwDeceasedUpazila" class="form-control"></div>
+        <div class="col-md-12"><label class="form-label fw-bold">মৃত ব্যক্তির জেলা</label><input id="editFwDeceasedDistrict" class="form-control"></div>
+      </div>
+      <div class="table-responsive mt-4"><table class="table table-bordered align-middle text-center"><thead class="table-dark"><tr><th>ক্রমিক</th><th>সদস্যের নাম</th><th>ভোটার আইডি / জন্ম নিবন্ধন</th><th>জন্ম তারিখ</th><th>সম্পর্ক</th><th>মন্তব্য</th></tr></thead><tbody id="editFwMembersTbody"></tbody></table></div>
+      <div class="text-end mt-4"><button type="submit" class="btn btn-success px-4" id="saveEditFwBtn">সংরক্ষণ করুন</button></div>
+    </form></div>
+  </div></div>
+</div>
+
+<script>
+  function toBnDigit(n) {
+    if(n === null || n === undefined || n === '') return '';
+    var bn = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+    return (n + '').replace(/\d/g, function(d){ return bn[d]; });
+  }
+
+  function getCurrentBanglaYear() {
+    return toBnDigit(new Date().getFullYear());
+  }
+
+  function getBanglaMemoNumber(appId) {
+    var matches = String(appId || '').match(/[0-9০-৯]+/g) || [];
+    return toBnDigit(matches.length ? matches[matches.length - 1] : '');
+  }
+
+  function escapeFamilyValue(value) {
+    return String(value || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function openFamilyCertPage(type) {
+    navToSection('familyWarishanView');
+    var form = document.getElementById('familyWarishanForm');
+    if (form) form.reset();
+    document.getElementById('fwServiceType').value = type;
+    
+    var isSuccession = (type === 'উত্তরাধিকারী সনদ');
+    document.getElementById('fwFormMainHeading').innerHTML = isSuccession ? '<i class="fa fa-users me-2"></i> উত্তরাধিকারী সনদের আবেদন ফরম' : '<i class="fa fa-people-roof me-2"></i> পারিবারিক সনদের আবেদন ফরম';
+    document.getElementById('fwSubjectText').innerText = isSuccession ? 'উত্তরাধিকারী সনদপত্র' : 'পারিবারিক সনদপত্র';
+    document.getElementById('fwTypeGuidance').className = isSuccession ? 'alert alert-warning py-2 mb-4' : 'alert alert-success py-2 mb-4';
+    document.getElementById('fwTypeGuidance').innerText = isSuccession ? 'উত্তরাধিকারী সনদ: মৃত ব্যক্তির অবর্তমানে তাঁর বৈধ উত্তরাধিকারীদের তথ্যের জন্য।' : 'পারিবারিক সনদ: জীবিত পরিবারের প্রধানের পরিবারের বর্তমান সদস্যদের তথ্যের জন্য।';
+    document.getElementById('fwDeceasedFields').classList.toggle('d-none', !isSuccession);
+    
+    ['fwDeceasedName', 'fwDeceasedDate', 'fwDeceasedFather', 'fwDeceasedMother', 'fwApplicantRelation', 'fwDeceasedWard', 'fwDeceasedVillage', 'fwDeceasedPost'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.required = isSuccession;
+    });
+
+    var tbody = document.getElementById('fwMembersTbody');
+    if (tbody) {
+      tbody.innerHTML = '';
+      for(var i=0; i<3; i++) { addFwMemberRow(); }
+    }
+  }
+
+  function addFwMemberRow() {
+    var tbody = document.getElementById('fwMembersTbody');
+    if(!tbody) return;
+    var tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="fw-bold">${toBnDigit(tbody.rows.length + 1)}</td>
+      <td><input type="text" class="table-input-clean fw-m-name" placeholder="সদস্যের নাম" required></td>
+      <td><input type="text" class="table-input-clean fw-m-nid" placeholder="এনআইডি / জন্ম নিবন্ধন"></td>
+      <td><input type="text" class="table-input-clean fw-m-dob" placeholder="দিন-মাস-সাল"></td>
+      <td>
+        <select class="table-input-clean fw-m-rel" required>
+          <option value="নিজে">নিজে</option><option value="বাবা">বাবা</option><option value="মা">মা</option>
+          <option value="স্বামী">স্বামী</option><option value="স্ত্রী">স্ত্রী</option><option value="ছেলে">ছেলে</option>
+          <option value="মেয়ে">মেয়ে</option><option value="ভাই">ভাই</option><option value="বোন">বোন</option><option value="অন্যান্য">অন্যান্য</option>
+        </select>
+      </td>
+      <td><input type="text" class="table-input-clean fw-m-rem" placeholder="মন্তব্য"></td>
+      <td><button type="button" class="btn btn-sm btn-outline-danger" onclick="removeFwMemberRow(this)"><i class="fa fa-trash"></i></button></td>
+    `;
+    tbody.appendChild(tr);
+    reindexFwMemberRows();
+  }
+
+  function removeFwMemberRow(btn) {
+    var tbody = document.getElementById('fwMembersTbody');
+    if(tbody.rows.length <= 1) return alert('কমপক্ষে একজন সদস্যের তথ্য থাকতে হবে!');
+    btn.closest('tr').remove();
+    reindexFwMemberRows();
+  }
+
+  function reindexFwMemberRows() {
+    var rows = document.getElementById('fwMembersTbody').rows;
+    for(var i=0; i<rows.length; i++) {
+      rows[i].cells[0].innerText = toBnDigit(i + 1);
+    }
+  }
+
+  async function submitFamilyForm() {
+    var btn = document.getElementById('fwSubmitBtn');
+    btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin me-1"></i> জমা হচ্ছে...';
+    var submittedType = document.getElementById('fwServiceType').value === 'উত্তরাধিকারী সনদ' ? 'উত্তরাধিকারী সনদ' : 'পারিবারিক সনদ';
+
+    var members = [];
+    var rows = document.getElementById('fwMembersTbody').rows;
+    for(var i=0; i<rows.length; i++) {
+      var name = rows[i].querySelector('.fw-m-name').value.trim();
+      var nid = rows[i].querySelector('.fw-m-nid').value.trim();
+      var dob = rows[i].querySelector('.fw-m-dob').value.trim();
+      var rel = rows[i].querySelector('.fw-m-rel').value;
+      var rem = rows[i].querySelector('.fw-m-rem').value.trim();
+      if(name) members.push({ sl: (i+1), name: name, nid: nid, dob: dob, relation: rel, remarks: rem });
+    }
+
+    var payload = {
+      type: submittedType,
+      serviceType: submittedType,
+      certificateType: submittedType,
+      appPrefix: submittedType === 'উত্তরাধিকারী সনদ' ? 'AUL-UW-' : 'AUL-FW-',
+      name: document.getElementById('fwApplicantName').value.trim(),
+      nid: document.getElementById('fwApplicantNid').value.trim(),
+      fatherName: document.getElementById('fwFatherName').value.trim(),
+      motherName: document.getElementById('fwMotherName').value.trim(),
+      mobile: document.getElementById('fwMobile').value.trim(),
+      wardNo: document.getElementById('fwWardNo').value,
+      village: document.getElementById('fwVillage').value.trim(),
+      postOffice: document.getElementById('fwPostOffice').value.trim(),
+      deceasedName: document.getElementById('fwDeceasedName') ? document.getElementById('fwDeceasedName').value.trim() : '',
+      deceasedDate: document.getElementById('fwDeceasedDate') ? document.getElementById('fwDeceasedDate').value.trim() : '',
+      deceasedFather: document.getElementById('fwDeceasedFather') ? document.getElementById('fwDeceasedFather').value.trim() : '',
+      deceasedMother: document.getElementById('fwDeceasedMother') ? document.getElementById('fwDeceasedMother').value.trim() : '',
+      applicantRelation: document.getElementById('fwApplicantRelation') ? document.getElementById('fwApplicantRelation').value.trim() : '',
+      deceasedWard: document.getElementById('fwDeceasedWard') ? document.getElementById('fwDeceasedWard').value : '',
+      deceasedVillage: document.getElementById('fwDeceasedVillage') ? document.getElementById('fwDeceasedVillage').value.trim() : '',
+      deceasedPostOffice: document.getElementById('fwDeceasedPost') ? document.getElementById('fwDeceasedPost').value.trim() : '',
+      deceasedUnion: document.getElementById('fwDeceasedUnion') ? document.getElementById('fwDeceasedUnion').value.trim() : '',
+      deceasedUpazila: document.getElementById('fwDeceasedUpazila') ? document.getElementById('fwDeceasedUpazila').value.trim() : '',
+      deceasedDistrict: document.getElementById('fwDeceasedDistrict') ? document.getElementById('fwDeceasedDistrict').value.trim() : '',
+      members: members
+    };
+
+    let res = await callBackendAPI('submitFamilyDirect', payload);
+    if (res && res.success === false && /ফাংশন খুঁজে পাওয়া যায়নি|function/i.test(String(res.error || ''))) {
+      res = await callBackendAPI('submitApplication', payload);
+    }
+    btn.disabled = false; btn.innerHTML = '<i class="fa fa-paper-plane me-1"></i> আবেদন দাখিল করুন';
+
+    if(res && res.success) {
+      var localTypeKey = 'familyApplicationType_' + res.appId;
+      localStorage.setItem(localTypeKey, submittedType);
+      document.getElementById('familyWarishanForm').reset();
+      document.getElementById('successAppId').innerText = res.appId;
+      document.getElementById('successAppCopyBtn').onclick = function() { printFamilyApplicationCopy(res.appId, submittedType); };
+      bootstrap.Modal.getOrCreateInstance(document.getElementById('successModal')).show();
+    } else {
+      Swal.fire({ icon: 'error', title: 'আবেদন ব্যর্থ', text: res ? res.error : 'আবেদন জমা দেওয়া যায়নি।' });
+    }
+  }
+
+  async function showFamilyPrintPreview(appId) {
+    const d = await callBackendAPI('getFamilyDetails', appId);
+    if(!d || !d.found) return alert('আবেদনের তথ্য পাওয়া যায়নি!');
+    
+    document.getElementById('prAppIdShort').innerText = getBanglaMemoNumber(d.appId);
+    document.getElementById('prSmarakYear').innerText = getCurrentBanglaYear();
+    document.getElementById('prIssueDate').innerText = new Date().toLocaleDateString('bn-BD');
+    
+    var certificateType = String(localStorage.getItem('familyApplicationType_' + appId) || d.type || d.serviceType || d.certificateType || (String(appId).indexOf('AUL-UW-') === 0 ? 'উত্তরাধিকারী সনদ' : 'পারিবারিক সনদ')).trim();
+    var isSuccession = certificateType === 'উত্তরাধিকারী সনদ';
+    document.getElementById('prCertTitle').innerText = isSuccession ? 'উত্তরাধিকারী সনদপত্র' : 'পারিবারিক সনদপত্র';
+    document.getElementById('prFamilyNarrative').classList.toggle('d-none', isSuccession);
+    document.getElementById('prSuccessionNarrative').classList.toggle('d-none', !isSuccession);
+
+    document.getElementById('prName').innerText = d.name;
+    document.getElementById('prFather').innerText = d.fatherName;
+    document.getElementById('prMother').innerText = d.motherName || '';
+    document.getElementById('prVillage').innerText = d.village;
+    document.getElementById('prPost').innerText = d.postOffice;
+    document.getElementById('prApplicantFooterName').innerText = d.name;
+    
+    document.getElementById('prDeceasedName').innerText = d.deceasedName || '';
+    document.getElementById('prDeceasedFather').innerText = d.deceasedFather || '';
+    document.getElementById('prDeceasedMother').innerText = d.deceasedMother || '';
+    document.getElementById('prDeceasedWard').innerText = d.deceasedWard || d.wardNo || '';
+    document.getElementById('prDeceasedVillage').innerText = d.deceasedVillage || d.village || '';
+    document.getElementById('prDeceasedPost').innerText = d.deceasedPostOffice || d.postOffice || '';
+    document.getElementById('prDeceasedUnion').innerText = d.deceasedUnion || '১১নং আউলিয়াপুর ইউনিয়ন';
+    document.getElementById('prDeceasedUpazila').innerText = d.deceasedUpazila || 'পটুয়াখালী সদর';
+    document.getElementById('prDeceasedDistrict').innerText = d.deceasedDistrict || 'পটুয়াখালী';
+    document.getElementById('prDeceasedDate').innerText = d.deceasedDate || '';
+
+    var sig = d.signatoryRole || 'চেয়ারম্যান';
+    document.getElementById('prSignRole').innerText = sig;
+    if(sig === 'প্যানেল চেয়ারম্যান' || sig === 'প্যানেল চেয়ারম্যান-১') {
+      document.getElementById('prChairName').innerText = '(' + (window.getUPPanelChairmanName ? window.getUPPanelChairmanName() : 'মোঃ আবদুস সালাম মৃধা') + ')';
+    } else if(sig === 'ভারপ্রাপ্ত চেয়ারম্যান') {
+      document.getElementById('prChairName').innerText = '(ভারপ্রাপ্ত চেয়ারম্যান)';
+    } else {
+      document.getElementById('prChairName').innerText = '(' + (window.getUPChairmanName ? window.getUPChairmanName() : 'অ্যাড. মোঃ হুমায়ুন কবির') + ')';
+    }
+
+    var tbody = document.getElementById('prMembersTbody');
+    tbody.innerHTML = '';
+    var members = d.members || [];
+    if(members.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" class="text-muted py-2">কোন সদস্য তালিকা নেই</td></tr>';
+    } else {
+      members.forEach(function(m, idx) {
+        tbody.innerHTML += `
+          <tr>
+            <td>${toBnDigit(idx + 1)}</td>
+            <td class="text-start ps-2"><strong>${m.name}</strong></td>
+            <td>${toBnDigit(m.nid || '-')}</td>
+            <td>${toBnDigit(m.dob || '-')}</td>
+            <td>${m.relation || '-'}</td>
+            <td></td>
+          </tr>
+        `;
+      });
+    }
+
+    setTimeout(function() {
+      printExactCertificate();
+    }, 100);
+  }
+
+  async function printFamilyApplicationCopy(appId, knownType) {
+    var printWindow = window.open('', '_blank', 'width=900,height=700');
+    if (!printWindow) return alert('প্রিন্ট উইন্ডো খোলা যায়নি। ব্রাউজারের পপ-আপ অনুমতি দিন।');
+    var d = await callBackendAPI('getFamilyDetails', appId);
+    if (!d || !d.found) { printWindow.close(); return alert('আবেদনের তথ্য পাওয়া যায়নি!'); }
+    var type = String(knownType || localStorage.getItem('familyApplicationType_' + appId) || d.type || d.serviceType || d.certificateType || (String(appId).indexOf('AUL-UW-') === 0 ? 'উত্তরাধিকারী সনদ' : 'পারিবারিক সনদ')).trim();
+    var isSuccession = type === 'উত্তরাধিকারী সনদ';
+    var escapeHtml = function(value) { return String(value || '-').replace(/[&<>"']/g, function(ch) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]; }); };
+    var memberRows = (d.members || []).map(function(member, index) {
+      return '<tr><td>' + toBnDigit(index + 1) + '</td><td>' + escapeHtml(member.name) + '</td><td>' + escapeHtml(toBnDigit(member.nid)) + '</td><td>' + escapeHtml(toBnDigit(member.dob)) + '</td><td>' + escapeHtml(member.relation) + '</td><td>' + escapeHtml(member.remarks) + '</td></tr>';
+    }).join('');
+    var subject = isSuccession ? 'উত্তরাধিকারী সনদপত্র প্রদানের জন্য আবেদন' : 'পারিবারিক সনদপত্র প্রদানের জন্য আবেদন';
+    var body = isSuccession ? 'আমি আপনার ইউনিয়নের একজন স্থায়ী বাসিন্দা। আমার ' + escapeHtml(d.deceasedName) + ', পিতা- ' + escapeHtml(d.deceasedFather) + ', মাতা- ' + escapeHtml(d.deceasedMother) + ', ওয়ার্ড- ' + escapeHtml(d.deceasedWard || d.wardNo) + ', গ্রাম- ' + escapeHtml(d.deceasedVillage || d.village) + ', ডাকঘর- ' + escapeHtml(d.deceasedPostOffice || d.postOffice) + ', ইউনিয়ন- ' + escapeHtml(d.deceasedUnion || '১১নং আউলিয়াপুর ইউনিয়ন') + ', উপজেলা- ' + escapeHtml(d.deceasedUpazila || 'পটুয়াখালী সদর') + ', জেলা- ' + escapeHtml(d.deceasedDistrict || 'পটুয়াখালী') + ', যিনি গত ' + escapeHtml(d.deceasedDate) + ' তারিখে মৃত্যুবরণ করেন। মৃত ব্যক্তির অবর্তমানে তাঁর বৈধ উত্তরাধিকারীদের পরিচয় ও সম্পর্ক উল্লেখপূর্বক উত্তরাধিকারী সনদপত্র প্রদানের জন্য আবেদন করছি।' : 'আমি আপনার ইউনিয়নের একজন স্থায়ী বাসিন্দা। আমার পরিবারের বর্তমান সদস্যদের সঠিক তথ্য উল্লেখপূর্বক পারিবারিক সনদপত্র প্রদানের জন্য আবেদন করছি।';
+    printWindow.document.write('<!doctype html><html lang="bn"><head><meta charset="UTF-8"><title>' + escapeHtml(type) + ' আবেদন কপি</title><link href="https://fonts.maateen.me/nikosh/font.css" rel="stylesheet"><style>@page{size:A4 portrait;margin:15mm 18mm}body{font-family:Nikosh,sans-serif;color:#111;font-size:16px;line-height:1.8}h2{text-align:center;text-decoration:underline;font-size:22px;margin:12px 0 20px}.topline{display:flex;justify-content:space-between}.address{margin-top:18px}.subject{font-weight:bold;text-decoration:underline;margin:14px 0}.body{text-align:justify;text-indent:42px}table{width:100%;border-collapse:collapse;margin:8px 0 18px;font-size:14px}th,td{border:1px solid #111;padding:5px;text-align:center}th{background:#f1f5f9}.signatures{display:flex;justify-content:space-between;align-items:flex-end;text-align:center;margin-top:45px;font-size:14px}.signature{width:30%}.line{border-top:1px solid #111;margin-bottom:4px}</style></head><body>' +
+      '<div class="topline"><span>আবেদন নংঃ ' + escapeHtml(d.appId) + '</span><span>তারিখঃ ' + escapeHtml(d.date || d.applyDate || new Date().toLocaleDateString('bn-BD')) + '</span></div><h2>' + escapeHtml(type) + ' এর আবেদন</h2><div class="address"><b>বরাবর</b><br>চেয়ারম্যান মহোদয়<br>১১নং আউলিয়াপুর ইউনিয়ন পরিষদ<br>পটুয়াখালী সদর, পটুয়াখালী।</div><div class="subject">বিষয়ঃ ' + subject + '।</div><div class="body">জনাব, বিনীত নিবেদন এই যে, আমি ' + escapeHtml(d.name || d.applicantName) + ', পিতা- ' + escapeHtml(d.fatherName || d.fatherSpouseName) + ', মাতা- ' + escapeHtml(d.motherName) + ', ওয়ার্ড নং- ' + escapeHtml(d.wardNo) + ', গ্রাম- ' + escapeHtml(d.village) + ', ডাকঘর- ' + escapeHtml(d.postOffice) + ', ইউনিয়ন- ১১নং আউলিয়াপুর, উপজেলা- পটুয়াখালী সদর, জেলা- পটুয়াখালী এর একজন স্থায়ী বাসিন্দা। ' + body + '</div><p><b>সদস্যদের বিবরণ নিম্নরূপঃ</b></p><table><thead><tr><th>ক্রমিক</th><th>নাম</th><th>ভোটার আইডি / জন্ম নিবন্ধন</th><th>জন্ম তারিখ</th><th>সম্পর্ক</th><th>মন্তব্য</th></tr></thead><tbody>' + (memberRows || '<tr><td colspan="6">কোন সদস্যের তথ্য দেওয়া হয়নি।</td></tr>') + '</tbody></table><p>অতএব, মহোদয়ের নিকট বিনীত প্রার্থনা, প্রয়োজনীয় তদন্তপূর্বক আমাকে উক্ত ' + escapeHtml(type) + ' প্রদান করে বাধিত করবেন।</p><div class="signatures"><div class="signature"><div class="line"></div>গ্রাম পুলিশ<br>১১নং আউলিয়াপুর ইউনিয়ন</div><div class="signature"><div class="line"></div>ইউপি সদস্য<br>ওয়ার্ড-' + escapeHtml(d.wardNo) + '</div><div class="signature"><div class="line"></div>' + escapeHtml(d.name || d.applicantName) + '<br>আবেদনকারীর স্বাক্ষর<br>মোবাইলঃ ' + escapeHtml(toBnDigit(d.mobile)) + '</div></div></body></html>');
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(function() { printWindow.print(); }, 300);
+  }
+
+  async function openEditFamilyModal(appId) {
+    var d = await callBackendAPI('getFamilyDetails', appId);
+    if (!d || !d.found) return alert('আবেদনের তথ্য পাওয়া যায়নি!');
+    var type = String(d.type || d.serviceType || d.certificateType || (String(appId).indexOf('AUL-UW-') === 0 ? 'উত্তরাধিকারী সনদ' : 'পারিবারিক সনদ')).trim();
+    [['editFwAppId', d.appId || appId], ['editFwType', type], ['editFwName', d.name || d.applicantName], ['editFwNid', d.nid], ['editFwFather', d.fatherName || d.fatherSpouseName], ['editFwMother', d.motherName], ['editFwMobile', d.mobile], ['editFwWard', d.wardNo], ['editFwVillage', d.village], ['editFwPost', d.postOffice], ['editFwDeceasedName', d.deceasedName], ['editFwDeceasedDate', d.deceasedDate], ['editFwDeceasedFather', d.deceasedFather], ['editFwDeceasedMother', d.deceasedMother], ['editFwApplicantRelation', d.applicantRelation], ['editFwDeceasedWard', d.deceasedWard], ['editFwDeceasedVillage', d.deceasedVillage], ['editFwDeceasedPost', d.deceasedPostOffice], ['editFwDeceasedUnion', d.deceasedUnion], ['editFwDeceasedUpazila', d.deceasedUpazila], ['editFwDeceasedDistrict', d.deceasedDistrict]].forEach(function(pair) {
+      var field = document.getElementById(pair[0]); if (field) field.value = pair[1] || '';
+    });
+    var memberBody = document.getElementById('editFwMembersTbody');
+    memberBody.innerHTML = '';
+    (d.members || []).forEach(function(member, index) {
+      memberBody.innerHTML += '<tr><td>' + toBnDigit(index + 1) + '</td><td><input class="form-control edit-fw-member-name" value="' + escapeFamilyValue(member.name) + '"></td><td><input class="form-control edit-fw-member-nid" value="' + escapeFamilyValue(member.nid) + '"></td><td><input class="form-control edit-fw-member-dob" value="' + escapeFamilyValue(member.dob) + '"></td><td><input class="form-control edit-fw-member-relation" value="' + escapeFamilyValue(member.relation) + '"></td><td><input class="form-control edit-fw-member-remarks" value="' + escapeFamilyValue(member.remarks) + '"></td></tr>';
+    });
+    bootstrap.Modal.getOrCreateInstance(document.getElementById('familyEditModal')).show();
+  }
+
+  async function saveEditedFamilyData() {
+    var btn = document.getElementById('saveEditFwBtn');
+    btn.disabled = true; btn.innerText = 'সংরক্ষণ হচ্ছে...';
+    var type = document.getElementById('editFwType').value;
+    var members = Array.prototype.map.call(document.querySelectorAll('#editFwMembersTbody tr'), function(row, index) { return { sl: index + 1, name: row.querySelector('.edit-fw-member-name').value.trim(), nid: row.querySelector('.edit-fw-member-nid').value.trim(), dob: row.querySelector('.edit-fw-member-dob').value.trim(), relation: row.querySelector('.edit-fw-member-relation').value.trim(), remarks: row.querySelector('.edit-fw-member-remarks').value.trim() }; }).filter(function(member) { return member.name; });
+    var payload = { appId: document.getElementById('editFwAppId').value, type: type, serviceType: type, certificateType: type, appPrefix: type === 'উত্তরাধিকারী সনদ' ? 'AUL-UW-' : 'AUL-FW-', name: document.getElementById('editFwName').value.trim(), nid: document.getElementById('editFwNid').value.trim(), fatherName: document.getElementById('editFwFather').value.trim(), motherName: document.getElementById('editFwMother').value.trim(), mobile: document.getElementById('editFwMobile').value.trim(), wardNo: document.getElementById('editFwWard').value.trim(), village: document.getElementById('editFwVillage').value.trim(), postOffice: document.getElementById('editFwPost').value.trim(), deceasedName: document.getElementById('editFwDeceasedName').value.trim(), deceasedDate: document.getElementById('editFwDeceasedDate').value.trim(), deceasedFather: document.getElementById('editFwDeceasedFather').value.trim(), deceasedMother: document.getElementById('editFwDeceasedMother').value.trim(), applicantRelation: document.getElementById('editFwApplicantRelation').value.trim(), deceasedWard: document.getElementById('editFwDeceasedWard').value.trim(), deceasedVillage: document.getElementById('editFwDeceasedVillage').value.trim(), deceasedPostOffice: document.getElementById('editFwDeceasedPost').value.trim(), deceasedUnion: document.getElementById('editFwDeceasedUnion').value.trim(), deceasedUpazila: document.getElementById('editFwDeceasedUpazila').value.trim(), deceasedDistrict: document.getElementById('editFwDeceasedDistrict').value.trim(), members: members };
+    var res = await callBackendAPI('saveEditedApplication', payload);
+    btn.disabled = false; btn.innerText = 'সংরক্ষণ করুন';
+    if (res && res.success) {
+      bootstrap.Modal.getInstance(document.getElementById('familyEditModal')).hide();
+      if (typeof loadFamilyApps === 'function') loadFamilyApps();
+      Swal.fire({ icon: 'success', title: 'সংশোধিত হয়েছে!', timer: 1500, showConfirmButton: false });
+    } else alert(res && (res.error || res.message) || 'তথ্য সংরক্ষণ করা যায়নি।');
+  }
+
+  function printExactCertificate() {
+    var source = document.getElementById('printableFamilyCert');
+    if (!source || window._familyPrintInProgress) return;
+    window._familyPrintInProgress = true;
+
+    var iframe = document.createElement('iframe');
+    iframe.className = 'family-print-frame';
+    iframe.style.cssText = 'position:fixed;right:0;bottom:0;width:1px;height:1px;border:0;opacity:0;pointer-events:none;';
+    document.body.appendChild(iframe);
+    var rawHtml = source.innerHTML;
+    var printWindow = iframe.contentWindow;
+    var printDoc = printWindow.document;
+    
+    printDoc.open();
+    printDoc.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>${document.getElementById('prCertTitle').innerText}</title>
+        <link href="https://fonts.maateen.me/nikosh/font.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Kalpurush&family=Tiro+Bangla&display=swap" rel="stylesheet">
+        <style>
+          @page { size: A4 portrait; margin: 0mm; }
+          * { box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+          body { margin: 0; padding: 0; background: #ffffff; font-family: 'Nikosh', 'Kalpurush', sans-serif; }
+          .family-cert-container { width: 210mm; height: 295mm; padding: 12mm 15mm 10mm; margin: 0 auto; border: 3px double #b91c1c; outline: 1px solid #dc2626; outline-offset: -7px; display: flex; flex-direction: column; justify-content: space-between; position: relative; font-family: 'Nikosh', sans-serif !important; }
+          .family-cert-container::before { content: ""; position: absolute; inset: 4mm; border: 1px solid rgba(185,28,28,.35); pointer-events: none; z-index: 3; }
+          .cert-watermark-bg { position: absolute; top: 52%; left: 50%; transform: translate(-50%, -50%); width: 500px; max-width: 88%; opacity: 0.09; z-index: 1; }
+          .family-cert-container img[alt="UP Logo"] { width: 82px !important; height: 82px !important; }
+          .family-cert-container, .family-cert-container * { font-family: 'Nikosh', sans-serif !important; }
+          .family-cert-footer { display: flex; justify-content: center; align-items: center; margin-top: 8mm; padding: 3mm 2mm 0; border-top: 1.5px solid #b91c1c; color: #1e3a8a; font-size: 13px; font-weight: bold; text-align: center; white-space: nowrap; }
+          .family-cert-footer > * { flex: 1; }
+          .cert-main-content { position: relative; z-index: 2; }
+          .d-none { display: none !important; }
+          .d-flex { display: flex; }
+          .justify-content-between { justify-content: space-between; }
+          .align-items-center { align-items: center; }
+          .align-items-end { align-items: flex-end; }
+          .text-center { text-align: center; }
+          .text-start { text-align: left; }
+          .text-justify { text-align: justify; }
+          .flex-grow-1 { flex-grow: 1; }
+          .m-0 { margin: 0; }
+          .fw-bold { font-weight: bold; }
+          .ribbon-wrapper-12 { position: relative; display: inline-block; margin: 8px 0 12px 0; }
+          .ribbon-center-box { background: linear-gradient(180deg, #2563eb 0%, #1e3a8a 100%) !important; background-color: #2563eb !important; color: #ffffff !important; font-size: 23px; font-weight: bold; padding: 7px 42px; border: 2px solid #ffffff !important; outline: 2px solid #1d4ed8 !important; box-shadow: 0 3px 0 #991b1b !important; }
+          .ribbon-wing-left, .ribbon-wing-right { background: #991b1b !important; }
+          .cert-table-exact { width: 100%; border-collapse: collapse !important; margin: 10px 0; }
+          .cert-table-exact th, .cert-table-exact td { border: 1.5px solid #000000 !important; padding: 5px; }
+          .border-top { border-top: 1px solid #000 !important; padding-top: 4px; }
+        </style>
+      </head>
+      <body>
+        <div class="family-cert-container">
+          ${rawHtml}
+        </div>
+      </body>
+      </html>
+    `);
+    printDoc.close();
+
+    var images = Array.prototype.slice.call(printDoc.images);
+    var printed = false;
+    var cleaned = false;
+    function cleanup() {
+      if (cleaned) return;
+      cleaned = true;
+      window._familyPrintInProgress = false;
+      printWindow.onafterprint = null;
+      if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
+    }
+    function waitForImage(image) {
+      if (image.complete && image.naturalWidth > 0) return Promise.resolve();
+      return new Promise(function(resolve) {
+        image.addEventListener('load', resolve, { once: true });
+        image.addEventListener('error', resolve, { once: true });
+      });
+    }
+    function startPrint() {
+      if (printed) return;
+      printed = true;
+      printWindow.onafterprint = cleanup;
+      printWindow.focus();
+      try { printWindow.print(); } catch (error) { cleanup(); }
+      setTimeout(cleanup, 10000);
+    }
+    var fontsReady = printDoc.fonts && printDoc.fonts.ready ? printDoc.fonts.ready : Promise.resolve();
+    Promise.all([fontsReady].concat(images.map(waitForImage))).then(function() {
+      setTimeout(startPrint, 120);
+    });
+  }
+</script>
