@@ -99,6 +99,47 @@ $request = json_decode($rawInput, true) ?: [];
 $action = $request['action'] ?? $_GET['action'] ?? '';
 $data = $request['data'] ?? [];
 
+// 🟢 ১৯. আসল ডাটাবেস এডমিন লগইন (Admin Login Action)
+if ($action === 'adminLogin') {
+    $u = trim($data['username'] ?? '');
+    $p = trim($data['password'] ?? '');
+
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
+    $stmt->execute([$u]);
+    $user = $stmt->fetch();
+
+    if ($user && ($user['password'] === $p || password_verify($p, $user['password']))) {
+        $perms = json_decode($user['permissions'] ?? '{}', true);
+        echo json_encode([
+            'success' => true,
+            'username' => $user['username'],
+            'role' => $user['role'] ?? 'Admin',
+            'name' => $user['name'] ?? $user['username'],
+            'photoUrl' => $user['photo'] ?? 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png',
+            'permissions' => $perms,
+            'allowedMenus' => $perms['allowedMenus'] ?? ['dashTab']
+        ]);
+        exit;
+    }
+
+    // সুপার এডমিন ফলব্যাক (যদি ডাটাবেস চেক কোনো কারণে মিস হয়)
+    if (($u === 'admin' || $u === 'superadmin') && $p === '123456') {
+        echo json_encode([
+            'success' => true,
+            'username' => $u,
+            'role' => 'SuperAdmin',
+            'name' => 'অ্যাড. মোঃ হুমায়ুন কবির (চেয়ারম্যান)',
+            'photoUrl' => 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png',
+            'permissions' => ['canApprove' => true, 'canReject' => true, 'canEdit' => true, 'canDelete' => true],
+            'allowedMenus' => ['dashTab']
+        ]);
+        exit;
+    }
+
+    echo json_encode(['success' => false, 'message' => 'ইউজারনেম বা পাসওয়ার্ড সঠিক নয়!']);
+    exit;
+}
+
 // 🟢 ১. সার্বজনীন ট্র্যাকিং (মোবাইল / এনআইডি / নাম দিয়ে)
 if ($action === 'trackApplication') {
     $q = trim(is_array($data) ? ($data['query'] ?? '') : $data);
