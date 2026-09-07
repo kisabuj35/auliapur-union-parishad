@@ -896,17 +896,29 @@ async function doAdminLogin() {
   var p = document.getElementById('admPass').value.trim();
   var btn = document.getElementById('admLoginBtn');
   if(!u || !p) return alert('ইউজারনেম এবং পাসওয়ার্ড প্রদান করুন!');
+  
   btn.disabled = true; btn.innerText = 'যাচাই হচ্ছে...';
   const res = await callBackendAPI('adminLogin', { username: u, password: p });
   btn.disabled = false; btn.innerText = 'লগইন করুন';
+
   if(res && res.success) {
+    // ১. সেশনে ইউজারের সকল তথ্য সংরক্ষণ
     sessionStorage.setItem('upAdminSession', JSON.stringify(res));
-    document.getElementById('adminAuthBtn').innerHTML = '<i class="fa fa-tachometer-alt me-1"></i> এডমিন প্যানেল';
-    document.getElementById('adminAuthBtn').className = 'btn btn-sm btn-success fw-bold px-3 rounded-pill';
-    navToSection('adminPanel');
+    
+    // ২. এডমিন প্যানেলে ঢুকে সাথে সাথে প্রোফাইল ও পারমিশন আপডেট
+    if (typeof updateSidebarProfile === 'function') updateSidebarProfile(res);
     if (typeof applyAdminRolePermissions === 'function') applyAdminRolePermissions(res);
-    if (typeof switchAdminTab === 'function') switchAdminTab('dashTab');
+    
+    navToSection('adminPanel');
+
+    // ৩. ইউজারের প্রথম অনুমোদিত ট্যাবে নিয়ে যাওয়া
+    var allowed = (res.permissions && res.permissions.allowedMenus) ? res.permissions.allowedMenus : ['dashTab'];
+    var targetTab = (res.role === 'SuperAdmin') ? 'dashTab' : (allowed[0] || 'dashTab');
+    
+    if (typeof switchAdminTab === 'function') switchAdminTab(targetTab);
     if (typeof loadAdminDashboard === 'function') loadAdminDashboard();
+
+    Swal.fire({ icon: 'success', title: 'স্বাগতম ' + (res.name || res.username), timer: 1200, showConfirmButton: false });
   } else {
     Swal.fire({
       icon: 'error',
