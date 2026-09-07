@@ -690,19 +690,13 @@
     applyAdminRolePermissions(userData);
   }
 
-  function getSessionPermissions(session) {
-    if (!session) return { canApprove: true, canReject: true, canEdit: true, canDelete: true, allowedMenus: [] };
-    var perms = session.permissions || {};
-    var allowedMenus = Array.isArray(perms.allowedMenus) ? perms.allowedMenus : [];
-    if (!allowedMenus.length && session.allowedMenus) {
-      allowedMenus = Array.isArray(session.allowedMenus) ? session.allowedMenus : [];
-    }
+function getSessionPermissions(session) {
     return {
-      canApprove: perms.canApprove === true || session.role === 'SuperAdmin',
-      canReject: perms.canReject === true || session.role === 'SuperAdmin',
-      canEdit: perms.canEdit === true || session.role === 'SuperAdmin',
-      canDelete: perms.canDelete === true || session.role === 'SuperAdmin',
-      allowedMenus: allowedMenus
+      canApprove: true,
+      canReject: true,
+      canEdit: true,
+      canDelete: true,
+      allowedMenus: ['dashTab','citTab','tradeTab','famTab','warTab','appsTab','taxTab','accountsTab','bankTab','beneficiaryTab','projectTab','reportTab','upSettingsTab','settingsTab']
     };
   }
 
@@ -710,13 +704,12 @@
     return true; // সব মেনু ওপেন হবে
   }
 
-  function applyAdminRolePermissions(session) {
-    // সব মেনু লিংক দৃশ্যমান থাকবে
-    document.querySelectorAll('.admin-menu-link[data-menu]').forEach(function(menuItem) {
-      menuItem.style.display = '';
+function applyAdminRolePermissions(session) {
+    document.querySelectorAll('.admin-menu-link').forEach(function(menuItem) {
+      menuItem.style.display = 'flex';
     });
     var superSettings = document.getElementById('superAdminSettingsBtn');
-    if (superSettings) superSettings.style.display = '';
+    if (superSettings) superSettings.style.display = 'flex';
   }
 
   function applyAdminRolePermissions(session) {
@@ -970,19 +963,17 @@
   }
 
   function renderActionButtons(appId, status, printCallbackName, editCallbackName) {
-    var session = getActiveSession() || {};
-    var perms = getSessionPermissions(session);
-    var canApprove = session.role === 'SuperAdmin' || perms.canApprove;
-    var canEdit = session.role === 'SuperAdmin' || perms.canEdit;
-    var canReject = session.role === 'SuperAdmin' || perms.canReject;
-    var canDel = session.role === 'SuperAdmin' || perms.canDelete;
+    var stBadge = (status === 'Approved') 
+      ? '<span class="status-badge-approved">Approved</span>' 
+      : ((status === 'Rejected') ? '<span class="status-badge-rejected">Rejected</span>' : '<span class="status-badge-pending">Pending</span>');
 
-    var stBadge = (status === 'Approved') ? '<span class="status-badge-approved">Approved</span>' : ((status === 'Rejected') ? '<span class="status-badge-rejected">Rejected</span>' : '<span class="status-badge-pending">Pending</span>');
-    var printBtn = (status === 'Approved') ? `<button type="button" class="btn-act-print" onclick="${printCallbackName}('${appId}')" title="সরাসরি প্রিন্ট"><i class="fa fa-print me-1"></i>প্রিন্ট</button>` : '';
-    var deleteBtn = canDel ? `<button class="btn btn-sm btn-outline-danger ms-1" onclick="removeApp('${appId}')" title="ডিলিট"><i class="fa fa-trash"></i></button>` : '';
-    var approveBtn = canApprove ? `<button class="btn-act-approve" onclick="changeStatus('${appId}', 'Approved')" title="অনুমোদন"><i class="fa fa-check"></i></button>` : '';
-    var editBtn = canEdit ? `<button class="btn-act-edit" onclick="${editCallbackName}('${appId}')" title="সংশোধন"><i class="fa fa-edit"></i></button>` : '';
-    var rejectBtn = canReject ? `<button class="btn-act-reject" onclick="changeStatus('${appId}', 'Rejected')" title="বাতিল"><i class="fa fa-times"></i></button>` : '';
+    var approveBtn = `<button class="btn-act-approve" onclick="changeStatus('${appId}', 'Approved')" title="অনুমোদন"><i class="fa fa-check"></i></button>`;
+    var editBtn = `<button class="btn-act-edit" onclick="${editCallbackName}('${appId}')" title="সংশোধন"><i class="fa fa-edit"></i></button>`;
+    var rejectBtn = `<button class="btn-act-reject" onclick="changeStatus('${appId}', 'Rejected')" title="বাতিল"><i class="fa fa-times"></i></button>`;
+    var printBtn = (status === 'Approved') 
+      ? `<button type="button" class="btn-act-print" onclick="${printCallbackName}('${appId}')" title="সরাসরি প্রিন্ট"><i class="fa fa-print me-1"></i>প্রিন্ট</button>` 
+      : '';
+    var deleteBtn = `<button class="btn btn-sm btn-outline-danger ms-1" onclick="removeApp('${appId}')" title="ডিলিট"><i class="fa fa-trash"></i></button>`;
 
     return {
       badge: stBadge,
@@ -991,12 +982,13 @@
           ${approveBtn}
           ${editBtn}
           ${rejectBtn}
-          ${printBtn} ${deleteBtn}
+          ${printBtn}
+          ${deleteBtn}
         </div>
       `
     };
   }
-
+  
   function renderStatusActionButtons(appId, status) {
     var session = getActiveSession() || {};
     var perms = getSessionPermissions(session);
