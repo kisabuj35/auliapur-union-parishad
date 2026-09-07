@@ -235,5 +235,108 @@ if ($action === 'submitApplication') {
     exit;
 }
 
-// অন্যান্য অ্যাকশন
+// 🟢 ৭. ড্যাশবোর্ড পরিসংখ্যান (Dashboard Stats)
+if ($action === 'getMasterDashboardStats') {
+    $citTotal = $pdo->query("SELECT COUNT(*) FROM citizenships")->fetchColumn();
+    $citApproved = $pdo->query("SELECT COUNT(*) FROM citizenships WHERE status='Approved'")->fetchColumn();
+    $citPending = $citTotal - $citApproved;
+
+    $tradeTotal = $pdo->query("SELECT COUNT(*) FROM trade_licenses")->fetchColumn();
+    $tradeApproved = $pdo->query("SELECT COUNT(*) FROM trade_licenses WHERE status='Approved'")->fetchColumn();
+    $tradePending = $tradeTotal - $tradeApproved;
+
+    $famTotal = $pdo->query("SELECT COUNT(*) FROM family_certificates")->fetchColumn();
+    $famApproved = $pdo->query("SELECT COUNT(*) FROM family_certificates WHERE status='Approved'")->fetchColumn();
+    $famPending = $famTotal - $famApproved;
+
+    $warTotal = $pdo->query("SELECT COUNT(*) FROM warishans")->fetchColumn();
+    $warApproved = $pdo->query("SELECT COUNT(*) FROM warishans WHERE status='Approved'")->fetchColumn();
+    $warPending = $warTotal - $warApproved;
+
+    $genTotal = $pdo->query("SELECT COUNT(*) FROM general_applications")->fetchColumn();
+    $genApproved = $pdo->query("SELECT COUNT(*) FROM general_applications WHERE status='Approved'")->fetchColumn();
+    $genPending = $genTotal - $genApproved;
+
+    $totalAll = $citTotal + $tradeTotal + $famTotal + $warTotal + $genTotal;
+    $totalApproved = $citApproved + $tradeApproved + $famApproved + $warApproved + $genApproved;
+    $totalPending = $totalAll - $totalApproved;
+
+    echo json_encode([
+        'totalApps' => $totalAll,
+        'totalApprovedApps' => $totalApproved,
+        'totalPendingApps' => $totalPending,
+        'citTotal' => $citTotal, 'citApproved' => $citApproved, 'citPending' => $citPending,
+        'tradeTotal' => $tradeTotal, 'tradeActive' => $tradeApproved, 'tradePending' => $tradePending,
+        'famTotal' => $famTotal, 'famApproved' => $famApproved, 'famPending' => $famPending,
+        'warTotal' => $warTotal, 'warApproved' => $warApproved, 'warPending' => $warPending,
+        'genTotal' => $genTotal, 'genApproved' => $genApproved, 'genPending' => $genPending
+    ]);
+    exit;
+}
+
+// 🟢 ৮. নাগরিকত্ব তালিকা (Citizenship List)
+if ($action === 'getCitizenshipApps') {
+    $stmt = $pdo->query("SELECT app_id as appId, cert_no as certNo, name, father_name as fatherName, mobile, status FROM citizenships ORDER BY id DESC");
+    echo json_encode($stmt->fetchAll());
+    exit;
+}
+
+// 🟢 ৯. ট্রেড লাইসেন্স তালিকা (Trade License List)
+if ($action === 'getTradeLicenses' || $action === 'getTradeRenewals') {
+    $stmt = $pdo->query("SELECT app_id as appId, license_no as licNo, org_name as orgName, owner_name as ownerName, father_name as fatherName, mobile, total_fee as totalFee, status, is_renewal as isRenewal FROM trade_licenses ORDER BY id DESC");
+    echo json_encode($stmt->fetchAll());
+    exit;
+}
+
+// 🟢 ১০. পারিবারিক ও উত্তরাধিকারী তালিকা (Family List)
+if ($action === 'getFamilyApps') {
+    $stmt = $pdo->query("SELECT app_id as appId, certificate_type as type, name, nid, father_name as fatherName, mobile, ward_no as wardNo, village, status FROM family_certificates ORDER BY id DESC");
+    echo json_encode($stmt->fetchAll());
+    exit;
+}
+
+// 🟢 ১১. ওয়ারিশান তালিকা (Warishan List)
+if ($action === 'getWarishanApps') {
+    $stmt = $pdo->query("SELECT app_id as appId, applicant_name as applicantName, deceased_name as deceasedName, deceased_father as deceasedFather, mobile, village, status FROM warishans ORDER BY id DESC");
+    echo json_encode($stmt->fetchAll());
+    exit;
+}
+
+// 🟢 ১২. সাধারণ প্রত্যয়ন তালিকা (General Apps List)
+if ($action === 'getAllApplications') {
+    $stmt = $pdo->query("SELECT app_id as appId, type, name, nid, mobile, ward_no as wardNo, status FROM general_applications ORDER BY id DESC");
+    echo json_encode($stmt->fetchAll());
+    exit;
+}
+
+// 🟢 ১৩. স্ট্যাটাস পরিবর্তন (Approve / Reject)
+if ($action === 'updateAppStatus') {
+    $appId = $data['appId'] ?? '';
+    $status = $data['status'] ?? 'Approved';
+
+    $pdo->prepare("UPDATE citizenships SET status=? WHERE app_id=?")->execute([$status, $appId]);
+    $pdo->prepare("UPDATE trade_licenses SET status=? WHERE app_id=?")->execute([$status, $appId]);
+    $pdo->prepare("UPDATE family_certificates SET status=? WHERE app_id=?")->execute([$status, $appId]);
+    $pdo->prepare("UPDATE warishans SET status=? WHERE app_id=?")->execute([$status, $appId]);
+    $pdo->prepare("UPDATE general_applications SET status=? WHERE app_id=?")->execute([$status, $appId]);
+
+    echo json_encode(['success' => true]);
+    exit;
+}
+
+// 🟢 ১৪. আবেদন ডিলিট করা
+if ($action === 'deleteApplication') {
+    $appId = is_array($data) ? ($data['appId'] ?? '') : $data;
+
+    $pdo->prepare("DELETE FROM citizenships WHERE app_id=?")->execute([$appId]);
+    $pdo->prepare("DELETE FROM trade_licenses WHERE app_id=?")->execute([$appId]);
+    $pdo->prepare("DELETE FROM family_certificates WHERE app_id=?")->execute([$appId]);
+    $pdo->prepare("DELETE FROM warishans WHERE app_id=?")->execute([$appId]);
+    $pdo->prepare("DELETE FROM general_applications WHERE app_id=?")->execute([$appId]);
+
+    echo json_encode(['success' => true]);
+    exit;
+}
+
+// ডিফল্ট রেসপন্স
 echo json_encode(['success' => true, 'message' => 'API is active']);
