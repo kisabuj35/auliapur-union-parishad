@@ -705,6 +705,11 @@
       }
       return '-';
     };
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0');
+    var yyyy = today.getFullYear();
+    var issueDate = dd + '/' + mm + '/' + yyyy;
     var applicantName = getVal('name', 'applicantName');
     var fatherName = getVal('fatherName', 'fatherSpouseName', 'father');
     var motherName = getVal('motherName', 'mother');
