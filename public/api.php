@@ -140,6 +140,172 @@ if ($action === 'adminLogin') {
     exit;
 }
 
+// 🟢 ২০. নাগরিকত্ব সনদের সম্পূর্ণ বিবরণ (Print & Details)
+if ($action === 'getCitizenshipDetails') {
+    $q = trim(is_array($data) ? ($data['appId'] ?? '') : $data);
+    $stmt = $pdo->prepare("SELECT * FROM citizenships WHERE app_id = ? OR cert_no = ?");
+    $stmt->execute([$q, $q]);
+    $row = $stmt->fetch();
+
+    if ($row) {
+        echo json_encode([
+            'found' => true,
+            'appId' => $row['app_id'],
+            'certNo' => $row['cert_no'],
+            'name' => $row['name'],
+            'fatherName' => $row['father_name'],
+            'motherName' => $row['mother_name'],
+            'dob' => $row['dob'],
+            'nid' => $row['nid'],
+            'maritalStatus' => $row['marital_status'],
+            'spouseName' => $row['spouse_name'],
+            'mobile' => $row['mobile'],
+            'wardNo' => $row['ward_no'],
+            'village' => $row['village'],
+            'postOffice' => $row['post_office'],
+            'division' => $row['division'],
+            'language' => $row['language'],
+            'certificateLanguage' => $row['language'],
+            'status' => $row['status'],
+            'applyDate' => $row['apply_date'],
+            'signatoryRole' => $row['signatory_role'] ?? 'চেয়ারম্যান'
+        ]);
+    } else {
+        echo json_encode(['found' => false]);
+    }
+    exit;
+}
+
+// 🟢 ২১. পারিবারিক ও উত্তরাধিকারী সনদের সম্পূর্ণ বিবরণ (Print & Details)
+if ($action === 'getFamilyDetails') {
+    $q = trim(is_array($data) ? ($data['appId'] ?? '') : $data);
+    $stmt = $pdo->prepare("SELECT * FROM family_certificates WHERE app_id = ?");
+    $stmt->execute([$q]);
+    $row = $stmt->fetch();
+
+    if ($row) {
+        $members = json_decode($row['members_json'] ?? '[]', true);
+        echo json_encode([
+            'found' => true,
+            'appId' => $row['app_id'],
+            'type' => $row['certificate_type'],
+            'certificateType' => $row['certificate_type'],
+            'name' => $row['name'],
+            'nid' => $row['nid'],
+            'fatherName' => $row['father_name'],
+            'motherName' => $row['mother_name'],
+            'mobile' => $row['mobile'],
+            'wardNo' => $row['ward_no'],
+            'village' => $row['village'],
+            'postOffice' => $row['post_office'],
+            'deceasedName' => $row['deceased_name'],
+            'deceasedFather' => $row['deceased_father'],
+            'deceasedMother' => $row['deceased_mother'],
+            'deceasedDate' => $row['deceased_date'],
+            'applicantRelation' => $row['applicant_relation'],
+            'deceasedWard' => $row['deceased_ward'],
+            'deceasedVillage' => $row['deceased_village'],
+            'deceasedPostOffice' => $row['deceased_post_office'],
+            'deceasedUnion' => $row['deceased_union'],
+            'deceasedUpazila' => $row['deceased_upazila'],
+            'deceasedDistrict' => $row['deceased_district'],
+            'members' => $members,
+            'status' => $row['status'],
+            'applyDate' => $row['apply_date'],
+            'signatoryRole' => $row['signatory_role'] ?? 'চেয়ারম্যান'
+        ]);
+    } else {
+        echo json_encode(['found' => false]);
+    }
+    exit;
+}
+
+// 🟢 ২২. ট্রেড লাইসেন্সের সম্পূর্ণ বিবরণ (Print & Details)
+if ($action === 'getTradeLicenseDetails') {
+    $q = trim(is_array($data) ? ($data['appId'] ?? $data['licNo'] ?? '') : $data);
+    $stmt = $pdo->prepare("SELECT * FROM trade_licenses WHERE app_id = ? OR license_no = ?");
+    $stmt->execute([$q, $q]);
+    $row = $stmt->fetch();
+
+    if ($row) {
+        echo json_encode([
+            'found' => true,
+            'appId' => $row['app_id'],
+            'licNo' => $row['license_no'],
+            'licenseNo' => $row['license_no'],
+            'receiptNo' => $row['receipt_no'],
+            'orgName' => $row['org_name'],
+            'ownerName' => $row['owner_name'],
+            'fatherName' => $row['father_name'],
+            'motherName' => $row['mother_name'],
+            'nid' => $row['nid'],
+            'dob' => $row['dob'],
+            'mobile' => $row['mobile'],
+            'ownerAddress' => $row['owner_address'],
+            'category' => $row['category'],
+            'bizDetails' => $row['biz_details'],
+            'bizAddress' => $row['biz_address'],
+            'bizStartDate' => $row['biz_start_date'],
+            'fiscalYear' => $row['fiscal_year'],
+            'capital' => $row['capital'],
+            'licenseFee' => $row['license_fee'],
+            'vatFee' => $row['vat_fee'],
+            'commTax' => $row['comm_tax'],
+            'signTax' => $row['sign_tax'],
+            'totalFee' => $row['total_fee'],
+            'photo' => $row['photo'],
+            'isRenewal' => (bool)$row['is_renewal'],
+            'status' => $row['status'],
+            'applyDate' => $row['apply_date'],
+            'signatoryRole' => $row['signatory_role'] ?? 'চেয়ারম্যান'
+        ]);
+    } else {
+        echo json_encode(['found' => false]);
+    }
+    exit;
+}
+
+// 🟢 ২৩. ওয়ারিশান সনদের সম্পূর্ণ বিবরণ (Print & Details)
+if ($action === 'getWarishanDetails') {
+    $q = trim(is_array($data) ? ($data['appId'] ?? '') : $data);
+    $stmt = $pdo->prepare("SELECT * FROM warishans WHERE app_id = ?");
+    $stmt->execute([$q]);
+    $row = $stmt->fetch();
+
+    if ($row) {
+        $tree = json_decode($row['warishan_tree_json'] ?? '[]', true);
+        echo json_encode([
+            'found' => true,
+            'appId' => $row['app_id'],
+            'applicantName' => $row['applicant_name'],
+            'fatherSpouseName' => $row['father_spouse'],
+            'deceasedName' => $row['deceased_name'],
+            'deceasedFather' => $row['deceased_father'],
+            'deceasedRelation' => $row['deceased_relation'],
+            'nid' => $row['nid'],
+            'mobile' => $row['mobile'],
+            'wardNo' => $row['ward_no'],
+            'village' => $row['village'],
+            'postOffice' => $row['post_office'],
+            'smarakNo' => $row['smarak_no'],
+            'warishanTree' => $tree,
+            'deceasedWardNo' => $row['deceased_ward_no'],
+            'deceasedVillage' => $row['deceased_village'],
+            'deceasedPostOffice' => $row['deceased_post_office'],
+            'deceasedUnion' => $row['deceased_union'],
+            'deceasedUpazila' => $row['deceased_upazila'],
+            'deceasedDistrict' => $row['deceased_district'],
+            'status' => $row['status'],
+            'date' => $row['date'],
+            'applyDate' => $row['date'],
+            'signatoryRole' => $row['signatory_role'] ?? 'চেয়ারম্যান'
+        ]);
+    } else {
+        echo json_encode(['found' => false]);
+    }
+    exit;
+}
+
 // 🟢 ১. সার্বজনীন ট্র্যাকিং (মোবাইল / এনআইডি / নাম দিয়ে)
 if ($action === 'trackApplication') {
     $q = trim(is_array($data) ? ($data['query'] ?? '') : $data);
