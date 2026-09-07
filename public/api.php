@@ -349,10 +349,20 @@ if ($action === 'trackApplication') {
 }
 
 // 🟢 ২. নাগরিকত্ব আবেদন সাবমিট
+// 🟢 নাগরিকত্ব সনদ সাবমিট (জন্মসাল দিয়ে ৪ ডিজিট তৈরি)
 if ($action === 'submitCitizenshipDirect') {
-    $rand = rand(100000, 999999);
-    $appId = 'AUL-' . $rand;
-    $certNo = '20007819510' . $rand;
+    $rand6 = rand(100000, 999999);
+    $appId = 'AUL-' . $rand6;
+    
+    // জন্ম তারিখ থেকে প্রথম ৪ ডিজিট (জন্ম সাল) নেওয়া
+    $dobYear = '2000';
+    if (!empty($data['dob'])) {
+        preg_match('/\d{4}/', $data['dob'], $matches);
+        if (!empty($matches)) {
+            $dobYear = $matches[0];
+        }
+    }
+    $certNo = $dobYear . '7819510' . substr($rand6, 0, 4);
     $date = date('d/m/Y');
 
     $stmt = $pdo->prepare("INSERT INTO citizenships (app_id, cert_no, name, nid, father_name, mother_name, dob, marital_status, spouse_name, mobile, ward_no, village, post_office, division, language, status, apply_date, signatory_role) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
@@ -360,7 +370,7 @@ if ($action === 'submitCitizenshipDirect') {
         $appId, $certNo, $data['name'], $data['nid'], $data['fatherName'], $data['motherName'],
         $data['dob'], $data['maritalStatus'] ?? 'অবিবাহিত', $data['spouseName'] ?? '', $data['mobile'],
         $data['wardNo'], $data['village'], $data['postOffice'] ?? 'আউলিয়াপুর ময়দান', 'বরিশাল',
-        $data['language'] ?? 'bn', 'Pending', $date, 'চেয়ারম্যান'
+        $data['language'] ?? 'bn', 'Pending', $date, 'চেয়ারম্যান'
     ]);
 
     echo json_encode(['success' => true, 'appId' => $appId, 'certNo' => $certNo]);
@@ -601,6 +611,43 @@ if ($action === 'deleteAdminUser' || $action === 'deleteUser') {
     echo json_encode(['success' => true]);
     exit;
 }
+// 🟢 ২৪. সংশোধিত সকল তথ্য ডাটাবেসে সেভ করা (Save Edited Application)
+if ($action === 'saveEditedApplication' || $action === 'updateApplicationData') {
+    $appId = trim($data['appId'] ?? '');
 
+    // ক. সাধারণ প্রত্যয়ন সংশোধন
+    if (isset($data['type']) && $data['type'] !== 'পারিবারিক সনদ' && $data['type'] !== 'উত্তরাধিকারী সনদ') {
+        $stmt = $pdo->prepare("UPDATE general_applications SET name=?, father_name=?, mother_name=?, nid=?, mobile=?, ward_no=?, village=?, post_office=? WHERE app_id=?");
+        $stmt->execute([
+            $data['name'] ?? '', $data['fatherName'] ?? '', $data['motherName'] ?? '',
+            $data['nid'] ?? '', $data['mobile'] ?? '', $data['wardNo'] ?? '',
+            $data['village'] ?? '', $data['postOffice'] ?? '', $appId
+        ]);
+    }
+
+    // খ. পারিবারিক ও উত্তরাধিকারী সনদ সংশোধন
+    if (isset($data['type']) && ($data['type'] === 'পারিবারিক সনদ' || $data['type'] === 'উত্তরাধিকারী সনদ')) {
+        $membersJson = isset($data['members']) ? json_encode($data['members']) : null;
+        $stmt = $pdo->prepare("UPDATE family_certificates SET name=?, nid=?, father_name=?, mother_name=?, mobile=?, ward_no=?, village=?, post_office=?, deceased_name=?, deceased_father=?, deceased_mother=?, deceased_date=?, applicant_relation=?, deceased_ward=?, deceased_village=?, deceased_post_office=?, members_json=COALESCE(?, members_json) WHERE app_id=?");
+        $stmt->execute([
+            $data['name'] ?? '', $data['nid'] ?? '', $data['fatherName'] ?? '', $data['motherName'] ?? '',
+            $data['mobile'] ?? '', $data['wardNo'] ?? '', $data['village'] ?? '', $data['postOffice'] ?? '',
+            $data['deceasedName'] ?? '', $data['deceasedFather'] ?? '', $data['deceasedMother'] ?? '',
+            $data['deceasedDate'] ?? '', $data['applicantRelation'] ?? '', $data['deceasedWard'] ?? '',
+            $data['deceasedVillage'] ?? '', $data['deceasedPostOffice'] ?? '', $membersJson, $appId
+        ]);
+    }
+
+    // গ. নাগরিকত্ব সনদ সংশোধন
+    $stmt = $pdo->prepare("UPDATE citizenships SET name=?, nid=?, father_name=?, mother_name=?, dob=?, mobile=?, ward_no=?, village=?, post_office=?, marital_status=?, spouse_name=? WHERE app_id=?");
+    $stmt->execute([
+        $data['name'] ?? '', $data['nid'] ?? '', $data['fatherName'] ?? '', $data['motherName'] ?? '',
+        $data['dob'] ?? '', $data['mobile'] ?? '', $data['wardNo'] ?? '', $data['village'] ?? '',
+        $data['postOffice'] ?? '', $data['maritalStatus'] ?? 'অবিবাহিত', $data['spouseName'] ?? '', $appId
+    ]);
+
+    echo json_encode(['success' => true]);
+    exit;
+}
 // ডিফল্ট রেসপন্স
 echo json_encode(['success' => true, 'message' => 'API is active']);
