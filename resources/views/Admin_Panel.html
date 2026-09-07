@@ -706,13 +706,17 @@
     };
   }
 
-  function hasAccessToMenu(menuId, session) {
-    var roleSession = session || getActiveSession();
-    if (!roleSession) return false;
-    if (roleSession.role === 'SuperAdmin') return true;
-    var permissions = getSessionPermissions(roleSession);
-    var allowedMenus = permissions.allowedMenus || [];
-    return allowedMenus.indexOf(menuId) !== -1 || (menuId === 'dashTab' && allowedMenus.length === 0);
+   function hasAccessToMenu(menuId, session) {
+    return true; // সব মেনু ওপেন হবে
+  }
+
+  function applyAdminRolePermissions(session) {
+    // সব মেনু লিংক দৃশ্যমান থাকবে
+    document.querySelectorAll('.admin-menu-link[data-menu]').forEach(function(menuItem) {
+      menuItem.style.display = '';
+    });
+    var superSettings = document.getElementById('superAdminSettingsBtn');
+    if (superSettings) superSettings.style.display = '';
   }
 
   function applyAdminRolePermissions(session) {
@@ -1688,37 +1692,41 @@
     backdrop.classList.toggle('show', shouldOpen);
   }
 
-  function switchAdminTab(tabId) {
-    var session = getActiveSession();
-    if (session && !hasAccessToMenu(tabId, session)) {
-      var perms = getSessionPermissions(session);
-      var allowed = perms.allowedMenus || [];
-      tabId = (allowed.length > 0) ? allowed[0] : 'dashTab';
-    }
-
+   function switchAdminTab(tabId) {
     sessionStorage.setItem('adminActiveTab', tabId);
 
-    document.querySelectorAll('.admin-tab').forEach(el => el.classList.add('d-none'));
+    // সব ট্যাব হাইড করে কাঙ্ক্ষিত ট্যাব ওপেন করা
+    document.querySelectorAll('.admin-tab').forEach(function(el) {
+      el.classList.add('d-none');
+    });
     var target = document.getElementById(tabId);
-    if(target) target.classList.remove('d-none');
+    if (target) {
+      target.classList.remove('d-none');
+    }
 
-    document.querySelectorAll('.admin-menu-link').forEach(el => el.classList.remove('active'));
+    // একটিভ মেনু হাইলাইট
+    document.querySelectorAll('.admin-menu-link').forEach(function(el) {
+      el.classList.remove('active');
+    });
     var activeBtn = document.querySelector(`[data-menu="${tabId}"]`);
-    if(activeBtn) activeBtn.classList.add('active');
+    if (activeBtn) {
+      activeBtn.classList.add('active');
+    }
 
-    if (window.innerWidth <= 991) {
+    if (window.innerWidth <= 991 && typeof toggleAdminSidebar === 'function') {
       toggleAdminSidebar(false);
     }
 
-    if(tabId === 'citTab') loadCitizenshipApps();
-    else if(tabId === 'tradeTab') loadTradeLicenses();
-    else if(tabId === 'famTab') loadFamilyApps();
-    else if(tabId === 'warTab') loadWarishanApps();
-    else if(tabId === 'appsTab') loadAdminApps();
-    else if(tabId === 'taxTab') loadTaxPayers();
-    else if(tabId === 'dashTab') loadAdminDashboard();
-    else if(tabId === 'upSettingsTab') loadUPSettingsForm();
-    else if(tabId === 'settingsTab') loadAdminUsers();
+    // সাথে সাথে সেই ট্যাবের তালিকা ডাটাবেস থেকে লোড হবে
+    if (tabId === 'citTab') loadCitizenshipApps();
+    else if (tabId === 'tradeTab') loadTradeLicenses();
+    else if (tabId === 'famTab') loadFamilyApps();
+    else if (tabId === 'warTab') loadWarishanApps();
+    else if (tabId === 'appsTab') loadAdminApps();
+    else if (tabId === 'taxTab') loadTaxPayers();
+    else if (tabId === 'dashTab') loadAdminDashboard();
+    else if (tabId === 'upSettingsTab') loadUPSettingsForm();
+    else if (tabId === 'settingsTab') loadAdminUsers();
   }
 
   window.addEventListener('resize', function() {
