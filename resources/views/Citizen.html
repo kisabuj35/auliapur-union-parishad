@@ -533,7 +533,15 @@
     
     // ক্রমিক নং ০০০১ ফরম্যাট
     var smarakNo = formatSerial3Digits(getVal('smarakNo', 'serialNo', 'ক্রমিক নং', 'appId'));
-    var issueDate = getVal('issueDate', 'date', 'তারিখ', 'applyDate') || new Date().toLocaleDateString('bn-BD');
+    // আজকের রানিং তারিখ
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0');
+    var yyyy = today.getFullYear();
+    var currentPrintDate = dd + '/' + mm + '/' + yyyy;
+
+    // বাংলায় রূপান্তর
+    var issueDate = toBn(currentPrintDate);
 
     var qrPayload = `গণপ্রজাতন্ত্রী বাংলাদেশ সরকার\n১১নং আউলিয়াপুর ইউনিয়ন পরিষদ\nসনদ: নাগরিকত্ব সনদ\nসনদ নং: ${certNo}\nনাম: ${applicantName}\nপিতা: ${fatherName}\nএনআইডি: ${nid}\nঅনলাইন ভেরিফায়েড`;
     var qrCodeUrl = "https://api.qrserver.com/v1/create-qr-code/?size=140x140&margin=0&data=" + encodeURIComponent(qrPayload);
