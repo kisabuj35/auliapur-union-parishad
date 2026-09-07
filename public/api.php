@@ -14,6 +14,7 @@ $port = '4000';
 $db   = 'test';
 $user = 'GPq6ziukdiBtnU1.root'; 
 $pass = 'GvhCfDZtnVJL3noh';
+
 try {
     $pdo = new PDO("mysql:host=$host;port=$port;dbname=$db;charset=utf8mb4", $user, $pass, [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -26,72 +27,17 @@ try {
     exit;
 }
 
-// টেবিলগুলো না থাকলে অটোমেটিক তৈরি করার ফাংশন
-function ensureTablesExist($pdo) {
-    $pdo->exec("CREATE TABLE IF NOT EXISTS citizenships (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        app_id VARCHAR(50) UNIQUE, cert_no VARCHAR(100), name VARCHAR(255), nid VARCHAR(50),
-        father_name VARCHAR(255), mother_name VARCHAR(255), dob VARCHAR(50), marital_status VARCHAR(50),
-        spouse_name VARCHAR(255), mobile VARCHAR(50), ward_no VARCHAR(20), village VARCHAR(255),
-        post_office VARCHAR(255), division VARCHAR(100), language VARCHAR(10) DEFAULT 'bn',
-        status VARCHAR(50) DEFAULT 'Pending', apply_date VARCHAR(50), signatory_role VARCHAR(100) DEFAULT 'চেয়ারম্যান',
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    )");
-
-    $pdo->exec("CREATE TABLE IF NOT EXISTS trade_licenses (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        app_id VARCHAR(50) UNIQUE, license_no VARCHAR(100), receipt_no VARCHAR(50), org_name VARCHAR(255),
-        owner_name VARCHAR(255), father_name VARCHAR(255), mother_name VARCHAR(255), nid VARCHAR(50),
-        dob VARCHAR(50), mobile VARCHAR(50), owner_address TEXT, category VARCHAR(255),
-        biz_details TEXT, biz_address TEXT, biz_start_date VARCHAR(50), fiscal_year VARCHAR(50),
-        capital VARCHAR(100), license_fee DECIMAL(10,2) DEFAULT 200, vat_fee DECIMAL(10,2) DEFAULT 30,
-        comm_tax DECIMAL(10,2) DEFAULT 0, sign_tax DECIMAL(10,2) DEFAULT 0, total_fee DECIMAL(10,2) DEFAULT 230,
-        is_renewal TINYINT(1) DEFAULT 0, original_license_no VARCHAR(100), photo LONGTEXT,
-        status VARCHAR(50) DEFAULT 'Pending', apply_date VARCHAR(50), signatory_role VARCHAR(100) DEFAULT 'চেয়ারম্যান',
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    )");
-
-    $pdo->exec("CREATE TABLE IF NOT EXISTS family_certificates (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        app_id VARCHAR(50) UNIQUE, certificate_type VARCHAR(100) DEFAULT 'পারিবারিক সনদ',
-        name VARCHAR(255), nid VARCHAR(50), father_name VARCHAR(255), mother_name VARCHAR(255),
-        mobile VARCHAR(50), ward_no VARCHAR(20), village VARCHAR(255), post_office VARCHAR(255),
-        deceased_name VARCHAR(255), deceased_father VARCHAR(255), deceased_mother VARCHAR(255),
-        deceased_date VARCHAR(50), applicant_relation VARCHAR(100), deceased_ward VARCHAR(20),
-        deceased_village VARCHAR(255), deceased_post_office VARCHAR(255), deceased_union VARCHAR(100),
-        deceased_upazila VARCHAR(100), deceased_district VARCHAR(100), members_json LONGTEXT,
-        status VARCHAR(50) DEFAULT 'Pending', apply_date VARCHAR(50), signatory_role VARCHAR(100) DEFAULT 'চেয়ারম্যান',
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    )");
-
-    $pdo->exec("CREATE TABLE IF NOT EXISTS warishans (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        app_id VARCHAR(50) UNIQUE, applicant_name VARCHAR(255), father_spouse VARCHAR(255),
-        deceased_name VARCHAR(255), deceased_father VARCHAR(255), deceased_relation VARCHAR(100),
-        nid VARCHAR(50), mobile VARCHAR(50), ward_no VARCHAR(20), village VARCHAR(255),
-        post_office VARCHAR(255), deceased_ward_no VARCHAR(20), deceased_village VARCHAR(255),
-        deceased_post_office VARCHAR(255), deceased_union VARCHAR(100), deceased_upazila VARCHAR(100),
-        deceased_district VARCHAR(100), smarak_no VARCHAR(100), warishan_tree_json LONGTEXT,
-        status VARCHAR(50) DEFAULT 'Pending', date VARCHAR(50), signatory_role VARCHAR(100) DEFAULT 'চেয়ারম্যান',
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    )");
-
-    $pdo->exec("CREATE TABLE IF NOT EXISTS general_applications (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        app_id VARCHAR(50) UNIQUE, type VARCHAR(100), name VARCHAR(255), nid VARCHAR(50),
-        father_name VARCHAR(255), mother_name VARCHAR(255), dob VARCHAR(50), mobile VARCHAR(50),
-        ward_no VARCHAR(20), village VARCHAR(255), post_office VARCHAR(255), division VARCHAR(100),
-        status VARCHAR(50) DEFAULT 'Pending', apply_date VARCHAR(50), signatory_role VARCHAR(100) DEFAULT 'চেয়ারম্যান',
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    )");
-
-    $pdo->exec("CREATE TABLE IF NOT EXISTS up_settings (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        `key` VARCHAR(100) UNIQUE, `value` TEXT
-    )");
+// 🟢 জন্ম সাল বের করার হেল্পার ফাংশন (বাংলা/ইংরেজি যেকোনো ফরম্যাট থেকে)
+function extractDobYear($dob) {
+    if (empty($dob)) return date('Y');
+    $bn = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+    $en = ['0','1','2','3','4','5','6','7','8','9'];
+    $clean = str_replace($bn, $en, (string)$dob);
+    if (preg_match('/(19\d{2}|20\d{2})/', $clean, $matches)) {
+        return $matches[1];
+    }
+    return date('Y');
 }
-
-ensureTablesExist($pdo);
 
 // ইনপুট গ্রহণ
 $rawInput = file_get_contents('php://input');
@@ -99,48 +45,91 @@ $request = json_decode($rawInput, true) ?: [];
 $action = $request['action'] ?? $_GET['action'] ?? '';
 $data = $request['data'] ?? [];
 
-// 🟢 ১৯. আসল ডাটাবেস এডমিন লগইন (Admin Login Action)
-if ($action === 'adminLogin') {
-    $u = trim($data['username'] ?? '');
-    $p = trim($data['password'] ?? '');
+// 🟢 ১. সার্বজনীন ট্র্যাকিং (মোবাইল / এনআইডি / নাম / ট্র্যাকিং নং দিয়ে সার্চ)
+if ($action === 'trackApplication') {
+    $q = trim(is_array($data) ? ($data['query'] ?? $data['appId'] ?? '') : $data);
+    $bn = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+    $en = ['0','1','2','3','4','5','6','7','8','9'];
+    $cleanQ = str_replace($bn, $en, $q);
 
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
-    $stmt->execute([$u]);
-    $user = $stmt->fetch();
+    $results = [];
 
-    if ($user && ($user['password'] === $p || password_verify($p, $user['password']))) {
-        $perms = json_decode($user['permissions'] ?? '{}', true);
+    // নাগরিকত্ব
+    $stmt = $pdo->prepare("SELECT app_id as appId, cert_no as certNo, 'নাগরিকত্ব সনদ' as type, 'নাগরিকত্ব সনদ' as serviceType, name as applicantName, name, father_name as fatherName, mother_name as motherName, mobile, nid, status, apply_date as applyDate, ward_no as wardNo, village, post_office as postOffice FROM citizenships WHERE app_id = ? OR app_id LIKE ? OR mobile LIKE ? OR nid LIKE ? OR name LIKE ?");
+    $stmt->execute([$cleanQ, "%$cleanQ%", "%$cleanQ%", "%$cleanQ%", "%$q%"]);
+    $results = array_merge($results, $stmt->fetchAll());
+
+    // ট্রেড লাইসেন্স
+    $stmt = $pdo->prepare("SELECT app_id as appId, license_no as licNo, license_no as certNo, IF(is_renewal=1, 'ট্রেড লাইসেন্স নবায়ন', 'ট্রেড লাইসেন্স') as type, IF(is_renewal=1, 'ট্রেড লাইসেন্স নবায়ন', 'ট্রেড লাইসেন্স') as serviceType, CONCAT(owner_name, ' (', org_name, ')') as applicantName, owner_name as name, father_name as fatherName, mother_name as motherName, mobile, nid, status, apply_date as applyDate, '' as wardNo, biz_address as village, '' as postOffice FROM trade_licenses WHERE app_id = ? OR app_id LIKE ? OR license_no LIKE ? OR mobile LIKE ? OR nid LIKE ? OR owner_name LIKE ? OR org_name LIKE ?");
+    $stmt->execute([$cleanQ, "%$cleanQ%", "%$cleanQ%", "%$cleanQ%", "%$cleanQ%", "%$q%", "%$q%"]);
+    $results = array_merge($results, $stmt->fetchAll());
+
+    // পারিবারিক ও উত্তরাধিকারী
+    $stmt = $pdo->prepare("SELECT app_id as appId, '' as certNo, certificate_type as type, certificate_type as serviceType, name as applicantName, name, father_name as fatherName, mother_name as motherName, mobile, nid, status, apply_date as applyDate, ward_no as wardNo, village, post_office as postOffice, members_json as membersJson FROM family_certificates WHERE app_id = ? OR app_id LIKE ? OR mobile LIKE ? OR nid LIKE ? OR name LIKE ? OR deceased_name LIKE ?");
+    $stmt->execute([$cleanQ, "%$cleanQ%", "%$cleanQ%", "%$cleanQ%", "%$q%", "%$q%"]);
+    $results = array_merge($results, $stmt->fetchAll());
+
+    // ওয়ারিশান
+    $stmt = $pdo->prepare("SELECT app_id as appId, smarak_no as certNo, 'ওয়ারিশান সনদ' as type, 'ওয়ারিশান সনদ' as serviceType, applicant_name as applicantName, applicant_name as name, father_spouse as fatherName, '' as motherName, mobile, nid, status, date as applyDate, ward_no as wardNo, village, post_office as postOffice FROM warishans WHERE app_id = ? OR app_id LIKE ? OR mobile LIKE ? OR nid LIKE ? OR applicant_name LIKE ? OR deceased_name LIKE ?");
+    $stmt->execute([$cleanQ, "%$cleanQ%", "%$cleanQ%", "%$cleanQ%", "%$q%", "%$q%"]);
+    $results = array_merge($results, $stmt->fetchAll());
+
+    // সাধারণ প্রত্যয়ন
+    $stmt = $pdo->prepare("SELECT app_id as appId, '' as certNo, type, type as serviceType, name as applicantName, name, father_name as fatherName, mother_name as motherName, mobile, nid, status, apply_date as applyDate, ward_no as wardNo, village, post_office as postOffice FROM general_applications WHERE app_id = ? OR app_id LIKE ? OR mobile LIKE ? OR nid LIKE ? OR name LIKE ?");
+    $stmt->execute([$cleanQ, "%$cleanQ%", "%$cleanQ%", "%$cleanQ%", "%$q%"]);
+    $results = array_merge($results, $stmt->fetchAll());
+
+    if (empty($results)) {
+        echo json_encode(['found' => false, 'list' => [], 'total' => 0]);
+    } else {
+        $first = $results[0];
         echo json_encode([
-            'success' => true,
-            'username' => $user['username'],
-            'role' => $user['role'] ?? 'Admin',
-            'name' => $user['name'] ?? $user['username'],
-            'photoUrl' => $user['photo'] ?? 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png',
-            'permissions' => $perms,
-            'allowedMenus' => $perms['allowedMenus'] ?? ['dashTab']
+            'found' => true,
+            'total' => count($results),
+            'list' => $results,
+            // একক অবজেক্ট কম্প্যাটিবিলিটি (যাতে সরাসরি এডিট ও প্রিন্ট ফাংশন তথ্য পায়)
+            'appId' => $first['appId'],
+            'type' => $first['type'],
+            'serviceType' => $first['serviceType'],
+            'name' => $first['name'],
+            'applicantName' => $first['applicantName'],
+            'fatherName' => $first['fatherName'],
+            'motherName' => $first['motherName'],
+            'mobile' => $first['mobile'],
+            'nid' => $first['nid'],
+            'status' => $first['status'],
+            'applyDate' => $first['applyDate'],
+            'wardNo' => $first['wardNo'],
+            'village' => $first['village'],
+            'postOffice' => $first['postOffice']
         ]);
-        exit;
     }
-
-    // সুপার এডমিন ফলব্যাক (যদি ডাটাবেস চেক কোনো কারণে মিস হয়)
-    if (($u === 'admin' || $u === 'superadmin') && $p === '123456') {
-        echo json_encode([
-            'success' => true,
-            'username' => $u,
-            'role' => 'SuperAdmin',
-            'name' => 'অ্যাড. মোঃ হুমায়ুন কবির (চেয়ারম্যান)',
-            'photoUrl' => 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png',
-            'permissions' => ['canApprove' => true, 'canReject' => true, 'canEdit' => true, 'canDelete' => true],
-            'allowedMenus' => ['dashTab']
-        ]);
-        exit;
-    }
-
-    echo json_encode(['success' => false, 'message' => 'ইউজারনেম বা পাসওয়ার্ড সঠিক নয়!']);
     exit;
 }
 
-// 🟢 ২০. নাগরিকত্ব সনদের সম্পূর্ণ বিবরণ (Print & Details)
+// 🟢 ২. নাগরিকত্ব আবেদন সাবমিট (জন্মসাল ৪ ডিজিট নিশ্চিতকরণ)
+if ($action === 'submitCitizenshipDirect') {
+    $rand6 = rand(100000, 999999);
+    $appId = 'AUL-' . $rand6;
+    
+    // আবেদনকারীর দেওয়া জন্ম তারিখ থেকে ৪ ডিজিটের সাল বের করা
+    $dobYear = extractDobYear($data['dob'] ?? '');
+    $certNo = $dobYear . '7819510' . substr($rand6, 0, 4);
+    $date = date('d/m/Y');
+
+    $stmt = $pdo->prepare("INSERT INTO citizenships (app_id, cert_no, name, nid, father_name, mother_name, dob, marital_status, spouse_name, mobile, ward_no, village, post_office, division, language, status, apply_date, signatory_role) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+    $stmt->execute([
+        $appId, $certNo, $data['name'], $data['nid'], $data['fatherName'], $data['motherName'],
+        $data['dob'], $data['maritalStatus'] ?? 'অবিবাহিত', $data['spouseName'] ?? '', $data['mobile'],
+        $data['wardNo'], $data['village'], $data['postOffice'] ?? 'আউলিয়াপুর ময়দান', 'বরিশাল',
+        $data['language'] ?? 'bn', 'Pending', $date, 'চেয়ারম্যান'
+    ]);
+
+    echo json_encode(['success' => true, 'appId' => $appId, 'certNo' => $certNo]);
+    exit;
+}
+
+// 🟢 ৩. নাগরিকত্ব সনদের সম্পূর্ণ বিবরণ (Print & Details - জন্মসাল ভেরিফাইড)
 if ($action === 'getCitizenshipDetails') {
     $q = trim(is_array($data) ? ($data['appId'] ?? '') : $data);
     $stmt = $pdo->prepare("SELECT * FROM citizenships WHERE app_id = ? OR cert_no = ?");
@@ -148,10 +137,18 @@ if ($action === 'getCitizenshipDetails') {
     $row = $stmt->fetch();
 
     if ($row) {
+        // যদি পুরনো কোনো সনদে ২০০০ থাকে, তবে জন্ম তারিখের সাল দিয়ে সাথে সাথে ঠিক করা
+        $dobYear = extractDobYear($row['dob']);
+        $certNo = $row['cert_no'];
+        if (!empty($dobYear) && substr($certNo, 0, 4) !== $dobYear) {
+            $certNo = $dobYear . substr($certNo, 4);
+            $pdo->prepare("UPDATE citizenships SET cert_no = ? WHERE id = ?")->execute([$certNo, $row['id']]);
+        }
+
         echo json_encode([
             'found' => true,
             'appId' => $row['app_id'],
-            'certNo' => $row['cert_no'],
+            'certNo' => $certNo,
             'name' => $row['name'],
             'fatherName' => $row['father_name'],
             'motherName' => $row['mother_name'],
@@ -168,7 +165,7 @@ if ($action === 'getCitizenshipDetails') {
             'certificateLanguage' => $row['language'],
             'status' => $row['status'],
             'applyDate' => $row['apply_date'],
-            'signatoryRole' => $row['signatory_role'] ?? 'চেয়ারম্যান'
+            'signatoryRole' => $row['signatory_role'] ?? 'চেয়ারম্যান'
         ]);
     } else {
         echo json_encode(['found' => false]);
@@ -176,7 +173,7 @@ if ($action === 'getCitizenshipDetails') {
     exit;
 }
 
-// 🟢 ২১. পারিবারিক ও উত্তরাধিকারী সনদের সম্পূর্ণ বিবরণ (Print & Details)
+// 🟢 ৪. পারিবারিক ও উত্তরাধিকারী সনদের সম্পূর্ণ বিবরণ
 if ($action === 'getFamilyDetails') {
     $q = trim(is_array($data) ? ($data['appId'] ?? '') : $data);
     $stmt = $pdo->prepare("SELECT * FROM family_certificates WHERE app_id = ?");
@@ -212,7 +209,7 @@ if ($action === 'getFamilyDetails') {
             'members' => $members,
             'status' => $row['status'],
             'applyDate' => $row['apply_date'],
-            'signatoryRole' => $row['signatory_role'] ?? 'চেয়ারম্যান'
+            'signatoryRole' => $row['signatory_role'] ?? 'চেয়ারম্যান'
         ]);
     } else {
         echo json_encode(['found' => false]);
@@ -220,7 +217,7 @@ if ($action === 'getFamilyDetails') {
     exit;
 }
 
-// 🟢 ২২. ট্রেড লাইসেন্সের সম্পূর্ণ বিবরণ (Print & Details)
+// 🟢 ৫. ট্রেড লাইসেন্সের সম্পূর্ণ বিবরণ
 if ($action === 'getTradeLicenseDetails') {
     $q = trim(is_array($data) ? ($data['appId'] ?? $data['licNo'] ?? '') : $data);
     $stmt = $pdo->prepare("SELECT * FROM trade_licenses WHERE app_id = ? OR license_no = ?");
@@ -257,7 +254,7 @@ if ($action === 'getTradeLicenseDetails') {
             'isRenewal' => (bool)$row['is_renewal'],
             'status' => $row['status'],
             'applyDate' => $row['apply_date'],
-            'signatoryRole' => $row['signatory_role'] ?? 'চেয়ারম্যান'
+            'signatoryRole' => $row['signatory_role'] ?? 'চেয়ারম্যান'
         ]);
     } else {
         echo json_encode(['found' => false]);
@@ -265,7 +262,7 @@ if ($action === 'getTradeLicenseDetails') {
     exit;
 }
 
-// 🟢 ২৩. ওয়ারিশান সনদের সম্পূর্ণ বিবরণ (Print & Details)
+// 🟢 ৬. ওয়ারিশান সনদের সম্পূর্ণ বিবরণ
 if ($action === 'getWarishanDetails') {
     $q = trim(is_array($data) ? ($data['appId'] ?? '') : $data);
     $stmt = $pdo->prepare("SELECT * FROM warishans WHERE app_id = ?");
@@ -298,7 +295,7 @@ if ($action === 'getWarishanDetails') {
             'status' => $row['status'],
             'date' => $row['date'],
             'applyDate' => $row['date'],
-            'signatoryRole' => $row['signatory_role'] ?? 'চেয়ারম্যান'
+            'signatoryRole' => $row['signatory_role'] ?? 'চেয়ারম্যান'
         ]);
     } else {
         echo json_encode(['found' => false]);
@@ -306,78 +303,42 @@ if ($action === 'getWarishanDetails') {
     exit;
 }
 
-// 🟢 ১. সার্বজনীন ট্র্যাকিং (মোবাইল / এনআইডি / নাম দিয়ে)
-if ($action === 'trackApplication') {
-    $q = trim(is_array($data) ? ($data['query'] ?? '') : $data);
-    $bn = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
-    $en = ['0','1','2','3','4','5','6','7','8','9'];
-    $cleanQ = str_replace($bn, $en, $q);
+// 🟢 ৭. সংশোধিত সকল তথ্য ডাটাবেসে সেভ করা (Save Edited Application - ১০০% নিশ্চিত আপডেট)
+if ($action === 'saveEditedApplication' || $action === 'updateApplicationData') {
+    $appId = trim($data['appId'] ?? '');
 
-    $results = [];
-
-    // নাগরিকত্ব
-    $stmt = $pdo->prepare("SELECT app_id as appId, cert_no as certNo, 'নাগরিকত্ব সনদ' as type, name as applicantName, father_name as fatherName, mobile, nid, status, apply_date as applyDate FROM citizenships WHERE app_id LIKE ? OR mobile LIKE ? OR nid LIKE ? OR name LIKE ?");
-    $stmt->execute(["%$cleanQ%", "%$cleanQ%", "%$cleanQ%", "%$q%"]);
-    $results = array_merge($results, $stmt->fetchAll());
-
-    // ট্রেড লাইসেন্স
-    $stmt = $pdo->prepare("SELECT app_id as appId, license_no as licNo, IF(is_renewal=1, 'ট্রেড লাইসেন্স নবায়ন', 'ট্রেড লাইসেন্স') as type, CONCAT(owner_name, ' (', org_name, ')') as applicantName, father_name as fatherName, mobile, nid, status, apply_date as applyDate FROM trade_licenses WHERE app_id LIKE ? OR license_no LIKE ? OR mobile LIKE ? OR nid LIKE ? OR owner_name LIKE ? OR org_name LIKE ?");
-    $stmt->execute(["%$cleanQ%", "%$cleanQ%", "%$cleanQ%", "%$cleanQ%", "%$q%", "%$q%"]);
-    $results = array_merge($results, $stmt->fetchAll());
-
-    // পারিবারিক
-    $stmt = $pdo->prepare("SELECT app_id as appId, certificate_type as type, name as applicantName, father_name as fatherName, mobile, nid, status, apply_date as applyDate FROM family_certificates WHERE app_id LIKE ? OR mobile LIKE ? OR nid LIKE ? OR name LIKE ?");
-    $stmt->execute(["%$cleanQ%", "%$cleanQ%", "%$cleanQ%", "%$q%"]);
-    $results = array_merge($results, $stmt->fetchAll());
-
-    // ওয়ারিশান
-    $stmt = $pdo->prepare("SELECT app_id as appId, 'ওয়ারিশান সনদ' as type, applicant_name as applicantName, father_spouse as fatherName, mobile, nid, status, date as applyDate FROM warishans WHERE app_id LIKE ? OR mobile LIKE ? OR nid LIKE ? OR applicant_name LIKE ?");
-    $stmt->execute(["%$cleanQ%", "%$cleanQ%", "%$cleanQ%", "%$q%"]);
-    $results = array_merge($results, $stmt->fetchAll());
-
-    // সাধারণ প্রত্যয়ন
-    $stmt = $pdo->prepare("SELECT app_id as appId, type, name as applicantName, father_name as fatherName, mobile, nid, status, apply_date as applyDate FROM general_applications WHERE app_id LIKE ? OR mobile LIKE ? OR nid LIKE ? OR name LIKE ?");
-    $stmt->execute(["%$cleanQ%", "%$cleanQ%", "%$cleanQ%", "%$q%"]);
-    $results = array_merge($results, $stmt->fetchAll());
-
-    if (empty($results)) {
-        echo json_encode(['found' => false, 'list' => [], 'total' => 0]);
-    } else {
-        echo json_encode(['found' => true, 'total' => count($results), 'list' => $results]);
-    }
-    exit;
-}
-
-// 🟢 ২. নাগরিকত্ব আবেদন সাবমিট
-// 🟢 নাগরিকত্ব সনদ সাবমিট (জন্মসাল দিয়ে ৪ ডিজিট তৈরি)
-if ($action === 'submitCitizenshipDirect') {
-    $rand6 = rand(100000, 999999);
-    $appId = 'AUL-' . $rand6;
-    
-    // জন্ম তারিখ থেকে প্রথম ৪ ডিজিট (জন্ম সাল) নেওয়া
-    $dobYear = '2000';
-    if (!empty($data['dob'])) {
-        preg_match('/\d{4}/', $data['dob'], $matches);
-        if (!empty($matches)) {
-            $dobYear = $matches[0];
-        }
-    }
-    $certNo = $dobYear . '7819510' . substr($rand6, 0, 4);
-    $date = date('d/m/Y');
-
-    $stmt = $pdo->prepare("INSERT INTO citizenships (app_id, cert_no, name, nid, father_name, mother_name, dob, marital_status, spouse_name, mobile, ward_no, village, post_office, division, language, status, apply_date, signatory_role) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-    $stmt->execute([
-        $appId, $certNo, $data['name'], $data['nid'], $data['fatherName'], $data['motherName'],
-        $data['dob'], $data['maritalStatus'] ?? 'অবিবাহিত', $data['spouseName'] ?? '', $data['mobile'],
-        $data['wardNo'], $data['village'], $data['postOffice'] ?? 'আউলিয়াপুর ময়দান', 'বরিশাল',
-        $data['language'] ?? 'bn', 'Pending', $date, 'চেয়ারম্যান'
+    // সাধারণ প্রত্যয়ন আপডেট
+    $stmtGen = $pdo->prepare("UPDATE general_applications SET name=?, father_name=?, mother_name=?, nid=?, mobile=?, ward_no=?, village=?, post_office=? WHERE app_id=?");
+    $stmtGen->execute([
+        $data['name'] ?? '', $data['fatherName'] ?? '', $data['motherName'] ?? '',
+        $data['nid'] ?? '', $data['mobile'] ?? '', $data['wardNo'] ?? '',
+        $data['village'] ?? '', $data['postOffice'] ?? '', $appId
     ]);
 
-    echo json_encode(['success' => true, 'appId' => $appId, 'certNo' => $certNo]);
+    // পারিবারিক ও উত্তরাধিকারী আপডেট
+    $membersJson = isset($data['members']) ? json_encode($data['members']) : null;
+    $stmtFam = $pdo->prepare("UPDATE family_certificates SET name=?, nid=?, father_name=?, mother_name=?, mobile=?, ward_no=?, village=?, post_office=?, deceased_name=?, deceased_father=?, deceased_mother=?, deceased_date=?, applicant_relation=?, deceased_ward=?, deceased_village=?, deceased_post_office=?, members_json=COALESCE(?, members_json) WHERE app_id=?");
+    $stmtFam->execute([
+        $data['name'] ?? '', $data['nid'] ?? '', $data['fatherName'] ?? '', $data['motherName'] ?? '',
+        $data['mobile'] ?? '', $data['wardNo'] ?? '', $data['village'] ?? '', $data['postOffice'] ?? '',
+        $data['deceasedName'] ?? '', $data['deceasedFather'] ?? '', $data['deceasedMother'] ?? '',
+        $data['deceasedDate'] ?? '', $data['applicantRelation'] ?? '', $data['deceasedWard'] ?? '',
+        $data['deceasedVillage'] ?? '', $data['deceasedPostOffice'] ?? '', $membersJson, $appId
+    ]);
+
+    // নাগরিকত্ব সনদ আপডেট
+    $stmtCit = $pdo->prepare("UPDATE citizenships SET name=?, nid=?, father_name=?, mother_name=?, dob=?, mobile=?, ward_no=?, village=?, post_office=?, marital_status=?, spouse_name=? WHERE app_id=?");
+    $stmtCit->execute([
+        $data['name'] ?? '', $data['nid'] ?? '', $data['fatherName'] ?? '', $data['motherName'] ?? '',
+        $data['dob'] ?? '', $data['mobile'] ?? '', $data['wardNo'] ?? '', $data['village'] ?? '',
+        $data['postOffice'] ?? '', $data['maritalStatus'] ?? 'অবিবাহিত', $data['spouseName'] ?? '', $appId
+    ]);
+
+    echo json_encode(['success' => true]);
     exit;
 }
 
-// 🟢 ৩. ট্রেড লাইসেন্স সাবমিট
+// 🟢 ৮. ট্রেড লাইসেন্স সাবমিট
 if ($action === 'submitTradeLicenseApplication') {
     $rand = rand(100000, 999999);
     $appId = 'AUL-TR-' . $rand;
@@ -390,14 +351,28 @@ if ($action === 'submitTradeLicenseApplication') {
         $data['nid'], $data['dob'], $data['mobile'], $data['ownerAddress'], $data['category'], $data['bizDetails'] ?? '',
         $data['bizAddress'], $data['bizStartDate'] ?? '', $data['fiscalYear'] ?? '২০২৬-২০২৭', $data['capital'] ?? '',
         200, 30, $data['commTax'] ?? 0, $data['signTax'] ?? 0, $data['totalFee'] ?? 230, $data['photo'] ?? '',
-        'Pending', $date, 'চেয়ারম্যান'
+        'Pending', $date, 'চেয়ারম্যান'
     ]);
 
     echo json_encode(['success' => true, 'appId' => $appId, 'licNo' => $licNo]);
     exit;
 }
 
-// 🟢 ৪. পারিবারিক ও উত্তরাধিকারী সাবমিট
+// 🟢 ৯. ট্রেড লাইসেন্স আপডেট
+if ($action === 'updateTradeLicenseData') {
+    $appId = trim($data['appId'] ?? '');
+    $stmt = $pdo->prepare("UPDATE trade_licenses SET org_name=?, owner_name=?, father_name=?, mother_name=?, nid=?, mobile=?, category=?, fiscal_year=?, owner_address=?, biz_address=?, comm_tax=?, sign_tax=?, total_fee=?, signatory_role=? WHERE app_id=?");
+    $stmt->execute([
+        $data['orgName'] ?? '', $data['ownerName'] ?? '', $data['fatherName'] ?? '', $data['motherName'] ?? '',
+        $data['nid'] ?? '', $data['mobile'] ?? '', $data['category'] ?? '', $data['fiscalYear'] ?? '',
+        $data['ownerAddress'] ?? '', $data['bizAddress'] ?? '', $data['commTax'] ?? 0, $data['signTax'] ?? 0,
+        $data['totalFee'] ?? 0, $data['signatoryRole'] ?? 'চেয়ারম্যান', $appId
+    ]);
+    echo json_encode(['success' => true]);
+    exit;
+}
+
+// 🟢 ১০. পারিবারিক ও উত্তরাধিকারী সাবমিট
 if ($action === 'submitFamilyDirect') {
     $isSuccession = ($data['type'] === 'উত্তরাধিকারী সনদ');
     $prefix = $isSuccession ? 'AUL-UW-' : 'AUL-FW-';
@@ -411,14 +386,14 @@ if ($action === 'submitFamilyDirect') {
         $data['deceasedName'] ?? '', $data['deceasedFather'] ?? '', $data['deceasedMother'] ?? '',
         $data['deceasedDate'] ?? '', $data['applicantRelation'] ?? '', $data['deceasedWard'] ?? '',
         $data['deceasedVillage'] ?? '', $data['deceasedPostOffice'] ?? '',
-        json_encode($data['members'] ?? []), 'Pending', $date, 'চেয়ারম্যান'
+        json_encode($data['members'] ?? []), 'Pending', $date, 'চেয়ারম্যান'
     ]);
 
     echo json_encode(['success' => true, 'appId' => $appId]);
     exit;
 }
 
-// 🟢 ৫. ওয়ারিশান সাবমিট
+// 🟢 ১১. ওয়ারিশান সাবমিট ও আপডেট
 if ($action === 'submitWarishanApplication') {
     $appId = 'AUL-WAR-' . rand(1000, 9999);
     $date = date('d/m/Y');
@@ -429,14 +404,28 @@ if ($action === 'submitWarishanApplication') {
         $appId, $data['applicantName'], $data['fatherSpouseName'], $data['deceasedName'], $data['deceasedFather'],
         $data['deceasedRelation'] ?? 'পুত্র', $data['nid'], $data['mobile'], $data['wardNo'], $data['village'],
         $data['postOffice'] ?? 'আউলিয়াপুর ময়দান', $smarakNo, json_encode($data['warishanTree'] ?? []),
-        'Pending', $date, 'চেয়ারম্যান'
+        'Pending', $date, 'চেয়ারম্যান'
     ]);
 
     echo json_encode(['success' => true, 'appId' => $appId]);
     exit;
 }
 
-// 🟢 ৬. সাধারণ প্রত্যয়ন সাবমিট
+if ($action === 'updateWarishanData') {
+    $appId = trim($data['appId'] ?? '');
+    $stmt = $pdo->prepare("UPDATE warishans SET applicant_name=?, father_spouse=?, deceased_name=?, deceased_father=?, deceased_relation=?, nid=?, mobile=?, ward_no=?, village=?, post_office=?, warishan_tree_json=?, signatory_role=? WHERE app_id=?");
+    $stmt->execute([
+        $data['applicantName'] ?? '', $data['fatherSpouseName'] ?? '', $data['deceasedName'] ?? '',
+        $data['deceasedFather'] ?? '', $data['deceasedRelation'] ?? 'পুত্র', $data['nid'] ?? '',
+        $data['mobile'] ?? '', $data['wardNo'] ?? '', $data['village'] ?? '',
+        $data['postOffice'] ?? '', json_encode($data['warishanTree'] ?? []),
+        $data['signatoryRole'] ?? 'চেয়ারম্যান', $appId
+    ]);
+    echo json_encode(['success' => true]);
+    exit;
+}
+
+// 🟢 ১২. সাধারণ প্রত্যয়ন সাবমিট
 if ($action === 'submitApplication') {
     $appId = 'AUL-' . rand(100000, 999999);
     $date = date('d/m/Y');
@@ -445,14 +434,14 @@ if ($action === 'submitApplication') {
     $stmt->execute([
         $appId, $data['type'] ?? 'বিবিধ প্রত্যয়নপত্র', $data['name'], $data['nid'], $data['fatherName'],
         $data['motherName'] ?? '', $data['mobile'], $data['wardNo'], $data['village'],
-        $data['postOffice'] ?? 'আউলিয়াপুর ময়দান', 'Pending', $date, 'চেয়ারম্যান'
+        $data['postOffice'] ?? 'আউলিয়াপুর ময়দান', 'Pending', $date, 'চেয়ারম্যান'
     ]);
 
     echo json_encode(['success' => true, 'appId' => $appId]);
     exit;
 }
 
-// 🟢 ৭. ড্যাশবোর্ড পরিসংখ্যান (Dashboard Stats)
+// 🟢 ১৩. ড্যাশবোর্ড পরিসংখ্যান
 if ($action === 'getMasterDashboardStats') {
     $citTotal = $pdo->query("SELECT COUNT(*) FROM citizenships")->fetchColumn();
     $citApproved = $pdo->query("SELECT COUNT(*) FROM citizenships WHERE status='Approved'")->fetchColumn();
@@ -491,42 +480,29 @@ if ($action === 'getMasterDashboardStats') {
     exit;
 }
 
-// 🟢 ৮. নাগরিকত্ব তালিকা (Citizenship List)
+// 🟢 ১৪. তালিকার API সমূহ
 if ($action === 'getCitizenshipApps') {
-    $stmt = $pdo->query("SELECT app_id as appId, cert_no as certNo, name, father_name as fatherName, mobile, status FROM citizenships ORDER BY id DESC");
-    echo json_encode($stmt->fetchAll());
+    echo json_encode($pdo->query("SELECT app_id as appId, cert_no as certNo, name, father_name as fatherName, mobile, status FROM citizenships ORDER BY id DESC")->fetchAll());
     exit;
 }
-
-// 🟢 ৯. ট্রেড লাইসেন্স তালিকা (Trade License List)
 if ($action === 'getTradeLicenses' || $action === 'getTradeRenewals') {
-    $stmt = $pdo->query("SELECT app_id as appId, license_no as licNo, org_name as orgName, owner_name as ownerName, father_name as fatherName, mobile, total_fee as totalFee, status, is_renewal as isRenewal FROM trade_licenses ORDER BY id DESC");
-    echo json_encode($stmt->fetchAll());
+    echo json_encode($pdo->query("SELECT app_id as appId, license_no as licNo, org_name as orgName, owner_name as ownerName, father_name as fatherName, mobile, total_fee as totalFee, status, is_renewal as isRenewal FROM trade_licenses ORDER BY id DESC")->fetchAll());
     exit;
 }
-
-// 🟢 ১০. পারিবারিক ও উত্তরাধিকারী তালিকা (Family List)
 if ($action === 'getFamilyApps') {
-    $stmt = $pdo->query("SELECT app_id as appId, certificate_type as type, name, nid, father_name as fatherName, mobile, ward_no as wardNo, village, status FROM family_certificates ORDER BY id DESC");
-    echo json_encode($stmt->fetchAll());
+    echo json_encode($pdo->query("SELECT app_id as appId, certificate_type as type, name, nid, father_name as fatherName, mobile, ward_no as wardNo, village, status FROM family_certificates ORDER BY id DESC")->fetchAll());
     exit;
 }
-
-// 🟢 ১১. ওয়ারিশান তালিকা (Warishan List)
 if ($action === 'getWarishanApps') {
-    $stmt = $pdo->query("SELECT app_id as appId, applicant_name as applicantName, deceased_name as deceasedName, deceased_father as deceasedFather, mobile, village, status FROM warishans ORDER BY id DESC");
-    echo json_encode($stmt->fetchAll());
+    echo json_encode($pdo->query("SELECT app_id as appId, applicant_name as applicantName, deceased_name as deceasedName, deceased_father as deceasedFather, mobile, village, status FROM warishans ORDER BY id DESC")->fetchAll());
     exit;
 }
-
-// 🟢 ১২. সাধারণ প্রত্যয়ন তালিকা (General Apps List)
 if ($action === 'getAllApplications') {
-    $stmt = $pdo->query("SELECT app_id as appId, type, name, nid, mobile, ward_no as wardNo, status FROM general_applications ORDER BY id DESC");
-    echo json_encode($stmt->fetchAll());
+    echo json_encode($pdo->query("SELECT app_id as appId, type, name, nid, mobile, ward_no as wardNo, status FROM general_applications ORDER BY id DESC")->fetchAll());
     exit;
 }
 
-// 🟢 ১৩. স্ট্যাটাস পরিবর্তন (Approve / Reject)
+// 🟢 ১৫. স্ট্যাটাস পরিবর্তন ও ডিলিট
 if ($action === 'updateAppStatus') {
     $appId = $data['appId'] ?? '';
     $status = $data['status'] ?? 'Approved';
@@ -541,113 +517,57 @@ if ($action === 'updateAppStatus') {
     exit;
 }
 
-// 🟢 ১৪. আবেদন ডিলিট করা
 if ($action === 'deleteApplication') {
     $appId = is_array($data) ? ($data['appId'] ?? '') : $data;
-
     $pdo->prepare("DELETE FROM citizenships WHERE app_id=?")->execute([$appId]);
     $pdo->prepare("DELETE FROM trade_licenses WHERE app_id=?")->execute([$appId]);
     $pdo->prepare("DELETE FROM family_certificates WHERE app_id=?")->execute([$appId]);
     $pdo->prepare("DELETE FROM warishans WHERE app_id=?")->execute([$appId]);
     $pdo->prepare("DELETE FROM general_applications WHERE app_id=?")->execute([$appId]);
-
     echo json_encode(['success' => true]);
     exit;
 }
 
-// 🟢 ১৫. ইউজার টেবিল নিশ্চিত করা
-$pdo->exec("CREATE TABLE IF NOT EXISTS users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(100) UNIQUE,
-    password VARCHAR(255),
-    role VARCHAR(50) DEFAULT 'Admin',
-    name VARCHAR(255),
-    permissions LONGTEXT,
-    photo LONGTEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)");
+// 🟢 ১৬. এডমিন ইউজার ও লগইন
+if ($action === 'adminLogin') {
+    $u = trim($data['username'] ?? '');
+    $p = trim($data['password'] ?? '');
 
-// 🟢 ১৬. এডমিন ইউজার তালিকা লোড
-if ($action === 'getAdminUsers' || $action === 'getAllUsers') {
-    $stmt = $pdo->query("SELECT username, role, name, permissions, photo as photoUrl FROM users ORDER BY id DESC");
-    $users = $stmt->fetchAll();
-    
-    // যদি ডাটাবেস খালি থাকে, অন্তত বর্তমান সুপার এডমিনকে দেখাবে
-    if (empty($users)) {
-        $users[] = [
-            'username' => 'admin',
-            'role' => 'SuperAdmin',
-            'name' => 'অ্যাড. মোঃ হুমায়ুন কবির (চেয়ারম্যান)',
-            'photoUrl' => 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png',
-            'permissions' => ['canApprove' => true, 'canReject' => true, 'canEdit' => true, 'canDelete' => true]
-        ];
-    }
-    echo json_encode($users);
-    exit;
-}
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
+    $stmt->execute([$u]);
+    $user = $stmt->fetch();
 
-// 🟢 ১৭. নতুন এডমিন ইউজার সংরক্ষণ ও আপডেট
-if ($action === 'saveAdminUser' || $action === 'saveNewUser' || $action === 'updateUser') {
-    $username = $data['username'] ?? '';
-    $password = $data['password'] ?? '123456';
-    $name = $data['name'] ?? $username;
-    $role = $data['role'] ?? 'Admin';
-    $perms = json_encode($data['permissions'] ?? []);
-    $photo = $data['photo'] ?? '';
-
-    $stmt = $pdo->prepare("INSERT INTO users (username, password, role, name, permissions, photo) 
-        VALUES (?,?,?,?,?,?) 
-        ON DUPLICATE KEY UPDATE name=VALUES(name), role=VALUES(role), permissions=VALUES(permissions), photo=VALUES(photo)");
-    $stmt->execute([$username, $password, $role, $name, $perms, $photo]);
-
-    echo json_encode(['success' => true]);
-    exit;
-}
-
-// 🟢 ১৮. এডমিন ডিলিট করা
-if ($action === 'deleteAdminUser' || $action === 'deleteUser') {
-    $uname = is_array($data) ? ($data['username'] ?? '') : $data;
-    $pdo->prepare("DELETE FROM users WHERE username=?")->execute([$uname]);
-    echo json_encode(['success' => true]);
-    exit;
-}
-// 🟢 ২৪. সংশোধিত সকল তথ্য ডাটাবেসে সেভ করা (Save Edited Application)
-if ($action === 'saveEditedApplication' || $action === 'updateApplicationData') {
-    $appId = trim($data['appId'] ?? '');
-
-    // ক. সাধারণ প্রত্যয়ন সংশোধন
-    if (isset($data['type']) && $data['type'] !== 'পারিবারিক সনদ' && $data['type'] !== 'উত্তরাধিকারী সনদ') {
-        $stmt = $pdo->prepare("UPDATE general_applications SET name=?, father_name=?, mother_name=?, nid=?, mobile=?, ward_no=?, village=?, post_office=? WHERE app_id=?");
-        $stmt->execute([
-            $data['name'] ?? '', $data['fatherName'] ?? '', $data['motherName'] ?? '',
-            $data['nid'] ?? '', $data['mobile'] ?? '', $data['wardNo'] ?? '',
-            $data['village'] ?? '', $data['postOffice'] ?? '', $appId
+    if ($user && ($user['password'] === $p || password_verify($p, $user['password']))) {
+        $perms = json_decode($user['permissions'] ?? '{}', true);
+        echo json_encode([
+            'success' => true,
+            'username' => $user['username'],
+            'role' => $user['role'] ?? 'Admin',
+            'name' => $user['name'] ?? $user['username'],
+            'photoUrl' => $user['photo'] ?? 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png',
+            'permissions' => $perms,
+            'allowedMenus' => $perms['allowedMenus'] ?? ['dashTab']
         ]);
+        exit;
     }
+    echo json_encode(['success' => false, 'message' => 'ইউজারনেম বা পাসওয়ার্ড সঠিক নয়!']);
+    exit;
+}
 
-    // খ. পারিবারিক ও উত্তরাধিকারী সনদ সংশোধন
-    if (isset($data['type']) && ($data['type'] === 'পারিবারিক সনদ' || $data['type'] === 'উত্তরাধিকারী সনদ')) {
-        $membersJson = isset($data['members']) ? json_encode($data['members']) : null;
-        $stmt = $pdo->prepare("UPDATE family_certificates SET name=?, nid=?, father_name=?, mother_name=?, mobile=?, ward_no=?, village=?, post_office=?, deceased_name=?, deceased_father=?, deceased_mother=?, deceased_date=?, applicant_relation=?, deceased_ward=?, deceased_village=?, deceased_post_office=?, members_json=COALESCE(?, members_json) WHERE app_id=?");
-        $stmt->execute([
-            $data['name'] ?? '', $data['nid'] ?? '', $data['fatherName'] ?? '', $data['motherName'] ?? '',
-            $data['mobile'] ?? '', $data['wardNo'] ?? '', $data['village'] ?? '', $data['postOffice'] ?? '',
-            $data['deceasedName'] ?? '', $data['deceasedFather'] ?? '', $data['deceasedMother'] ?? '',
-            $data['deceasedDate'] ?? '', $data['applicantRelation'] ?? '', $data['deceasedWard'] ?? '',
-            $data['deceasedVillage'] ?? '', $data['deceasedPostOffice'] ?? '', $membersJson, $appId
-        ]);
-    }
-
-    // গ. নাগরিকত্ব সনদ সংশোধন
-    $stmt = $pdo->prepare("UPDATE citizenships SET name=?, nid=?, father_name=?, mother_name=?, dob=?, mobile=?, ward_no=?, village=?, post_office=?, marital_status=?, spouse_name=? WHERE app_id=?");
-    $stmt->execute([
-        $data['name'] ?? '', $data['nid'] ?? '', $data['fatherName'] ?? '', $data['motherName'] ?? '',
-        $data['dob'] ?? '', $data['mobile'] ?? '', $data['wardNo'] ?? '', $data['village'] ?? '',
-        $data['postOffice'] ?? '', $data['maritalStatus'] ?? 'অবিবাহিত', $data['spouseName'] ?? '', $appId
-    ]);
-
+if ($action === 'getAdminUsers') {
+    echo json_encode($pdo->query("SELECT username, role, name, permissions, photo as photoUrl FROM users ORDER BY id DESC")->fetchAll());
+    exit;
+}
+if ($action === 'saveAdminUser' || $action === 'updateUser') {
+    $stmt = $pdo->prepare("INSERT INTO users (username, password, role, name, permissions, photo) VALUES (?,?,?,?,?,?) ON DUPLICATE KEY UPDATE name=VALUES(name), role=VALUES(role), permissions=VALUES(permissions), photo=VALUES(photo)");
+    $stmt->execute([$data['username'], $data['password'] ?? '123456', $data['role'] ?? 'Admin', $data['name'] ?? $data['username'], json_encode($data['permissions'] ?? []), $data['photo'] ?? '']);
     echo json_encode(['success' => true]);
     exit;
 }
-// ডিফল্ট রেসপন্স
-echo json_encode(['success' => true, 'message' => 'API is active']);
+if ($action === 'deleteAdminUser') {
+    $pdo->prepare("DELETE FROM users WHERE username=?")->execute([$data['username'] ?? $data]);
+    echo json_encode(['success' => true]);
+    exit;
+}
+
+echo json_encode(['success' => true, 'message' => 'API Active']);
