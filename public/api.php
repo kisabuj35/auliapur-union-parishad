@@ -338,5 +338,62 @@ if ($action === 'deleteApplication') {
     exit;
 }
 
+// 🟢 ১৫. ইউজার টেবিল নিশ্চিত করা
+$pdo->exec("CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(100) UNIQUE,
+    password VARCHAR(255),
+    role VARCHAR(50) DEFAULT 'Admin',
+    name VARCHAR(255),
+    permissions LONGTEXT,
+    photo LONGTEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)");
+
+// 🟢 ১৬. এডমিন ইউজার তালিকা লোড
+if ($action === 'getAdminUsers' || $action === 'getAllUsers') {
+    $stmt = $pdo->query("SELECT username, role, name, permissions, photo as photoUrl FROM users ORDER BY id DESC");
+    $users = $stmt->fetchAll();
+    
+    // যদি ডাটাবেস খালি থাকে, অন্তত বর্তমান সুপার এডমিনকে দেখাবে
+    if (empty($users)) {
+        $users[] = [
+            'username' => 'admin',
+            'role' => 'SuperAdmin',
+            'name' => 'অ্যাড. মোঃ হুমায়ুন কবির (চেয়ারম্যান)',
+            'photoUrl' => 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png',
+            'permissions' => ['canApprove' => true, 'canReject' => true, 'canEdit' => true, 'canDelete' => true]
+        ];
+    }
+    echo json_encode($users);
+    exit;
+}
+
+// 🟢 ১৭. নতুন এডমিন ইউজার সংরক্ষণ ও আপডেট
+if ($action === 'saveAdminUser' || $action === 'saveNewUser' || $action === 'updateUser') {
+    $username = $data['username'] ?? '';
+    $password = $data['password'] ?? '123456';
+    $name = $data['name'] ?? $username;
+    $role = $data['role'] ?? 'Admin';
+    $perms = json_encode($data['permissions'] ?? []);
+    $photo = $data['photo'] ?? '';
+
+    $stmt = $pdo->prepare("INSERT INTO users (username, password, role, name, permissions, photo) 
+        VALUES (?,?,?,?,?,?) 
+        ON DUPLICATE KEY UPDATE name=VALUES(name), role=VALUES(role), permissions=VALUES(permissions), photo=VALUES(photo)");
+    $stmt->execute([$username, $password, $role, $name, $perms, $photo]);
+
+    echo json_encode(['success' => true]);
+    exit;
+}
+
+// 🟢 ১৮. এডমিন ডিলিট করা
+if ($action === 'deleteAdminUser' || $action === 'deleteUser') {
+    $uname = is_array($data) ? ($data['username'] ?? '') : $data;
+    $pdo->prepare("DELETE FROM users WHERE username=?")->execute([$uname]);
+    echo json_encode(['success' => true]);
+    exit;
+}
+
 // ডিফল্ট রেসপন্স
 echo json_encode(['success' => true, 'message' => 'API is active']);
