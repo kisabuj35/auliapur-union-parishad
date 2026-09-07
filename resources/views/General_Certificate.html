@@ -68,7 +68,6 @@
 
 .official-certificate .rule{height:4px;margin:2mm 0 3mm;border-top:1px solid #b89446;border-bottom:1.5px solid #126341}
 
-/* 🟢 ১. মার্ক করা টেক্সট: স্মারক নং ও তারিখ বার (১৬.৫px Bold) */
 .official-certificate .meta{
   display:flex;
   justify-content:space-between;
@@ -79,7 +78,7 @@
   font-family:'Nikosh',sans-serif !important;
 }
 
-/* 🟢 ২. মার্ক করা টেক্সট: ৩ডি রিবন ব্যানার (২৪.৫px Bold) */
+/* 🟢 ৩ডি রিবন ব্যানার */
 .official-certificate h2{
   position:relative;
   width:fit-content;
@@ -103,7 +102,6 @@
 .official-certificate h2:before{left:-11mm;clip-path:polygon(0 0,100% 0,72% 50%,100% 100%,0 100%,28% 50%)}
 .official-certificate h2:after{right:-11mm;clip-path:polygon(0 0,100% 0,72% 50%,100% 100%,0 100%,28% 50%);transform:scaleX(-1)}
 
-/* 🟢 মূল বিবরণী: ১৯px ফন্ট সাইজ ও ২.১৫ লাইন-হাইট */
 .certificate-body{
   font-size:19px !important;
   line-height:2.15 !important;
@@ -116,7 +114,6 @@
 }
 .certificate-body strong{color:#073d2a;font-weight:bold}
 
-/* 🟢 ৩. মার্ক করা টেক্সট: শুভকামনা লাইন (২০px Bold) */
 .official-certificate .closing{
   margin:14px 2mm 0;
   text-align:center;
@@ -126,7 +123,6 @@
   font-family:'Nikosh',sans-serif !important;
 }
 
-/* 🟢 ৪. মার্ক করা টেক্সট: নিচে চেয়ারম্যানের একক স্বাক্ষর (১৭.৫px ও ১৬px) */
 .certificate-signatures{
   display:flex;
   justify-content:flex-end;
@@ -193,14 +189,95 @@
 }
 </style>
 
-<div id="generalServiceView" class="view-section container my-4 d-none"><div class="general-shell shadow-sm rounded-3 overflow-hidden"><div class="general-hero p-4 d-flex justify-content-between align-items-center"><div><span class="small text-uppercase opacity-75">Digital Citizen Service</span><h3 id="genPageMainTitle" class="fw-bold mb-0 mt-1">সাধারণ প্রত্যয়ন আবেদন</h3></div><button class="btn btn-light fw-bold" onclick="navToSection('publicHome')"><i class="fa fa-arrow-left me-1"></i> হোম</button></div><div class="p-3 p-md-4"><div class="alert alert-success border-0 mb-4"><i class="fa fa-circle-info me-2"></i> সঠিক তথ্য দিয়ে আবেদন করুন। অনুমোদনের পর প্রশাসনিক প্যানেল থেকে প্রত্যয়নটি প্রিন্ট করা যাবে।</div><form id="generalAppPageForm" onsubmit="event.preventDefault();submitGeneralAppForm()"><input type="hidden" id="genTypeHidden"><div class="general-section p-3 p-md-4 mb-3"><h5 class="general-section-title fw-bold pb-2 mb-3"><i class="fa fa-file-signature me-2"></i>আবেদনের ধরন: <span id="genServiceLabel"></span></h5><div class="row g-3"><div class="col-md-6"><label class="form-label fw-bold">আবেদনকারীর পূর্ণ নাম *</label><input id="genName" class="form-control" required></div><div class="col-md-6"><label class="form-label fw-bold">পিতার নাম *</label><input id="genFather" class="form-control" required></div><div class="col-md-6"><label class="form-label fw-bold">জন্ম নিবন্ধন / ভোটার আইডি নম্বর *</label><input id="genNid" class="form-control" required></div><div class="col-md-6"><label class="form-label fw-bold">মোবাইল নম্বর</label><input id="genMobile" class="form-control" inputmode="tel"></div><div class="col-md-4"><label class="form-label fw-bold">ওয়ার্ড নম্বর *</label><select id="genWard" class="form-select" required><option>০১</option><option>০২</option><option>০৩</option><option>০৪</option><option>০৫</option><option>০৬</option><option>০৭</option><option>০৮</option><option>০৯</option></select></div><div class="col-md-4"><label class="form-label fw-bold">গ্রাম *</label><input id="genVillage" class="form-control" required></div><div class="col-md-4"><label class="form-label fw-bold">ডাকঘর *</label><input id="genPost" class="form-control" value="আউলিয়াপুর ময়দান" required></div><div class="col-md-4"><label class="form-label fw-bold">ইউনিয়ন</label><input class="form-control" value="১১নং আউলিয়াপুর ইউনিয়ন" readonly></div><div class="col-md-4"><label class="form-label fw-bold">উপজেলা</label><input class="form-control" value="পটুয়াখালী সদর" readonly></div><div class="col-md-4"><label class="form-label fw-bold">জেলা</label><input class="form-control" value="পটুয়াখালী" readonly></div></div></div><div class="general-section p-3 mb-3"><label class="form-check fw-bold"><input id="genDeclaration" class="form-check-input me-2" type="checkbox" required checked> আমি ঘোষণা করছি যে, উপরের তথ্য সত্য ও সঠিক।</label></div><div class="text-end"><button type="button" class="btn btn-outline-secondary me-2" onclick="navToSection('publicHome')">বাতিল</button><button id="genSubmitBtn" class="btn btn-success px-4 fw-bold"><i class="fa fa-paper-plane me-1"></i> আবেদন জমা দিন</button></div></form></div></div></div>
-<div class="modal fade" id="genOfficialCertModal" tabindex="-1"><div class="modal-dialog modal-xl modal-dialog-centered"><div class="modal-content"><div class="modal-header bg-dark text-white"><h5 class="modal-title">প্রত্যয়নপত্র প্রিভিউ</h5><button class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div id="genOfficialCertPrintArea" class="modal-body general-preview p-3"></div><div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">বন্ধ</button><button class="btn btn-danger fw-bold" onclick="printGeneralElement('genOfficialCertPrintArea')"><i class="fa fa-print me-1"></i> A4 প্রিন্ট</button></div></div></div></div>
-<div class="modal fade" id="generalEditModal" tabindex="-1"><div class="modal-dialog modal-lg modal-dialog-centered"><div class="modal-content"><div class="modal-header bg-warning"><h5 class="modal-title fw-bold">সাধারণ প্রত্যয়ন তথ্য সংশোধন</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><form onsubmit="event.preventDefault();saveEditedGeneralData()"><input type="hidden" id="editGenAppId"><div class="row g-3"><div class="col-md-6"><label class="form-label fw-bold">সেবার ধরন</label><input id="editGenType" class="form-control" readonly></div><div class="col-md-6"><label class="form-label fw-bold">নাম *</label><input id="editGenName" class="form-control" required></div><div class="col-md-6"><label class="form-label fw-bold">পিতার নাম *</label><input id="editGenFather" class="form-control" required></div><div class="col-md-6"><label class="form-label fw-bold">জন্ম নিবন্ধন / ভোটার আইডি *</label><input id="editGenNid" class="form-control" required></div><div class="col-md-4"><label class="form-label fw-bold">মোবাইল</label><input id="editGenMobile" class="form-control"></div><div class="col-md-4"><label class="form-label fw-bold">ওয়ার্ড</label><select id="editGenWard" class="form-select"><option>০১</option><option>০২</option><option>০৩</option><option>০৪</option><option>০৫</option><option>০৬</option><option>০৭</option><option>০৮</option><option>০৯</option></select></div><div class="col-md-4"><label class="form-label fw-bold">গ্রাম</label><input id="editGenVillage" class="form-control" required></div><div class="col-md-12"><label class="form-label fw-bold">ডাকঘর</label><input id="editGenPost" class="form-control" required></div></div><div class="text-end mt-4"><button class="btn btn-warning fw-bold" id="saveEditGenBtn">আপডেট করুন</button></div></form></div></div></div></div>
+<div id="generalServiceView" class="view-section container my-4 d-none">
+  <div class="general-shell shadow-sm rounded-3 overflow-hidden">
+    <div class="general-hero p-4 d-flex justify-content-between align-items-center">
+      <div><span class="small text-uppercase opacity-75">Digital Citizen Service</span><h3 id="genPageMainTitle" class="fw-bold mb-0 mt-1">সাধারণ প্রত্যয়ন আবেদন</h3></div>
+      <button class="btn btn-light fw-bold" onclick="navToSection('publicHome')"><i class="fa fa-arrow-left me-1"></i> হোম</button>
+    </div>
+    <div class="p-3 p-md-4">
+      <div class="alert alert-success border-0 mb-4"><i class="fa fa-circle-info me-2"></i> সঠিক তথ্য দিয়ে আবেদন করুন। অনুমোদনের পর প্রশাসনিক প্যানেল থেকে প্রত্যয়নটি প্রিন্ট করা যাবে।</div>
+      <form id="generalAppPageForm" onsubmit="event.preventDefault();submitGeneralAppForm()">
+        <input type="hidden" id="genTypeHidden">
+        <div class="general-section p-3 p-md-4 mb-3">
+          <h5 class="general-section-title fw-bold pb-2 mb-3"><i class="fa fa-file-signature me-2"></i>আবেদনের ধরন: <span id="genServiceLabel"></span></h5>
+          <div class="row g-3">
+            <div class="col-md-6"><label class="form-label fw-bold">আবেদনকারীর পূর্ণ নাম *</label><input id="genName" class="form-control" required></div>
+            <div class="col-md-6"><label class="form-label fw-bold">পিতার নাম *</label><input id="genFather" class="form-control" required></div>
+            <div class="col-md-6"><label class="form-label fw-bold">মাতার নাম *</label><input id="genMother" class="form-control" required></div>
+            <div class="col-md-6"><label class="form-label fw-bold">জন্ম নিবন্ধন / ভোটার আইডি নম্বর *</label><input id="genNid" class="form-control" required></div>
+            <div class="col-md-4"><label class="form-label fw-bold">মোবাইল নম্বর</label><input id="genMobile" class="form-control" inputmode="tel"></div>
+            <div class="col-md-4"><label class="form-label fw-bold">ওয়ার্ড নম্বর *</label><select id="genWard" class="form-select" required><option>০১</option><option>০২</option><option>০৩</option><option>০৪</option><option>০৫</option><option>০৬</option><option>০৭</option><option>০৮</option><option>০৯</option></select></div>
+            <div class="col-md-4"><label class="form-label fw-bold">গ্রাম *</label><input id="genVillage" class="form-control" required></div>
+            <div class="col-md-4"><label class="form-label fw-bold">ডাকঘর *</label><input id="genPost" class="form-control" value="আউলিয়াপুর ময়দান" required></div>
+            <div class="col-md-4"><label class="form-label fw-bold">ইউনিয়ন</label><input class="form-control" value="১১নং আউলিয়াপুর ইউনিয়ন" readonly></div>
+            <div class="col-md-4"><label class="form-label fw-bold">উপজেলা</label><input class="form-control" value="পটুয়াখালী সদর" readonly></div>
+            <div class="col-md-4"><label class="form-label fw-bold">জেলা</label><input class="form-control" value="পটুয়াখালী" readonly></div>
+          </div>
+        </div>
+        <div class="general-section p-3 mb-3">
+          <label class="form-check fw-bold"><input id="genDeclaration" class="form-check-input me-2" type="checkbox" required checked> আমি ঘোষণা করছি যে, উপরের তথ্য সত্য ও সঠিক।</label>
+        </div>
+        <div class="text-end">
+          <button type="button" class="btn btn-outline-secondary me-2" onclick="navToSection('publicHome')">বাতিল</button>
+          <button id="genSubmitBtn" class="btn btn-success px-4 fw-bold"><i class="fa fa-paper-plane me-1"></i> আবেদন জমা দিন</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="genOfficialCertModal" tabindex="-1">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-dark text-white"><h5 class="modal-title">প্রত্যয়নপত্র প্রিভিউ</h5><button class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+      <div id="genOfficialCertPrintArea" class="modal-body general-preview p-3"></div>
+      <div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">বন্ধ</button><button class="btn btn-danger fw-bold" onclick="printGeneralElement('genOfficialCertPrintArea')"><i class="fa fa-print me-1"></i> A4 প্রিন্ট</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ✏️ সাধারণ প্রত্যয়ন তথ্য সংশোধন মোডাল -->
+<div class="modal fade" id="generalEditModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-warning">
+        <h5 class="modal-title fw-bold"><i class="fa fa-edit me-2"></i>সাধারণ প্রত্যয়ন তথ্য সংশোধন</h5>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form onsubmit="event.preventDefault();saveEditedGeneralData()">
+          <input type="hidden" id="editGenAppId">
+          <div class="row g-3">
+            <div class="col-md-6"><label class="form-label fw-bold">সেবার ধরন</label><input id="editGenType" class="form-control" readonly></div>
+            <div class="col-md-6"><label class="form-label fw-bold">নাম *</label><input id="editGenName" class="form-control" required></div>
+            <div class="col-md-6"><label class="form-label fw-bold">পিতার নাম *</label><input id="editGenFather" class="form-control" required></div>
+            <div class="col-md-6"><label class="form-label fw-bold">মাতার নাম *</label><input id="editGenMother" class="form-control" required></div>
+            <div class="col-md-6"><label class="form-label fw-bold">জন্ম নিবন্ধন / ভোটার আইডি *</label><input id="editGenNid" class="form-control" required></div>
+            <div class="col-md-6"><label class="form-label fw-bold">মোবাইল</label><input id="editGenMobile" class="form-control"></div>
+            <div class="col-md-4"><label class="form-label fw-bold">ওয়ার্ড</label>
+              <select id="editGenWard" class="form-select">
+                <option value="০১">০১</option><option value="০২">০২</option><option value="০৩">০৩</option>
+                <option value="০৪">০৪</option><option value="০৫">০৫</option><option value="০৬">০৬</option>
+                <option value="০৭">০৭</option><option value="০৮">০৮</option><option value="০৯">০৯</option>
+              </select>
+            </div>
+            <div class="col-md-4"><label class="form-label fw-bold">গ্রাম</label><input id="editGenVillage" class="form-control" required></div>
+            <div class="col-md-4"><label class="form-label fw-bold">ডাকঘর</label><input id="editGenPost" class="form-control" required></div>
+          </div>
+          <div class="text-end mt-4">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">বাতিল</button>
+            <button class="btn btn-warning fw-bold px-4" id="saveEditGenBtn">আপডেট করুন</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
 var GENERAL_UNION='১১নং আউলিয়াপুর ইউনিয়ন',GENERAL_UPAZILA='পটুয়াখালী সদর',GENERAL_DISTRICT='পটুয়াখালী';
 
-/* 🟢 ১৮ নম্বর ছবির ২১টি সনদের বর্ধিত, প্রফেশনাল ও বিস্তারিত বিবরণী */
 var GENERAL_TEMPLATES={
   'চারিত্রিক সনদ':'তিনি জন্মসূত্রে বাংলাদেশের স্থায়ী নাগরিক ও অত্র ইউনিয়নের একজন সৎ, চরিত্রবান, শান্তিপ্রিয় ও সমাজহিতৈষী ব্যক্তি। আমার জানামতে তিনি কোনো প্রকার রাষ্ট্রবিরোধী, আইনবিরোধী বা সমাজবিধ্বংসী অনৈতিক কর্মকাণ্ডের সহিত জড়িত নন এবং তাঁর বিরুদ্ধে কোনো প্রকার নৈতিক স্খলনজনিত অভিযোগ নেই। সমাজে তাঁহার নৈতিক চরিত্র অত্যন্ত প্রশংসনীয় ও অনুকরণীয়।',
   'ভূমিহীন সনদ':'আমার জানামতে তাঁহার কিংবা তাঁহার পরিবারভুক্ত কোনো সদস্যের নিজস্ব কোনো স্থাবর সম্পত্তি, বসতভিটা বা চাষযোগ্য কৃষি জমি নাই। তিনি প্রকৃত অর্থেই একজন নিঃস্ব ও ভূমিহীন নাগরিক এবং পরিবারের সদস্যদের লইয়া অতি কষ্টে জীবনযাপন করিতেছেন। তিনি সরকারি যেকোনো খাসজমি বন্দোবস্ত ও সরকারি ভূমিহীন পুনর্বাসন সহায়তা পাওয়ার সম্পূর্ণ উপযুক্ত।',
@@ -235,10 +312,43 @@ function generalBnDigits(v){return String(v==null?'':v).replace(/\d/g,function(d
 function generalApplicationNumber(appId){var value=String(appId==null?'':appId).replace(/^AUL[-/\s]*/i,'');var parts=value.split(/[-/\s]+/).filter(function(part){return part!==''});return generalBnDigits(parts.length?parts[parts.length-1]:value)}
 function generalCurrentYear(){return generalBnDigits(new Date().getFullYear())}
 function generalPrintDate(){return new Date().toLocaleDateString('bn-BD',{day:'2-digit',month:'2-digit',year:'numeric'})}
-function openGeneralServicePage(type){navToSection('generalServiceView');document.getElementById('generalAppPageForm').reset();document.getElementById('genTypeHidden').value=type;document.getElementById('genServiceLabel').innerText=type;document.getElementById('genPageMainTitle').innerText=type+' আবেদন';document.getElementById('genPost').value='আউলিয়াপুর ময়দান'}
-function submitGeneralAppForm(){var b=document.getElementById('genSubmitBtn');b.disabled=true;var d={type:document.getElementById('genTypeHidden').value,name:document.getElementById('genName').value.trim(),fatherName:document.getElementById('genFather').value.trim(),nid:document.getElementById('genNid').value.trim(),mobile:document.getElementById('genMobile').value.trim(),wardNo:document.getElementById('genWard').value,village:document.getElementById('genVillage').value.trim(),postOffice:document.getElementById('genPost').value.trim()};callBackendAPI('submitApplication',d).then(function(r){b.disabled=false;if(r&&r.success){document.getElementById('successAppId').innerText=r.appId;document.getElementById('successAppCopyBtn').onclick=function(){printGeneralAppCopy(r.appId)};bootstrap.Modal.getOrCreateInstance(document.getElementById('successModal')).show();document.getElementById('generalAppPageForm').reset()}else alert((r&&(r.error||r.message))||'আবেদন জমা দেওয়া যায়নি।')})}
 
-/* 🟢 মূল বিবরণী তৈরি */
+function openGeneralServicePage(type){
+  navToSection('generalServiceView');
+  document.getElementById('generalAppPageForm').reset();
+  document.getElementById('genTypeHidden').value=type;
+  document.getElementById('genServiceLabel').innerText=type;
+  document.getElementById('genPageMainTitle').innerText=type+' আবেদন';
+  document.getElementById('genPost').value='আউলিয়াপুর ময়দান';
+}
+
+function submitGeneralAppForm(){
+  var b=document.getElementById('genSubmitBtn');
+  b.disabled=true;
+  var d={
+    type:document.getElementById('genTypeHidden').value,
+    name:document.getElementById('genName').value.trim(),
+    fatherName:document.getElementById('genFather').value.trim(),
+    motherName:document.getElementById('genMother').value.trim(),
+    nid:document.getElementById('genNid').value.trim(),
+    mobile:document.getElementById('genMobile').value.trim(),
+    wardNo:document.getElementById('genWard').value,
+    village:document.getElementById('genVillage').value.trim(),
+    postOffice:document.getElementById('genPost').value.trim()
+  };
+  callBackendAPI('submitApplication',d).then(function(r){
+    b.disabled=false;
+    if(r&&r.success){
+      document.getElementById('successAppId').innerText=r.appId;
+      document.getElementById('successAppCopyBtn').onclick=function(){printGeneralAppCopy(r.appId)};
+      bootstrap.Modal.getOrCreateInstance(document.getElementById('successModal')).show();
+      document.getElementById('generalAppPageForm').reset();
+    } else {
+      alert((r&&(r.error||r.message))||'আবেদন জমা দেওয়া যায়নি।');
+    }
+  });
+}
+
 function generalBody(d){
   var certType=d.type||d.serviceType||'বিবিধ প্রত্যয়নপত্র';
   var specificText=GENERAL_TEMPLATES[certType]||GENERAL_TEMPLATES['বিবিধ প্রত্যয়নপত্র'];
@@ -248,7 +358,6 @@ function generalBody(d){
   return 'এই মর্মে প্রত্যয়ন পত্র প্রদান করা যাইতেছে যে, <strong>'+escapeGeneral(d.name||d.applicantName)+'</strong>, পিতা: <strong>'+escapeGeneral(fatherVal)+'</strong>, মাতা: <strong>'+escapeGeneral(motherVal)+'</strong>, জন্ম নিবন্ধন/ভোটার আইডি নম্বর: <strong>'+generalBnDigits(d.nid)+'</strong>, গ্রাম: <strong>'+escapeGeneral(d.village)+'</strong>, ডাকঘর: <strong>'+escapeGeneral(d.postOffice||'আউলিয়াপুর ময়দান')+'</strong>, ওয়ার্ড নং: <strong>'+generalBnDigits(d.wardNo)+'</strong>, '+GENERAL_UNION+', '+GENERAL_UPAZILA+', '+GENERAL_DISTRICT+'-এর একজন স্থায়ী বাসিন্দা। '+specificText;
 }
 
-/* 🟢 অফিসিয়াল A4 সনদ মার্কআপ (৪টি অংশ আকর্ষণীয়ভাবে বড় ও সাজানো) */
 function certificateMarkup(d){
   var logo='https://lh3.googleusercontent.com/d/1_LMOoAtirVZeGxE4sz_CVQtQpInPPQTs';
   var chair=escapeGeneral((window.getUPChairmanName ? window.getUPChairmanName() : (d.chairName||'অ্যাড. মোঃ হুমায়ুন কবির')));
@@ -297,46 +406,146 @@ function certificateMarkup(d){
   '</article>';
 }
 
-function printGeneralCertificate(id){callBackendAPI('trackApplication',id).then(function(d){if(!d||!d.found)return alert('সনদের তথ্য পাওয়া যায়নি।'); var st = (d.status || '').trim().toLowerCase();
-if (st !== 'approved' && st !== 'অনুমোদিত') {
-    return alert('অনুমোদনের পর সনদ প্রিন্ট করা যাবে।');
-};var host=document.getElementById('generalPrintHost');if(!host){host=document.createElement('div');host.id='generalPrintHost';document.body.appendChild(host)}host.innerHTML=certificateMarkup(d);document.body.classList.add('general-print-mode');var images=host.getElementsByTagName('img'),remaining=images.length,printed=false,finished=false;function cleanup(){if(finished)return;finished=true;document.body.classList.remove('general-print-mode');host.innerHTML='';window.onafterprint=null}function finishPrint(){if(printed)return;printed=true;window.print()}function readyToPrint(){if(document.fonts&&document.fonts.ready){document.fonts.ready.then(finishPrint)}else{finishPrint()}}function imageDone(){if(!--remaining)readyToPrint()}for(var i=0;i<images.length;i++){if(images[i].complete)remaining--;else{images[i].addEventListener('load',imageDone,{once:true});images[i].addEventListener('error',imageDone,{once:true})}}window.onafterprint=cleanup;if(!remaining)setTimeout(readyToPrint,300);setTimeout(readyToPrint,2500)})}
-function printGeneralElement(id){var w=window.open('','_blank'),css=document.getElementById('generalCertificateStyles').innerHTML;w.document.write('<html><head><title>প্রত্যয়নপত্র</title><link href="https://fonts.maateen.me/nikosh/font.css" rel="stylesheet"><style>@page{size:A4 portrait;margin:0}*{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}html,body{margin:0;padding:0;overflow:hidden}'+css+'</style></head><body>'+document.getElementById(id).innerHTML+'</body></html>');w.document.close();w.focus();w.print()}
-function printGeneralAppCopy(id){callBackendAPI('trackApplication',id).then(function(d){if(!d||!d.found)return alert('আবেদনের তথ্য পাওয়া যায়নি।');var type=d.type||'সাধারণ প্রত্যয়ন';var name=d.name||d.applicantName||'';var mobile=d.mobile||d.phone||'-';var father=d.fatherName||d.father||'-';var nid=d.nid||d.nidNo||'-';var address=[d.village,d.postOffice,d.wardNo?'ওয়ার্ড নং '+d.wardNo:''].filter(function(value){return value}).join(', ')||'-';var subject=type+' প্রাপ্তির জন্য আবেদন।';var body='আমি '+escapeGeneral(name)+', পিতা: '+escapeGeneral(father)+', '+escapeGeneral(address)+'-এর বাসিন্দা। আমার প্রয়োজনীয় তথ্য ও কাগজপত্র অনুযায়ী আমাকে '+escapeGeneral(type)+' প্রদান করার জন্য বিনীতভাবে আবেদন করছি।';if(type==='নাগরিকত্ব সনদ')body='আমি '+escapeGeneral(name)+', পিতা: '+escapeGeneral(father)+', '+escapeGeneral(address)+'-এর একজন স্থায়ী বাসিন্দা। আমাকে নাগরিকত্ব সনদ প্রদান করার জন্য বিনীতভাবে আবেদন করছি।';else if(type==='ট্রেড লাইসেন্স')body='আমি '+escapeGeneral(name)+', পিতা: '+escapeGeneral(father)+', '+escapeGeneral(address)+'-এ ব্যবসা পরিচালনার জন্য ট্রেড লাইসেন্স প্রাপ্তির আবেদন করছি। প্রয়োজনীয় তথ্য যাচাই করে আমাকে ট্রেড লাইসেন্স প্রদানের জন্য অনুরোধ করছি।';else if(type==='পারিবারিক সনদ')body='আমি '+escapeGeneral(name)+', পিতা: '+escapeGeneral(father)+', '+escapeGeneral(address)+'-এর বাসিন্দা। আমার পরিবারের তথ্য উল্লেখ করে পারিবারিক সনদ প্রদান করার জন্য বিনীতভাবে আবেদন করছি।';var details='<p><strong>আবেদনকারীর নাম:</strong> '+escapeGeneral(name)+'<br><strong>পিতার নাম:</strong> '+escapeGeneral(father)+'<br><strong>জাতীয় পরিচয়পত্র/জন্ম নিবন্ধন:</strong> '+escapeGeneral(nid)+'<br><strong>মোবাইল নম্বর:</strong> '+escapeGeneral(mobile)+'<br><strong>ট্র্যাকিং আইডি:</strong> '+escapeGeneral(d.appId||id)+'</p>';var w=window.open('','_blank');if(!w)return alert('প্রিন্ট উইন্ডো খোলা যায়নি।');w.document.write('<html lang="bn"><head><meta charset="UTF-8"><title>আবেদনপত্র - '+escapeGeneral(type)+'</title><link href="https://fonts.maateen.me/nikosh/font.css" rel="stylesheet"><style>@page{size:A4 portrait;margin:0}*{box-sizing:border-box}body{margin:0;background:#fff;color:#111;font-family:Nikosh,"Noto Serif Bengali",serif}.paper{width:210mm;min-height:297mm;padding:25mm 25mm 20mm;font-size:18px;line-height:1.9}.heading{text-align:center;font-size:24px;text-decoration:underline;margin-bottom:20px}.date{text-align:right;margin-bottom:22px}.recipient{margin-bottom:18px}.subject{font-weight:bold;text-decoration:underline;margin:18px 0}.body{text-align:justify;text-indent:45px;min-height:105px}.closing{margin-top:22px}.details{border-top:1px solid #777;border-bottom:1px solid #777;padding:10px 0;margin-top:20px}.signature{margin-top:55px;margin-left:auto;width:210px;text-align:center}.signature-line{border-top:1px solid #111;margin-bottom:7px}.footer{margin-top:28px;font-size:14px;color:#444}@media print{.paper{min-height:297mm}}</style></head><body><main class="paper"><div class="heading">আবেদনপত্র</div><div class="date">তারিখ: '+escapeGeneral(d.date||d.applyDate||generalPrintDate())+'</div><div class="recipient">বরাবর<br>চেয়ারম্যান<br>'+GENERAL_UNION+' পরিষদ<br>'+GENERAL_UPAZILA+', '+GENERAL_DISTRICT+'</div><div class="subject">বিষয়: '+escapeGeneral(subject)+'</div><p>জনাব,</p><div class="body">'+body+'</div><p class="closing">অতএব, মহোদয়ের নিকট বিনীত আবেদন, উপরোক্ত বিষয়টি সদয় বিবেচনা করে আমাকে প্রয়োজনীয় '+escapeGeneral(type)+' প্রদান করতে মর্জি হয়।</p>'+details+'<div class="signature"><div class="signature-line">স্বাক্ষর</div><strong>'+escapeGeneral(name)+'</strong><br>আবেদনকারী<br>মোবাইল: '+escapeGeneral(mobile)+'</div><div class="footer">আবেদনপত্রের ধরন: '+escapeGeneral(type)+' | ট্র্যাকিং আইডি: '+escapeGeneral(d.appId||id)+'</div></main></body></html>');w.document.close();w.focus();setTimeout(function(){w.print()},500)})}
-function openEditGeneralModal(id){callBackendAPI('trackApplication',id).then(function(d){if(!d||!d.found)return alert('আবেদনের তথ্য পাওয়া যায়নি।');[['editGenAppId','appId'],['editGenType','type'],['editGenName','name'],['editGenFather','fatherName'],['editGenNid','nid'],['editGenMobile','mobile'],['editGenWard','wardNo'],['editGenVillage','village'],['editGenPost','postOffice']].forEach(function(x){document.getElementById(x[0]).value=d[x[1]]||''});bootstrap.Modal.getOrCreateInstance(document.getElementById('generalEditModal')).show()})}
-function saveEditedGeneralData(){var b=document.getElementById('saveEditGenBtn'),d={appId:document.getElementById('editGenAppId').value,type:document.getElementById('editGenType').value,name:document.getElementById('editGenName').value.trim(),fatherName:document.getElementById('editGenFather').value.trim(),nid:document.getElementById('editGenNid').value.trim(),mobile:document.getElementById('editGenMobile').value.trim(),wardNo:document.getElementById('editGenWard').value,village:document.getElementById('editGenVillage').value.trim(),postOffice:document.getElementById('editGenPost').value.trim()};b.disabled=true;callBackendAPI('saveEditedApplication',d).then(function(r){b.disabled=false;if(r&&r.success){bootstrap.Modal.getInstance(document.getElementById('generalEditModal')).hide();loadAdminApps();Swal.fire({icon:'success',title:'তথ্য আপডেট হয়েছে',timer:1400,showConfirmButton:false})}else alert('তথ্য আপডেট করা যায়নি।')})}
-</script>
+// 🟢 প্রিন্ট ফাংশন (অনুমোদিত হলে সাথে সাথে প্রিন্ট হবে)
+function printGeneralCertificate(id){
+  callBackendAPI('trackApplication', id).then(function(res){
+    if(!res || !res.found) return alert('সনদের তথ্য পাওয়া যায়নি।');
+    
+    // অবজেক্টের সঠিক ডাটা ধরা
+    var d = (res.list && res.list.length > 0) ? res.list[0] : res;
+    var st = (d.status || '').trim().toLowerCase();
 
-<script>
-(function(){
-	function addMotherField(formId, anchorId, fieldId){
-		var form=document.getElementById(formId),anchor=document.getElementById(anchorId);
-		if(!form||!anchor||document.getElementById(fieldId))return;
-		var wrap=document.createElement('div');wrap.className='col-md-6';wrap.innerHTML='<label class="form-label fw-bold">মাতার নাম *</label><input id="'+fieldId+'" class="form-control" required>';
-		anchor.parentNode.insertBefore(wrap,anchor.nextSibling);
-	}
-	function ensureGeneralMotherFields(){
-		addMotherField('generalAppPageForm','genFather','genMother');
-		addMotherField('generalEditModal','editGenFather','editGenMother');
-	}
-	var originalOpenGeneralServicePage=window.openGeneralServicePage;
-	window.openGeneralServicePage=function(type){originalOpenGeneralServicePage(type);ensureGeneralMotherFields()};
-	var originalSubmitGeneralAppForm=window.submitGeneralAppForm;
-	window.submitGeneralAppForm=function(){
-		ensureGeneralMotherFields();var button=document.getElementById('genSubmitBtn');button.disabled=true;
-		var data={type:document.getElementById('genTypeHidden').value,name:document.getElementById('genName').value.trim(),fatherName:document.getElementById('genFather').value.trim(),motherName:document.getElementById('genMother').value.trim(),nid:document.getElementById('genNid').value.trim(),mobile:document.getElementById('genMobile').value.trim(),wardNo:document.getElementById('genWard').value,village:document.getElementById('genVillage').value.trim(),postOffice:document.getElementById('genPost').value.trim()};
-		callBackendAPI('submitApplication',data).then(function(result){button.disabled=false;if(result&&result.success){document.getElementById('successAppId').innerText=result.appId;document.getElementById('successAppCopyBtn').onclick=function(){printGeneralAppCopy(result.appId)};bootstrap.Modal.getOrCreateInstance(document.getElementById('successModal')).show();document.getElementById('generalAppPageForm').reset()}else alert((result&&(result.error||result.message))||'আবেদন জমা দেওয়া যায়নি।')});
-	};
-	var originalOpenEditGeneralModal=window.openEditGeneralModal;
-	window.openEditGeneralModal=function(id){
-		ensureGeneralMotherFields();originalOpenEditGeneralModal(id);
-		setTimeout(function(){ensureGeneralMotherFields();callBackendAPI('trackApplication',id).then(function(data){if(data&&data.found&&document.getElementById('editGenMother'))document.getElementById('editGenMother').value=data.motherName||''})},100);
-	};
-	var originalSaveEditedGeneralData=window.saveEditedGeneralData;
-	window.saveEditedGeneralData=function(){
-		ensureGeneralMotherFields();var button=document.getElementById('saveEditGenBtn'),data={appId:document.getElementById('editGenAppId').value,type:document.getElementById('editGenType').value,name:document.getElementById('editGenName').value.trim(),fatherName:document.getElementById('editGenFather').value.trim(),motherName:document.getElementById('editGenMother').value.trim(),nid:document.getElementById('editGenNid').value.trim(),mobile:document.getElementById('editGenMobile').value.trim(),wardNo:document.getElementById('editGenWard').value,village:document.getElementById('editGenVillage').value.trim(),postOffice:document.getElementById('editGenPost').value.trim()};button.disabled=true;callBackendAPI('saveEditedApplication',data).then(function(result){button.disabled=false;if(result&&result.success){bootstrap.Modal.getInstance(document.getElementById('generalEditModal')).hide();loadAdminApps();Swal.fire({icon:'success',title:'তথ্য আপডেট হয়েছে',timer:1400,showConfirmButton:false})}else alert('তথ্য আপডেট করা যায়নি।')});
-	};
-	var originalGeneralBody=window.generalBody;
-	window.generalBody=function(data){return originalGeneralBody(data)};
-})();
+    if (st !== 'approved' && st !== 'অনুমোদিত') {
+      return alert('অনুমোদনের পর সনদ প্রিন্ট করা যাবে।');
+    }
+
+    var host=document.getElementById('generalPrintHost');
+    if(!host){
+      host=document.createElement('div');
+      host.id='generalPrintHost';
+      document.body.appendChild(host);
+    }
+    host.innerHTML=certificateMarkup(d);
+    document.body.classList.add('general-print-mode');
+    
+    var images=host.getElementsByTagName('img'),remaining=images.length,printed=false,finished=false;
+    function cleanup(){
+      if(finished)return;
+      finished=true;
+      document.body.classList.remove('general-print-mode');
+      host.innerHTML='';
+      window.onafterprint=null;
+    }
+    function finishPrint(){
+      if(printed)return;
+      printed=true;
+      window.print();
+    }
+    function readyToPrint(){
+      if(document.fonts&&document.fonts.ready){
+        document.fonts.ready.then(finishPrint);
+      }else{
+        finishPrint();
+      }
+    }
+    function imageDone(){
+      if(!--remaining)readyToPrint();
+    }
+    for(var i=0;i<images.length;i++){
+      if(images[i].complete)remaining--;
+      else{
+        images[i].addEventListener('load',imageDone,{once:true});
+        images[i].addEventListener('error',imageDone,{once:true});
+      }
+    }
+    window.onafterprint=cleanup;
+    if(!remaining)setTimeout(readyToPrint,300);
+    setTimeout(readyToPrint,2500);
+  });
+}
+
+function printGeneralElement(id){
+  var w=window.open('','_blank'),css=document.getElementById('generalCertificateStyles').innerHTML;
+  w.document.write('<html><head><title>প্রত্যয়নপত্র</title><link href="https://fonts.maateen.me/nikosh/font.css" rel="stylesheet"><style>@page{size:A4 portrait;margin:0}*{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}html,body{margin:0;padding:0;overflow:hidden}'+css+'</style></head><body>'+document.getElementById(id).innerHTML+'</body></html>');
+  w.document.close();
+  w.focus();
+  w.print();
+}
+
+function printGeneralAppCopy(id){
+  callBackendAPI('trackApplication',id).then(function(res){
+    if(!res||!res.found)return alert('আবেদনের তথ্য পাওয়া যায়নি।');
+    var d = (res.list && res.list.length > 0) ? res.list[0] : res;
+    var type=d.type||'সাধারণ প্রত্যয়ন';
+    var name=d.name||d.applicantName||'';
+    var mobile=d.mobile||d.phone||'-';
+    var father=d.fatherName||d.father||'-';
+    var nid=d.nid||d.nidNo||'-';
+    var address=[d.village,d.postOffice,d.wardNo?'ওয়ার্ড নং '+d.wardNo:''].filter(Boolean).join(', ')||'-';
+    var subject=type+' প্রাপ্তির জন্য আবেদন।';
+    var body='আমি '+escapeGeneral(name)+', পিতা: '+escapeGeneral(father)+', '+escapeGeneral(address)+'-এর বাসিন্দা। আমার প্রয়োজনীয় তথ্য ও কাগজপত্র অনুযায়ী আমাকে '+escapeGeneral(type)+' প্রদান করার জন্য বিনীতভাবে আবেদন করছি।';
+    
+    var details='<p><strong>আবেদনকারীর নাম:</strong> '+escapeGeneral(name)+'<br><strong>পিতার নাম:</strong> '+escapeGeneral(father)+'<br><strong>জাতীয় পরিচয়পত্র/জন্ম নিবন্ধন:</strong> '+escapeGeneral(nid)+'<br><strong>মোবাইল নম্বর:</strong> '+escapeGeneral(mobile)+'<br><strong>ট্র্যাকিং আইডি:</strong> '+escapeGeneral(d.appId||id)+'</p>';
+    var w=window.open('','_blank');
+    if(!w)return alert('প্রিন্ট উইন্ডো খোলা যায়নি।');
+    w.document.write('<html lang="bn"><head><meta charset="UTF-8"><title>আবেদনপত্র - '+escapeGeneral(type)+'</title><link href="https://fonts.maateen.me/nikosh/font.css" rel="stylesheet"><style>@page{size:A4 portrait;margin:0}*{box-sizing:border-box}body{margin:0;background:#fff;color:#111;font-family:Nikosh,"Noto Serif Bengali",serif}.paper{width:210mm;min-height:297mm;padding:25mm 25mm 20mm;font-size:18px;line-height:1.9}.heading{text-align:center;font-size:24px;text-decoration:underline;margin-bottom:20px}.date{text-align:right;margin-bottom:22px}.recipient{margin-bottom:18px}.subject{font-weight:bold;text-decoration:underline;margin:18px 0}.body{text-align:justify;text-indent:45px;min-height:105px}.closing{margin-top:22px}.details{border-top:1px solid #777;border-bottom:1px solid #777;padding:10px 0;margin-top:20px}.signature{margin-top:55px;margin-left:auto;width:210px;text-align:center}.signature-line{border-top:1px solid #111;margin-bottom:7px}.footer{margin-top:28px;font-size:14px;color:#444}@media print{.paper{min-height:297mm}}</style></head><body><main class="paper"><div class="heading">আবেদনপত্র</div><div class="date">তারিখ: '+escapeGeneral(d.date||d.applyDate||generalPrintDate())+'</div><div class="recipient">বরাবর<br>চেয়ারম্যান<br>'+GENERAL_UNION+' পরিষদ<br>'+GENERAL_UPAZILA+', '+GENERAL_DISTRICT+'</div><div class="subject">বিষয়: '+escapeGeneral(subject)+'</div><p>জনাব,</p><div class="body">'+body+'</div><p class="closing">অতএব, মহোদয়ের নিকট বিনীত আবেদন, উপরোক্ত বিষয়টি সদয় বিবেচনা করে আমাকে প্রয়োজনীয় '+escapeGeneral(type)+' প্রদান করতে মর্জি হয়।</p>'+details+'<div class="signature"><div class="signature-line">স্বাক্ষর</div><strong>'+escapeGeneral(name)+'</strong><br>আবেদনকারী<br>মোবাইল: '+escapeGeneral(mobile)+'</div><div class="footer">আবেদনপত্রের ধরন: '+escapeGeneral(type)+' | ট্র্যাকিং আইডি: '+escapeGeneral(d.appId||id)+'</div></main></body></html>');
+    w.document.close();
+    w.focus();
+    setTimeout(function(){w.print()},500);
+  });
+}
+
+// 🟢 এডিট মোডাল ওপেন করা (তথ্য সহকারে ১০০% লোড হবে)
+function openEditGeneralModal(id){
+  callBackendAPI('trackApplication', id).then(function(res){
+    if(!res || !res.found) return alert('আবেদনের তথ্য পাওয়া যায়নি।');
+    
+    var d = (res.list && res.list.length > 0) ? res.list[0] : res;
+
+    document.getElementById('editGenAppId').value = d.appId || id;
+    document.getElementById('editGenType').value = d.type || d.serviceType || 'বিবিধ প্রত্যয়নপত্র';
+    document.getElementById('editGenName').value = d.name || d.applicantName || '';
+    document.getElementById('editGenFather').value = d.fatherName || '';
+    document.getElementById('editGenMother').value = d.motherName || '';
+    document.getElementById('editGenNid').value = d.nid || '';
+    document.getElementById('editGenMobile').value = d.mobile || '';
+    document.getElementById('editGenWard').value = d.wardNo || '০১';
+    document.getElementById('editGenVillage').value = d.village || '';
+    document.getElementById('editGenPost').value = d.postOffice || 'আউলিয়াপুর ময়দান';
+
+    bootstrap.Modal.getOrCreateInstance(document.getElementById('generalEditModal')).show();
+  });
+}
+
+// 🟢 সংশোধিত তথ্য সংরক্ষণ (ডাটাবেসে আপডেট নিশ্চিত)
+function saveEditedGeneralData(){
+  var b=document.getElementById('saveEditGenBtn');
+  b.disabled=true;
+  b.innerText='সংরক্ষণ হচ্ছে...';
+
+  var d={
+    appId:document.getElementById('editGenAppId').value,
+    type:document.getElementById('editGenType').value,
+    name:document.getElementById('editGenName').value.trim(),
+    fatherName:document.getElementById('editGenFather').value.trim(),
+    motherName:document.getElementById('editGenMother').value.trim(),
+    nid:document.getElementById('editGenNid').value.trim(),
+    mobile:document.getElementById('editGenMobile').value.trim(),
+    wardNo:document.getElementById('editGenWard').value,
+    village:document.getElementById('editGenVillage').value.trim(),
+    postOffice:document.getElementById('editGenPost').value.trim()
+  };
+
+  callBackendAPI('saveEditedApplication', d).then(function(r){
+    b.disabled=false;
+    b.innerText='আপডেট করুন';
+    if(r && r.success){
+      bootstrap.Modal.getInstance(document.getElementById('generalEditModal')).hide();
+      if(typeof loadAdminApps === 'function') loadAdminApps();
+      Swal.fire({icon:'success', title:'তথ্য সফলভাবে আপডেট হয়েছে!', timer:1500, showConfirmButton:false});
+    } else {
+      alert((r && (r.error || r.message)) || 'তথ্য আপডেট করা যায়নি।');
+    }
+  });
+}
 </script>
