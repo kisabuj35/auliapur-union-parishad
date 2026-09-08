@@ -27,7 +27,7 @@ try {
     exit;
 }
 
-// 🟢 ওয়ারিশান বাতিলের টেবিল অটো-তৈরি নিশ্চিতকরণ
+// 🟢 ওয়ারিশান বাতিলের টেবিল
 $pdo->exec("CREATE TABLE IF NOT EXISTS warishan_cancellations (
     id INT AUTO_INCREMENT PRIMARY KEY,
     cancel_app_id VARCHAR(50) UNIQUE,
@@ -46,7 +46,6 @@ $pdo->exec("CREATE TABLE IF NOT EXISTS warishan_cancellations (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )");
 
-// জন্ম সাল বের করার হেল্পার
 function extractDobYear($dob) {
     if (empty($dob)) return date('Y');
     $bn = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
@@ -58,13 +57,12 @@ function extractDobYear($dob) {
     return date('Y');
 }
 
-// ইনপুট গ্রহণ
 $rawInput = file_get_contents('php://input');
 $request = json_decode($rawInput, true) ?: [];
 $action = $request['action'] ?? $_GET['action'] ?? '';
 $data = $request['data'] ?? [];
 
-// 🟢 ১. সার্বজনীন ট্র্যাকিং (বাতিলকৃত সনদের লাল সতর্কবার্তাসহ)
+// 🟢 ১. সার্বজনীন ট্র্যাকিং (স্মারক নং, সনদ নং, লাইসেন্স নং ও সম্পূর্ণ ঠিকানাসহ)
 if ($action === 'trackApplication') {
     $q = trim(is_array($data) ? ($data['query'] ?? $data['appId'] ?? '') : $data);
     $bn = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
@@ -74,40 +72,45 @@ if ($action === 'trackApplication') {
     $results = [];
 
     // নাগরিকত্ব
-    $stmt = $pdo->prepare("SELECT app_id as appId, cert_no as certNo, 'নাগরিকত্ব সনদ' as type, 'নাগরিকত্ব সনদ' as serviceType, name as applicantName, name, father_name as fatherName, mother_name as motherName, mobile, nid, status, apply_date as applyDate, ward_no as wardNo, village, post_office as postOffice FROM citizenships WHERE app_id = ? OR app_id LIKE ? OR mobile LIKE ? OR nid LIKE ? OR name LIKE ?");
-    $stmt->execute([$cleanQ, "%$cleanQ%", "%$cleanQ%", "%$cleanQ%", "%$q%"]);
+    $stmt = $pdo->prepare("SELECT app_id as appId, cert_no as certNo, '' as smarakNo, 'নাগরিকত্ব সনদ' as type, 'নাগরিকত্ব সনদ' as serviceType, name as applicantName, name, father_name as fatherName, mother_name as motherName, '' as deceasedName, mobile, nid, status, apply_date as applyDate, ward_no as wardNo, village, post_office as postOffice FROM citizenships WHERE app_id = ? OR app_id LIKE ? OR cert_no LIKE ? OR mobile LIKE ? OR nid LIKE ? OR name LIKE ?");
+    $stmt->execute([$cleanQ, "%$cleanQ%", "%$cleanQ%", "%$cleanQ%", "%$cleanQ%", "%$q%"]);
     $results = array_merge($results, $stmt->fetchAll());
 
     // ট্রেড লাইসেন্স
-    $stmt = $pdo->prepare("SELECT app_id as appId, license_no as licNo, license_no as certNo, IF(is_renewal=1, 'ট্রেড লাইসেন্স নবায়ন', 'ট্রেড লাইসেন্স') as type, IF(is_renewal=1, 'ট্রেড লাইসেন্স নবায়ন', 'ট্রেড লাইসেন্স') as serviceType, CONCAT(owner_name, ' (', org_name, ')') as applicantName, owner_name as name, father_name as fatherName, mother_name as motherName, mobile, nid, status, apply_date as applyDate, '' as wardNo, biz_address as village, '' as postOffice FROM trade_licenses WHERE app_id = ? OR app_id LIKE ? OR license_no LIKE ? OR mobile LIKE ? OR nid LIKE ? OR owner_name LIKE ? OR org_name LIKE ?");
+    $stmt = $pdo->prepare("SELECT app_id as appId, license_no as licNo, license_no as certNo, '' as smarakNo, IF(is_renewal=1, 'ট্রেড লাইসেন্স নবায়ন', 'ট্রেড লাইসেন্স') as type, IF(is_renewal=1, 'ট্রেড লাইসেন্স নবায়ন', 'ট্রেড লাইসেন্স') as serviceType, CONCAT(owner_name, ' (', org_name, ')') as applicantName, owner_name as name, father_name as fatherName, mother_name as motherName, '' as deceasedName, mobile, nid, status, apply_date as applyDate, '' as wardNo, biz_address as village, '' as postOffice FROM trade_licenses WHERE app_id = ? OR app_id LIKE ? OR license_no LIKE ? OR mobile LIKE ? OR nid LIKE ? OR owner_name LIKE ? OR org_name LIKE ?");
     $stmt->execute([$cleanQ, "%$cleanQ%", "%$cleanQ%", "%$cleanQ%", "%$cleanQ%", "%$q%", "%$q%"]);
     $results = array_merge($results, $stmt->fetchAll());
 
     // পারিবারিক ও উত্তরাধিকারী
-    $stmt = $pdo->prepare("SELECT app_id as appId, '' as certNo, certificate_type as type, certificate_type as serviceType, name as applicantName, name, father_name as fatherName, mother_name as motherName, mobile, nid, status, apply_date as applyDate, ward_no as wardNo, village, post_office as postOffice, members_json as membersJson FROM family_certificates WHERE app_id = ? OR app_id LIKE ? OR mobile LIKE ? OR nid LIKE ? OR name LIKE ? OR deceased_name LIKE ?");
-    $stmt->execute([$cleanQ, "%$cleanQ%", "%$cleanQ%", "%$cleanQ%", "%$q%", "%$q%"]);
+    $stmt = $pdo->prepare("SELECT app_id as appId, '' as certNo, '' as smarakNo, certificate_type as type, certificate_type as serviceType, name as applicantName, name, father_name as fatherName, mother_name as motherName, deceased_name as deceasedName, mobile, nid, status, apply_date as applyDate, ward_no as wardNo, village, post_office as postOffice FROM family_certificates WHERE app_id = ? OR app_id LIKE ? OR mobile LIKE ? OR nid LIKE ? OR name LIKE ? OR deceased_name LIKE ?");
+    $stmt->execute([$cleanQ, "%$cleanQ%", "%$cleanQ%", "%$cleanQ%", "%$cleanQ%", "%$q%", "%$q%"]);
     $results = array_merge($results, $stmt->fetchAll());
 
-    // ওয়ারিশান সনদ (বাতিল স্ট্যাটাস চেক সহ)
-    $stmt = $pdo->prepare("SELECT app_id as appId, smarak_no as certNo, smarak_no as smarakNo, 'ওয়ারিশান সনদ' as type, 'ওয়ারিশান সনদ' as serviceType, applicant_name as applicantName, applicant_name as name, father_spouse as fatherName, '' as motherName, mobile, nid, status, date as applyDate, ward_no as wardNo, village, post_office as postOffice FROM warishans WHERE app_id = ? OR app_id LIKE ? OR smarak_no LIKE ? OR mobile LIKE ? OR nid LIKE ? OR applicant_name LIKE ? OR deceased_name LIKE ?");
+    // ওয়ারিশান সনদ (বাতিল স্ট্যাটাস স্বয়ংক্রিয় ভেরিফিকেশন সহ)
+    $stmt = $pdo->prepare("SELECT app_id as appId, smarak_no as certNo, smarak_no as smarakNo, 'ওয়ারিশান সনদ' as type, 'ওয়ারিশান সনদ' as serviceType, applicant_name as applicantName, applicant_name as name, father_spouse as fatherName, '' as motherName, deceased_name as deceasedName, mobile, nid, status, date as applyDate, deceased_ward_no as wardNo, deceased_village as village, deceased_post_office as postOffice FROM warishans WHERE app_id = ? OR app_id LIKE ? OR smarak_no LIKE ? OR mobile LIKE ? OR nid LIKE ? OR applicant_name LIKE ? OR deceased_name LIKE ?");
     $stmt->execute([$cleanQ, "%$cleanQ%", "%$cleanQ%", "%$cleanQ%", "%$cleanQ%", "%$q%", "%$q%"]);
     $warRows = $stmt->fetchAll();
+
     foreach ($warRows as &$wRow) {
-        if ($wRow['status'] === 'Cancelled' || $wRow['status'] === 'বাতিলকৃত') {
+        // যদি এই সনদের বিরুদ্ধে কোনো অনুমোদিত বাতিলের রেকর্ড থাকে, তবে স্ট্যাটাস সরাসরি Cancelled
+        $chkCancel = $pdo->prepare("SELECT cancel_app_id FROM warishan_cancellations WHERE status='Approved' AND (target_app_id = ? OR target_smarak_no = ? OR target_smarak_no = ? OR target_smarak_no LIKE ?)");
+        $chkCancel->execute([$wRow['appId'], $wRow['appId'], $wRow['smarakNo'], "%" . $wRow['smarakNo'] . "%"]);
+        if ($chkCancel->fetch() || $wRow['status'] === 'Cancelled' || $wRow['status'] === 'বাতিলকৃত') {
+            $wRow['status'] = 'Cancelled';
             $wRow['isCancelled'] = true;
-            $wRow['cancellationNotice'] = "সতর্কবার্তা: স্মারক নং- " . ($wRow['smarakNo'] ?: $wRow['appId']) . " এর এই ওয়ারিশান সনদটি ইউনিয়ন পরিষদ কর্তৃক বাতিল করা হইয়াছে!";
+            $wRow['cancellationNotice'] = "সতর্কবার্তা: স্মারক নং- " . ($wRow['smarakNo'] ?: $wRow['appId']) . " এর এই ওয়ারিশান সনদটি ইউনিয়ন পরিষদ কর্তৃক বাতিল করা হইল!";
         }
     }
     $results = array_merge($results, $warRows);
 
     // সাধারণ প্রত্যয়ন
-    $stmt = $pdo->prepare("SELECT app_id as appId, '' as certNo, type, type as serviceType, name as applicantName, name, father_name as fatherName, mother_name as motherName, mobile, nid, status, apply_date as applyDate, ward_no as wardNo, village, post_office as postOffice FROM general_applications WHERE app_id = ? OR app_id LIKE ? OR mobile LIKE ? OR nid LIKE ? OR name LIKE ?");
-    $stmt->execute([$cleanQ, "%$cleanQ%", "%$cleanQ%", "%$cleanQ%", "%$q%"]);
+    $stmt = $pdo->prepare("SELECT app_id as appId, '' as certNo, '' as smarakNo, type, type as serviceType, name as applicantName, name, father_name as fatherName, mother_name as motherName, '' as deceasedName, mobile, nid, status, apply_date as applyDate, ward_no as wardNo, village, post_office as postOffice FROM general_applications WHERE app_id = ? OR app_id LIKE ? OR mobile LIKE ? OR nid LIKE ? OR name LIKE ?");
+    $stmt->execute([$cleanQ, "%$cleanQ%", "%$cleanQ%", "%$cleanQ%", "%$cleanQ%", "%$q%"]);
     $results = array_merge($results, $stmt->fetchAll());
 
-    // ওয়ারিশান বাতিলের আবেদনসমূহ
-    $stmt = $pdo->prepare("SELECT cancel_app_id as appId, target_smarak_no as certNo, 'ওয়ারিশ সনদ বাতিলের আবেদন' as type, 'ওয়ারিশ সনদ বাতিলের আবেদন' as serviceType, applicant_name as applicantName, applicant_name as name, applicant_father as fatherName, '' as motherName, applicant_mobile as mobile, applicant_nid as nid, status, apply_date as applyDate, '' as wardNo, '' as village, '' as postOffice FROM warishan_cancellations WHERE cancel_app_id = ? OR cancel_app_id LIKE ? OR target_smarak_no LIKE ? OR applicant_mobile LIKE ? OR applicant_name LIKE ?");
-    $stmt->execute([$cleanQ, "%$cleanQ%", "%$cleanQ%", "%$cleanQ%", "%$q%"]);
+    // ওয়ারিশান বাতিলের আবেদন
+    $stmt = $pdo->prepare("SELECT cancel_app_id as appId, target_smarak_no as certNo, target_smarak_no as smarakNo, 'ওয়ারিশ সনদ বাতিলের আবেদন' as type, 'ওয়ারিশ সনদ বাতিলের আবেদন' as serviceType, applicant_name as applicantName, applicant_name as name, applicant_father as fatherName, '' as motherName, deceased_name as deceasedName, applicant_mobile as mobile, applicant_nid as nid, status, apply_date as applyDate, '' as wardNo, deceased_address as village, '' as postOffice FROM warishan_cancellations WHERE cancel_app_id = ? OR cancel_app_id LIKE ? OR target_smarak_no LIKE ? OR target_app_id LIKE ? OR applicant_mobile LIKE ? OR applicant_name LIKE ?");
+    $stmt->execute([$cleanQ, "%$cleanQ%", "%$cleanQ%", "%$cleanQ%", "%$cleanQ%", "%$q%"]);
     $results = array_merge($results, $stmt->fetchAll());
 
     if (empty($results)) {
@@ -123,19 +126,41 @@ if ($action === 'trackApplication') {
             'name' => $first['name'],
             'applicantName' => $first['applicantName'],
             'fatherName' => $first['fatherName'],
+            'motherName' => $first['motherName'],
+            'deceasedName' => $first['deceasedName'],
             'mobile' => $first['mobile'],
             'nid' => $first['nid'],
             'status' => $first['status'],
             'applyDate' => $first['applyDate'],
             'wardNo' => $first['wardNo'] ?? '০১',
             'village' => $first['village'] ?? '',
-            'postOffice' => $first['postOffice'] ?? ''
+            'postOffice' => $first['postOffice'] ?? '',
+            'smarakNo' => $first['smarakNo'] ?? '',
+            'certNo' => $first['certNo'] ?? '',
+            'licNo' => $first['licNo'] ?? ''
         ]);
     }
     exit;
 }
 
-// 🟢 ২. ওয়ারিশান সনদ বাতিলের আবেদন দাখিল (Submit Cancellation)
+// 🟢 ২. ওয়ারিশান সনদ বাতিল অনুমোদন (শতভাগ নিশ্চিত বাতিলকরণ)
+if ($action === 'approveWarishanCancellation') {
+    $cancelAppId = trim($data['cancelAppId'] ?? '');
+    $targetSmarak = trim($data['targetSmarakNo'] ?? '');
+    $targetAppId = trim($data['targetAppId'] ?? '');
+
+    // ১. বাতিলের আবেদন এপ্রুভ করা
+    $pdo->prepare("UPDATE warishan_cancellations SET status='Approved' WHERE cancel_app_id=?")->execute([$cancelAppId]);
+
+    // ২. মূল ওয়ারিশান সনদকে 'Cancelled' (বাতিলকৃত) করা (স্মারক নং বা অ্যাপ আইডি যেভাবেই থাকুক)
+    $stmtCancel = $pdo->prepare("UPDATE warishans SET status='Cancelled' WHERE app_id = ? OR app_id = ? OR smarak_no = ? OR smarak_no = ? OR smarak_no LIKE ?");
+    $stmtCancel->execute([$targetAppId, $targetSmarak, $targetAppId, $targetSmarak, "%$targetSmarak%"]);
+
+    echo json_encode(['success' => true]);
+    exit;
+}
+
+// 🟢 ৩. ওয়ারিশান বাতিলের আবেদন সাবমিট
 if ($action === 'submitWarishanCancellation') {
     $rand6 = rand(100000, 999999);
     $cancelAppId = 'AUL-WCN-' . $rand6;
@@ -162,35 +187,13 @@ if ($action === 'submitWarishanCancellation') {
     exit;
 }
 
-// 🟢 ৩. ওয়ারিশান বাতিলের আবেদন তালিকা লোড (Admin List)
+// 🟢 ৪. ওয়ারিশান বাতিলের আবেদন তালিকা লোড
 if ($action === 'getWarishanCancellationApps') {
     $stmt = $pdo->query("SELECT * FROM warishan_cancellations ORDER BY id DESC");
     echo json_encode($stmt->fetchAll());
     exit;
 }
 
-// 🟢 ৪. ওয়ারিশান বাতিল অনুমোদন ও আসল সনদকে 'Cancelled' করা (Approve Cancellation)
-if ($action === 'approveWarishanCancellation') {
-    $cancelAppId = trim($data['cancelAppId'] ?? '');
-    $targetSmarak = trim($data['targetSmarakNo'] ?? '');
-    $targetAppId = trim($data['targetAppId'] ?? '');
-
-    // ১. বাতিলের আবেদনটি Approved করা
-    $pdo->prepare("UPDATE warishan_cancellations SET status='Approved' WHERE cancel_app_id=?")->execute([$cancelAppId]);
-
-    // ২. মূল ওয়ারিশান সনদটিকে Cancelled (বাতিলকৃত) করে দেওয়া
-    if (!empty($targetAppId)) {
-        $pdo->prepare("UPDATE warishans SET status='Cancelled' WHERE app_id=?")->execute([$targetAppId]);
-    }
-    if (!empty($targetSmarak)) {
-        $pdo->prepare("UPDATE warishans SET status='Cancelled' WHERE smarak_no=? OR smarak_no LIKE ?")->execute([$targetSmarak, "%$targetSmarak%"]);
-    }
-
-    echo json_encode(['success' => true]);
-    exit;
-}
-
-// 🟢 ৫. ওয়ারিশান বাতিলের আবেদন রিজেক্ট করা
 if ($action === 'rejectWarishanCancellation') {
     $cancelAppId = trim($data['cancelAppId'] ?? '');
     $pdo->prepare("UPDATE warishan_cancellations SET status='Rejected' WHERE cancel_app_id=?")->execute([$cancelAppId]);
@@ -198,7 +201,6 @@ if ($action === 'rejectWarishanCancellation') {
     exit;
 }
 
-// 🟢 ৬. ওয়ারিশান বাতিলের আবেদনের বিস্তারিত বিবরণ (Print Application Copy)
 if ($action === 'getWarishanCancellationDetails') {
     $q = trim(is_array($data) ? ($data['appId'] ?? '') : $data);
     $stmt = $pdo->prepare("SELECT * FROM warishan_cancellations WHERE cancel_app_id = ?");
@@ -213,7 +215,7 @@ if ($action === 'getWarishanCancellationDetails') {
     exit;
 }
 
-// 🟢 ৭. নাগরিকত্ব আবেদন সাবমিট
+// 🟢 ৫. নাগরিকত্ব আবেদন সাবমিট
 if ($action === 'submitCitizenshipDirect') {
     $rand6 = rand(100000, 999999);
     $appId = 'AUL-' . $rand6;
@@ -233,7 +235,7 @@ if ($action === 'submitCitizenshipDirect') {
     exit;
 }
 
-// 🟢 ৮. নাগরিকত্ব বিবরণ (Print)
+// 🟢 ৬. নাগরিকত্ব বিবরণ (Print)
 if ($action === 'getCitizenshipDetails') {
     $q = trim(is_array($data) ? ($data['appId'] ?? '') : $data);
     $stmt = $pdo->prepare("SELECT * FROM citizenships WHERE app_id = ? OR cert_no = ?");
@@ -275,7 +277,7 @@ if ($action === 'getCitizenshipDetails') {
     exit;
 }
 
-// 🟢 ৯. পারিবারিক বিবরণ
+// 🟢 ৭. পারিবারিক বিবরণ
 if ($action === 'getFamilyDetails') {
     $q = trim(is_array($data) ? ($data['appId'] ?? '') : $data);
     $stmt = $pdo->prepare("SELECT * FROM family_certificates WHERE app_id = ?");
@@ -318,7 +320,7 @@ if ($action === 'getFamilyDetails') {
     exit;
 }
 
-// 🟢 ১০. ট্রেড লাইসেন্স বিবরণ
+// 🟢 ৮. ট্রেড লাইসেন্স বিবরণ
 if ($action === 'getTradeLicenseDetails') {
     $q = trim(is_array($data) ? ($data['appId'] ?? $data['licNo'] ?? '') : $data);
     $stmt = $pdo->prepare("SELECT * FROM trade_licenses WHERE app_id = ? OR license_no = ?");
@@ -362,7 +364,7 @@ if ($action === 'getTradeLicenseDetails') {
     exit;
 }
 
-// 🟢 ১১. ওয়ারিশান বিবরণ
+// 🟢 ৯. ওয়ারিশান বিবরণ
 if ($action === 'getWarishanDetails') {
     $q = trim(is_array($data) ? ($data['appId'] ?? '') : $data);
     $stmt = $pdo->prepare("SELECT * FROM warishans WHERE app_id = ? OR smarak_no = ?");
@@ -403,7 +405,7 @@ if ($action === 'getWarishanDetails') {
     exit;
 }
 
-// 🟢 ১২. সংশোধিত সকল তথ্য ডাটাবেসে সেভ করা
+// 🟢 ১০. সংশোধিত সকল তথ্য ডাটাবেসে সেভ করা
 if ($action === 'saveEditedApplication' || $action === 'updateApplicationData') {
     $appId = trim($data['appId'] ?? '');
 
@@ -435,7 +437,7 @@ if ($action === 'saveEditedApplication' || $action === 'updateApplicationData') 
     exit;
 }
 
-// 🟢 ১৩. ট্রেড লাইসেন্স সাবমিট ও আপডেট
+// 🟢 ১১. ট্রেড লাইসেন্স সাবমিট ও আপডেট
 if ($action === 'submitTradeLicenseApplication') {
     $rand = rand(100000, 999999);
     $appId = 'AUL-TR-' . $rand;
@@ -468,7 +470,7 @@ if ($action === 'updateTradeLicenseData') {
     exit;
 }
 
-// 🟢 ১৪. পারিবারিক সাবমিট
+// 🟢 ১২. পারিবারিক সাবমিট
 if ($action === 'submitFamilyDirect') {
     $isSuccession = ($data['type'] === 'উত্তরাধিকারী সনদ');
     $prefix = $isSuccession ? 'AUL-UW-' : 'AUL-FW-';
@@ -489,13 +491,12 @@ if ($action === 'submitFamilyDirect') {
     exit;
 }
 
-// 🟢 ১৫. ওয়ারিশান সাবমিট ও আপডেট
+// 🟢 ১৩. ওয়ারিশান সাবমিট ও আপডেট
 if ($action === 'submitWarishanApplication') {
     $rand = rand(1000, 9999);
     $appId = 'AUL-WAR-' . $rand;
     $date = date('d/m/Y');
     
-    // স্মারক নং ০০১ প্যাডিং সহ
     $count = $pdo->query("SELECT COUNT(*) FROM warishans")->fetchColumn() + 1;
     $smarakNo = 'আ/ইউ/পটুয়া/সদর/' . date('Y') . '/' . str_pad($count, 3, '0', STR_PAD_LEFT);
 
@@ -527,7 +528,7 @@ if ($action === 'updateWarishanData') {
     exit;
 }
 
-// 🟢 ১৬. সাধারণ প্রত্যয়ন সাবমিট
+// 🟢 ১৪. সাধারণ প্রত্যয়ন সাবমিট
 if ($action === 'submitApplication') {
     $appId = 'AUL-' . rand(100000, 999999);
     $date = date('d/m/Y');
@@ -543,7 +544,7 @@ if ($action === 'submitApplication') {
     exit;
 }
 
-// 🟢 ১৭. ড্যাশবোর্ড পরিসংখ্যান
+// 🟢 ১৫. ড্যাশবোর্ড পরিসংখ্যান
 if ($action === 'getMasterDashboardStats') {
     $citTotal = $pdo->query("SELECT COUNT(*) FROM citizenships")->fetchColumn();
     $citApproved = $pdo->query("SELECT COUNT(*) FROM citizenships WHERE status='Approved'")->fetchColumn();
@@ -582,7 +583,7 @@ if ($action === 'getMasterDashboardStats') {
     exit;
 }
 
-// 🟢 ১৮. তালিকার API সমূহ
+// 🟢 ১৬. তালিকার API সমূহ
 if ($action === 'getCitizenshipApps') {
     echo json_encode($pdo->query("SELECT app_id as appId, cert_no as certNo, name, father_name as fatherName, mobile, status FROM citizenships ORDER BY id DESC")->fetchAll());
     exit;
@@ -604,7 +605,7 @@ if ($action === 'getAllApplications') {
     exit;
 }
 
-// 🟢 ১৯. স্ট্যাটাস পরিবর্তন ও ডিলিট
+// 🟢 ১৭. স্ট্যাটাস পরিবর্তন ও ডিলিট
 if ($action === 'updateAppStatus') {
     $appId = $data['appId'] ?? '';
     $status = $data['status'] ?? 'Approved';
@@ -630,7 +631,7 @@ if ($action === 'deleteApplication') {
     exit;
 }
 
-// 🟢 ২০. এডমিন লগইন
+// 🟢 ১৮. এডমিন লগইন
 if ($action === 'adminLogin') {
     $u = trim($data['username'] ?? '');
     $p = trim($data['password'] ?? '');
