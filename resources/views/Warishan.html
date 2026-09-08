@@ -1,6 +1,6 @@
 <!-- ======================================================= -->
 <!-- 11NO AULIAPUR UNION PARISHAD - WARISHAN MODULE          -->
-<!-- File: Warishan.html (Royal 3D Ribbon & Master Print)    -->
+<!-- File: Warishan.html (Royal 3D Ribbon & Master Tools)    -->
 <!-- ======================================================= -->
 
 <!-- Google & Maateen Fonts -->
@@ -10,8 +10,12 @@
 <style>
   .war-card-header { background: linear-gradient(135deg, #006837, #004d26); color: #fff; padding: 14px 20px; border-radius: 8px 8px 0 0; }
   .war-group-box { background: #fdfdfd; border: 1.5px solid #006837; border-radius: 8px; padding: 14px; margin-bottom: 16px; position: relative; }
-  .btn-war-add { background-color: #006837; color: #ffffff; font-weight: bold; border-radius: 6px; font-size: 13px; }
+  .btn-war-add { background-color: #006837; color: #ffffff; font-weight: bold; border-radius: 6px; font-size: 13px; border: none; padding: 4px 10px; }
   .btn-war-add:hover { background-color: #004d26; color: #ffffff; }
+  
+  /* টেবিল কন্ট্রোল বাটন টুলস */
+  .war-row-tools { white-space: nowrap; display: flex; gap: 2px; justify-content: center; }
+  .war-row-tools button { padding: 2px 6px; font-size: 11px; }
 
   /* 🟢 নিখুঁত অফিশিয়াল A4 ফ্রেম */
   .war-page-container {
@@ -29,20 +33,19 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    font-family: 'Nikosh', 'Kalpurush', 'Tiro Bangla', sans-serif;
+    font-family: 'Nikosh', 'Kalpurush', sans-serif;
     color: #000000;
     box-shadow: 0 0 15px rgba(0,0,0,0.15);
     overflow: hidden;
   }
 
-  /* 🟢 ওয়াটারমার্ক */
   .war-watermark-bg {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 440px !important;
-    max-width: 440px !important;
+    width: 450px !important;
+    max-width: 450px !important;
     opacity: 0.11 !important;
     pointer-events: none;
     z-index: 1;
@@ -60,51 +63,74 @@
     justify-content: space-between;
   }
 
-  /* 🟢 ৩ডি (3D) রয়্যাল রিবন ব্যানার */
+  /* 🟢 চমৎকার ৩ডি (3D) রয়্যাল রিবন ব্যানার (গোল্ডেন বর্ডার ও থ্রিডি উইং সহ) */
   .royal-ribbon-wrapper {
     text-align: center;
-    margin: 6px 0 10px 0;
+    margin: 8px 0 14px 0;
     position: relative;
   }
 
   .royal-ribbon-3d {
     position: relative;
     display: inline-block;
-    background: linear-gradient(180deg, #007a3d 0%, #005a2d 60%, #004622 100%) !important;
+    background: linear-gradient(180deg, #0a7340 0%, #04522c 50%, #02331b 100%) !important;
     color: #ffffff !important;
-    font-size: 22px;
+    font-size: 23px !important;
     font-weight: 800;
-    padding: 5px 45px;
+    padding: 6px 50px;
     letter-spacing: 1px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.28);
+    box-shadow: 0 5px 12px rgba(0,0,0,0.35);
     z-index: 2;
-    border-radius: 2px;
-    border-top: 1.5px solid #6ee7b7;
-    border-bottom: 2px solid #002813;
-    text-shadow: 0 1.5px 3px rgba(0,0,0,0.4);
+    border-radius: 3px;
+    border-top: 1.5px solid #a7f3d0;
+    border-bottom: 2px solid #001a0d;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
   .royal-ribbon-3d::before, .royal-ribbon-3d::after {
     content: "";
     position: absolute;
-    top: 6px;
-    border: 17px solid #00361a !important;
+    top: 8px;
+    border: 18px solid #012413 !important;
     z-index: -1;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
-  .royal-ribbon-3d::before { left: -24px; border-right-width: 14px; border-left-color: transparent !important; }
-  .royal-ribbon-3d::after { right: -24px; border-left-width: 14px; border-right-color: transparent !important; }
+  .royal-ribbon-3d::before {
+    left: -26px;
+    border-right-width: 14px;
+    border-left-color: transparent !important;
+  }
+  .royal-ribbon-3d::after {
+    right: -26px;
+    border-left-width: 14px;
+    border-right-color: transparent !important;
+  }
+
+  .ribbon-fold-left, .ribbon-fold-right {
+    position: absolute;
+    bottom: -7px;
+    width: 0;
+    height: 0;
+    border: 3.5px solid transparent;
+    z-index: 1;
+  }
+  .ribbon-fold-left { left: 0; border-top-color: #001208 !important; border-left-color: #001208 !important; }
+  .ribbon-fold-right { right: 0; border-top-color: #001208 !important; border-right-color: #001208 !important; }
 
   /* টেবিল কাঠামো */
   .war-main-table {
     width: 100%;
     border-collapse: collapse !important;
-    margin-top: 5px;
-    font-size: 14px;
+    margin-top: 6px;
+    font-size: 14.5px;
     font-family: 'Nikosh', 'Kalpurush', sans-serif;
   }
   .war-main-table th, .war-main-table td {
     border: 1.2px solid #000000 !important;
-    padding: 4px 6px;
+    padding: 4.5px 6px;
     text-align: center;
     vertical-align: middle;
     line-height: 1.25;
@@ -121,7 +147,7 @@
     background-color: #ffffff !important;
     font-weight: bold;
     text-align: left !important;
-    padding: 4px 8px !important;
+    padding: 5px 8px !important;
     font-size: 14px;
     border: 1.2px solid #000000 !important;
   }
@@ -146,7 +172,7 @@
 
   @media (max-width: 767.98px) {
     .war-page-container { width: 100%; height: auto; min-height: auto; padding: 8mm 6mm; }
-    .royal-ribbon-3d { font-size: 16px; padding: 5px 18px; }
+    .royal-ribbon-3d { font-size: 16px !important; padding: 5px 22px; }
     .war-main-table { font-size: 11.5px; }
   }
 </style>
@@ -185,20 +211,20 @@
           </div>
         </div>
 
-        <!-- ২. মূল মৃত ব্যক্তির তথ্য -->
+        <!-- ২. মূল মৃত ব্যক্তির তথ্য (যা সনদের বিবরণীতে হুবহু বসবে) -->
         <div class="card p-3 mb-4 bg-white border">
-          <h6 class="fw-bold text-danger border-bottom pb-2 mb-3"><i class="fa fa-book-skull me-2"></i> ২. মূল মৃত ব্যক্তির তথ্য</h6>
+          <h6 class="fw-bold text-danger border-bottom pb-2 mb-3"><i class="fa fa-book-skull me-2"></i> ২. মূল মৃত ব্যক্তির তথ্য (সনদে এই তথ্যটি আসবে)</h6>
           <div class="row g-3">
             <div class="col-md-6"><label class="form-label fw-bold text-danger">মূল মৃত ব্যক্তির নাম *</label><input type="text" id="warDeceasedName" class="form-control border-danger" placeholder="মৃত ব্যক্তির নাম" required></div>
             <div class="col-md-4"><label class="form-label fw-bold text-danger">মৃত ব্যক্তির পিতা/স্বামীর নাম *</label><input type="text" id="warDeceasedFather" class="form-control border-danger" placeholder="পিতা বা স্বামীর নাম" required></div>
             <div class="col-md-2"><label class="form-label fw-bold text-danger">সম্পর্ক *</label><select id="warDeceasedRelation" class="form-select border-danger" required><option value="পুত্র">পুত্র</option><option value="কন্যা">কন্যা</option><option value="স্ত্রী">স্ত্রী</option><option value="স্বামী">স্বামী</option></select></div>
-            <div class="col-md-4"><label class="form-label fw-bold text-danger">ওয়ার্ড নম্বর *</label><select id="warDeceasedWard" class="form-select border-danger" required><option value="০১">০১</option><option value="০২">০২</option><option value="০৩">০৩</option><option value="০৪">০৪</option><option value="০৫">০৫</option><option value="০৬">০৬</option><option value="০৭">০৭</option><option value="০৮">০৮</option><option value="০৯">০৯</option></select></div>
-            <div class="col-md-4"><label class="form-label fw-bold text-danger">গ্রাম/মহল্লা *</label><input type="text" id="warDeceasedVillage" class="form-control border-danger" placeholder="গ্রামের নাম" required></div>
-            <div class="col-md-4"><label class="form-label fw-bold text-danger">ডাকঘর *</label><input type="text" id="warDeceasedPost" class="form-control border-danger" value="আউলিয়াপুর ময়দান" required></div>
+            <div class="col-md-4"><label class="form-label fw-bold text-danger">মৃত ব্যক্তির ওয়ার্ড নং *</label><select id="warDeceasedWard" class="form-select border-danger" required><option value="০১">০১</option><option value="০২">০২</option><option value="০৩">০৩</option><option value="০৪">০৪</option><option value="০৫">০৫</option><option value="০৬">০৬</option><option value="০৭">০৭</option><option value="০৮">০৮</option><option value="০৯">০৯</option></select></div>
+            <div class="col-md-4"><label class="form-label fw-bold text-danger">মৃত ব্যক্তির গ্রাম *</label><input type="text" id="warDeceasedVillage" class="form-control border-danger" placeholder="যেমন: উত্তর বাদুরা" required></div>
+            <div class="col-md-4"><label class="form-label fw-bold text-danger">মৃত ব্যক্তির ডাকঘর *</label><input type="text" id="warDeceasedPost" class="form-control border-danger" value="বাদুরা হাট-৮৬০০" required></div>
           </div>
         </div>
 
-        <!-- ৩. ওয়ারিশগণের তালিকা -->
+        <!-- ৩. ওয়ারিশগণের তালিকা ও কপি/মুভ টুলস -->
         <div class="card p-3 mb-4 bg-white border">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <h6 class="fw-bold text-primary m-0"><i class="fa fa-users-rectangle me-2"></i> ৩. ওয়ারিশগণের বিবরণ ও ধাপসমূহ</h6>
@@ -206,15 +232,43 @@
           </div>
           <div id="warGroupsContainer">
             <div class="war-group-box" id="warGroup_0" data-group-index="0">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <input type="text" class="form-control form-control-sm fw-bold text-success border-success war-group-title" value="মূল মৃত ব্যক্তির ওয়ারিশগণ" style="max-width: 450px;">
-                <div><button type="button" class="btn btn-sm btn-war-add" onclick="addWarRow(0)"><i class="fa fa-plus me-1"></i> সদস্য যোগ</button></div>
+              <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+                <input type="text" class="form-control form-control-sm fw-bold text-success border-success war-group-title" value="মূল মৃত ব্যক্তির ওয়ারিশগণ" style="max-width: 420px;">
+                <div class="d-flex gap-1">
+                  <button type="button" class="btn btn-sm btn-outline-primary" onclick="duplicateWarGroup(0)" title="পুরো টেবিল একবারে কপি করুন"><i class="fa fa-copy me-1"></i>পুরো টেবিল কপি</button>
+                  <button type="button" class="btn btn-sm btn-war-add" onclick="addWarRow(0)"><i class="fa fa-plus me-1"></i> সদস্য যোগ</button>
+                </div>
               </div>
               <div class="table-responsive">
                 <table class="table table-bordered table-sm align-middle mb-0 bg-white">
-                  <thead class="table-light"><tr><th width="8%">ক্র.নং</th><th width="28%">ওয়ারিশের নাম</th><th width="28%">পিতা/স্বামীর নাম</th><th width="20%">ঠিকানা</th><th width="12%">সম্পর্ক</th><th width="4%">মুছুন</th></tr></thead>
+                  <thead class="table-light">
+                    <tr>
+                      <th width="6%">ক্র.নং</th>
+                      <th width="26%">ওয়ারিশের নাম</th>
+                      <th width="26%">পিতা/স্বামীর নাম</th>
+                      <th width="18%">গ্রাম</th>
+                      <th width="12%">সম্পর্ক</th>
+                      <th width="12%">টুলস (কপি/মুভ)</th>
+                    </tr>
+                  </thead>
                   <tbody id="warTableBody_0">
-                    <tr><td><input type="text" class="form-control form-control-sm text-center war-sl" value="১"></td><td><input type="text" class="form-control form-control-sm war-name" required></td><td><input type="text" class="form-control form-control-sm war-rel-name"></td><td><input type="text" class="form-control form-control-sm war-addr"></td><td><input type="text" class="form-control form-control-sm war-rel"></td><td class="text-center"><button type="button" class="btn btn-sm text-danger p-0" onclick="removeWarRow(this)"><i class="fa fa-trash"></i></button></td></tr>
+                    <tr>
+                      <td><input type="text" class="form-control form-control-sm text-center war-sl" value="১"></td>
+                      <td><input type="text" class="form-control form-control-sm war-name" placeholder="নাম" required></td>
+                      <td><input type="text" class="form-control form-control-sm war-rel-name" placeholder="পিতা/স্বামী"></td>
+                      <td><input type="text" class="form-control form-control-sm war-addr" placeholder="গ্রাম"></td>
+                      <td><input type="text" class="form-control form-control-sm war-rel" placeholder="সম্পর্ক"></td>
+                      <td class="text-center">
+                        <div class="war-row-tools">
+                          <button type="button" class="btn btn-sm btn-outline-secondary" onclick="copyWarRow(this)" title="কপি"><i class="fa fa-copy"></i></button>
+                          <button type="button" class="btn btn-sm btn-outline-secondary" onclick="pasteWarRow(this)" title="পেস্ট"><i class="fa fa-paste"></i></button>
+                          <button type="button" class="btn btn-sm btn-outline-primary" onclick="duplicateWarRow(this)" title="ডুপ্লিকেট"><i class="fa fa-clone"></i></button>
+                          <button type="button" class="btn btn-sm btn-outline-dark" onclick="moveWarRow(this, -1)" title="উপরে তুলুন"><i class="fa fa-arrow-up"></i></button>
+                          <button type="button" class="btn btn-sm btn-outline-dark" onclick="moveWarRow(this, 1)" title="নিচে নামান"><i class="fa fa-arrow-down"></i></button>
+                          <button type="button" class="btn btn-sm text-danger" onclick="removeWarRow(this)" title="মুছুন"><i class="fa fa-trash"></i></button>
+                        </div>
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -254,7 +308,7 @@
             </div>
           </div>
           <div class="card p-3 mb-3 bg-white border">
-            <h6 class="fw-bold text-danger border-bottom pb-2 mb-3">মূল মৃত ব্যক্তির তথ্য</h6>
+            <h6 class="fw-bold text-danger border-bottom pb-2 mb-3">মূল মৃত ব্যক্তির তথ্য (সনদে প্রদর্শিত হবে)</h6>
             <div class="row g-3">
               <div class="col-md-6"><label class="form-label fw-bold">মূল মৃত ব্যক্তির নাম *</label><input type="text" id="editWarDeceasedName" class="form-control" required></div>
               <div class="col-md-4"><label class="form-label fw-bold">পিতা/স্বামীর নাম *</label><input type="text" id="editWarDeceasedFather" class="form-control" required></div>
@@ -267,7 +321,7 @@
           <div class="card p-3 bg-white border">
             <div class="d-flex justify-content-between align-items-center mb-3">
               <h6 class="fw-bold text-primary m-0">ওয়ারিশগণের বিবরণ</h6>
-              <button type="button" class="btn btn-sm btn-outline-success fw-bold" onclick="addWarishanEditGroup()"><i class="fa fa-folder-plus me-1"></i> উপ-গ্রুপ যোগ</button>
+              <button type="button" class="btn btn-sm btn-outline-success fw-bold" onclick="addNewWarishanGroup()"><i class="fa fa-folder-plus me-1"></i> উপ-গ্রুপ যোগ</button>
             </div>
             <div id="editWarGroupsContainer"></div>
           </div>
@@ -285,6 +339,7 @@
 
 <script>
   var warGroupCounter = 0;
+  window._copiedWarRowData = null;
 
   function toBn(n) {
     if (n === null || n === undefined || n === '') return '';
@@ -297,6 +352,74 @@
     return name.startsWith('মৃত') ? name : 'মৃত ' + name;
   }
 
+  // 🟢 রো ও টেবিল ম্যানিপুলেশন টুলস (Copy, Paste, Move, Duplicate)
+  function readRowValues(tr) {
+    return Array.from(tr.querySelectorAll('input')).map(input => input.value);
+  }
+
+  function writeRowValues(tr, values) {
+    var inputs = tr.querySelectorAll('input');
+    inputs.forEach((input, idx) => {
+      if (idx > 0) input.value = values[idx] || ''; // sl অপরিবর্তিত রাখা
+    });
+  }
+
+  function copyWarRow(btn) {
+    var tr = btn.closest('tr');
+    window._copiedWarRowData = readRowValues(tr);
+    Swal.fire({ icon: 'success', title: 'রো কপি হয়েছে!', timer: 800, showConfirmButton: false });
+  }
+
+  function pasteWarRow(btn) {
+    if (!window._copiedWarRowData) return alert('আগে একটি রো কপি করুন!');
+    var tr = btn.closest('tr');
+    writeRowValues(tr, window._copiedWarRowData);
+  }
+
+  function duplicateWarRow(btn) {
+    var tr = btn.closest('tr');
+    var clone = tr.cloneNode(true);
+    tr.parentNode.insertBefore(clone, tr.nextSibling);
+    reindexTableRows(tr.closest('tbody'));
+    Swal.fire({ icon: 'success', title: 'রো ডুপ্লিকেট হয়েছে!', timer: 800, showConfirmButton: false });
+  }
+
+  function moveWarRow(btn, direction) {
+    var tr = btn.closest('tr');
+    var tbody = tr.parentElement;
+    if (direction < 0 && tr.previousElementSibling) {
+      tbody.insertBefore(tr, tr.previousElementSibling);
+    } else if (direction > 0 && tr.nextElementSibling) {
+      tbody.insertBefore(tr.nextElementSibling, tr);
+    }
+    reindexTableRows(tbody);
+  }
+
+  function reindexTableRows(tbody) {
+    var rows = tbody.querySelectorAll('tr');
+    rows.forEach((row, idx) => {
+      var slInput = row.querySelector('.war-sl');
+      if (slInput) slInput.value = toBn(idx + 1);
+    });
+  }
+
+  function duplicateWarGroup(groupIndex) {
+    var source = document.getElementById('warGroup_' + groupIndex);
+    if (!source) return;
+    addNewWarishanGroup();
+    var target = document.getElementById('warGroup_' + warGroupCounter);
+    target.querySelector('.war-group-title').value = source.querySelector('.war-group-title').value + ' (কপি)';
+    
+    var targetTbody = target.querySelector('tbody');
+    targetTbody.innerHTML = '';
+    source.querySelectorAll('tbody tr').forEach(function(sRow) {
+      var clone = sRow.cloneNode(true);
+      targetTbody.appendChild(clone);
+    });
+    reindexTableRows(targetTbody);
+    Swal.fire({ icon: 'success', title: 'সম্পূর্ণ টেবিল কপি হয়েছে!', timer: 1000, showConfirmButton: false });
+  }
+
   function addWarRow(groupIndex) {
     var tbody = document.getElementById('warTableBody_' + groupIndex);
     if (!tbody) return;
@@ -304,11 +427,20 @@
     var tr = document.createElement('tr');
     tr.innerHTML = `
       <td><input type="text" class="form-control form-control-sm text-center war-sl" value="${toBn(count)}"></td>
-      <td><input type="text" class="form-control form-control-sm war-name" required></td>
-      <td><input type="text" class="form-control form-control-sm war-rel-name"></td>
-      <td><input type="text" class="form-control form-control-sm war-addr"></td>
-      <td><input type="text" class="form-control form-control-sm war-rel"></td>
-      <td class="text-center"><button type="button" class="btn btn-sm text-danger p-0" onclick="removeWarRow(this)"><i class="fa fa-trash"></i></button></td>
+      <td><input type="text" class="form-control form-control-sm war-name" placeholder="নাম" required></td>
+      <td><input type="text" class="form-control form-control-sm war-rel-name" placeholder="পিতা/স্বামী"></td>
+      <td><input type="text" class="form-control form-control-sm war-addr" placeholder="গ্রাম"></td>
+      <td><input type="text" class="form-control form-control-sm war-rel" placeholder="সম্পর্ক"></td>
+      <td class="text-center">
+        <div class="war-row-tools">
+          <button type="button" class="btn btn-sm btn-outline-secondary" onclick="copyWarRow(this)" title="কপি"><i class="fa fa-copy"></i></button>
+          <button type="button" class="btn btn-sm btn-outline-secondary" onclick="pasteWarRow(this)" title="পেস্ট"><i class="fa fa-paste"></i></button>
+          <button type="button" class="btn btn-sm btn-outline-primary" onclick="duplicateWarRow(this)" title="ডুপ্লিকেট"><i class="fa fa-clone"></i></button>
+          <button type="button" class="btn btn-sm btn-outline-dark" onclick="moveWarRow(this, -1)" title="উপরে"><i class="fa fa-arrow-up"></i></button>
+          <button type="button" class="btn btn-sm btn-outline-dark" onclick="moveWarRow(this, 1)" title="নিচে"><i class="fa fa-arrow-down"></i></button>
+          <button type="button" class="btn btn-sm text-danger" onclick="removeWarRow(this)"><i class="fa fa-trash"></i></button>
+        </div>
+      </td>
     `;
     tbody.appendChild(tr);
   }
@@ -316,8 +448,12 @@
   function removeWarRow(btn) {
     var tr = btn.closest('tr');
     var tbody = tr.parentElement;
-    if(tbody.getElementsByTagName('tr').length > 1) { tr.remove(); }
-    else { alert('কমপক্ষে একজন ওয়ারিশের তথ্য থাকতে হবে!'); }
+    if(tbody.getElementsByTagName('tr').length > 1) { 
+      tr.remove(); 
+      reindexTableRows(tbody);
+    } else { 
+      alert('কমপক্ষে একজন ওয়ারিশের তথ্য থাকতে হবে!'); 
+    }
   }
 
   function addNewWarishanGroup() {
@@ -328,18 +464,35 @@
     groupDiv.id = 'warGroup_' + warGroupCounter;
 
     groupDiv.innerHTML = `
-      <div class="d-flex justify-content-between align-items-center mb-2">
-        <input type="text" class="form-control form-control-sm fw-bold text-danger border-danger war-group-title" placeholder="উপ-গ্রুপের শিরোনাম লিখুন" style="max-width: 550px;" required>
-        <div>
-          <button type="button" class="btn btn-sm btn-war-add me-1" onclick="addWarRow(${warGroupCounter})"><i class="fa fa-plus me-1"></i> সদস্য যোগ</button>
+      <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+        <input type="text" class="form-control form-control-sm fw-bold text-danger border-danger war-group-title" placeholder="যেমন: ১নং কলামের ৯নং ওয়ারিশ ... এর মৃত্যুতে ওয়ারিশের তালিকা" style="max-width: 450px;" required>
+        <div class="d-flex gap-1">
+          <button type="button" class="btn btn-sm btn-outline-primary" onclick="duplicateWarGroup(${warGroupCounter})" title="পুরো টেবিল কপি"><i class="fa fa-copy me-1"></i>টেবিল কপি</button>
+          <button type="button" class="btn btn-sm btn-war-add" onclick="addWarRow(${warGroupCounter})"><i class="fa fa-plus me-1"></i> সদস্য যোগ</button>
           <button type="button" class="btn btn-sm btn-outline-danger" onclick="this.closest('.war-group-box').remove()"><i class="fa fa-times"></i></button>
         </div>
       </div>
       <div class="table-responsive">
         <table class="table table-bordered table-sm align-middle mb-0 bg-white">
-          <thead class="table-light"><tr><th width="8%">ক্র.নং</th><th width="28%">ওয়ারিশের নাম</th><th width="28%">পিতা/স্বামীর নাম</th><th width="20%">ঠিকানা</th><th width="12%">সম্পর্ক</th><th width="4%">মুছুন</th></tr></thead>
+          <thead class="table-light"><tr><th width="6%">ক্র.নং</th><th width="26%">ওয়ারিশের নাম</th><th width="26%">পিতা/স্বামীর নাম</th><th width="18%">গ্রাম</th><th width="12%">সম্পর্ক</th><th width="12%">টুলস</th></tr></thead>
           <tbody id="warTableBody_${warGroupCounter}">
-            <tr><td><input type="text" class="form-control form-control-sm text-center war-sl" value="১"></td><td><input type="text" class="form-control form-control-sm war-name" required></td><td><input type="text" class="form-control form-control-sm war-rel-name"></td><td><input type="text" class="form-control form-control-sm war-addr"></td><td><input type="text" class="form-control form-control-sm war-rel"></td><td class="text-center"><button type="button" class="btn btn-sm text-danger p-0" onclick="removeWarRow(this)"><i class="fa fa-trash"></i></button></td></tr>
+            <tr>
+              <td><input type="text" class="form-control form-control-sm text-center war-sl" value="১"></td>
+              <td><input type="text" class="form-control form-control-sm war-name" placeholder="নাম" required></td>
+              <td><input type="text" class="form-control form-control-sm war-rel-name" placeholder="পিতা/স্বামী"></td>
+              <td><input type="text" class="form-control form-control-sm war-addr" placeholder="গ্রাম"></td>
+              <td><input type="text" class="form-control form-control-sm war-rel" placeholder="সম্পর্ক"></td>
+              <td class="text-center">
+                <div class="war-row-tools">
+                  <button type="button" class="btn btn-sm btn-outline-secondary" onclick="copyWarRow(this)"><i class="fa fa-copy"></i></button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary" onclick="pasteWarRow(this)"><i class="fa fa-paste"></i></button>
+                  <button type="button" class="btn btn-sm btn-outline-primary" onclick="duplicateWarRow(this)"><i class="fa fa-clone"></i></button>
+                  <button type="button" class="btn btn-sm btn-outline-dark" onclick="moveWarRow(this, -1)"><i class="fa fa-arrow-up"></i></button>
+                  <button type="button" class="btn btn-sm btn-outline-dark" onclick="moveWarRow(this, 1)"><i class="fa fa-arrow-down"></i></button>
+                  <button type="button" class="btn btn-sm text-danger" onclick="removeWarRow(this)"><i class="fa fa-trash"></i></button>
+                </div>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -406,7 +559,7 @@
     }
   }
 
-  // 🟢 সরাসরি ১-ক্লিকে ওয়ারিশ সনদ প্রিন্ট (undefined এরর সমাধান সহ)
+  // 🟢 সরাসরি ১-ক্লিকে ওয়ারিশ সনদ প্রিন্ট (মৃত ব্যক্তির ঠিকানা ও ৩ডি রিবন সহ)
   async function directPrintWarishan(appId) {
     try {
       const data = await callBackendAPI('getWarishanDetails', appId);
@@ -416,7 +569,7 @@
       var totalRows = 0;
       tree.forEach(g => { totalRows += (g.members ? g.members.length : 0); });
 
-      // 🟢 মৃত ব্যক্তি ও পিতার নাম সুনিশ্চিত করা
+      // 🟢 মৃত ব্যক্তির আসল ঠিকানা নিশ্চিতকরণ
       var decNameVal = data.deceasedName || data.deceased_name || '-';
       var decFatherVal = data.deceasedFather || data.deceased_father || '-';
       var decRelVal = data.deceasedRelation || data.deceased_relation || 'পুত্র';
@@ -424,14 +577,11 @@
       var decNameText = formatMrito(decNameVal);
       var decFatherText = (decFatherVal && decFatherVal !== '-') ? `${formatMrito(decFatherVal)} এর ${decRelVal} ` : '';
       
-      var decWard = data.deceasedWardNo || data.deceased_ward_no || data.wardNo || '';
-      var decVillage = data.deceasedVillage || data.deceased_village || data.village || '';
-      var decPost = data.deceasedPostOffice || data.deceased_post_office || data.postOffice || 'আউলিয়াপুর ময়দান';
+      var decWard = data.deceasedWardNo || data.deceased_ward_no || '০১';
+      var decVillage = data.deceasedVillage || data.deceased_village || 'উত্তর বাদুরা';
+      var decPost = data.deceasedPostOffice || data.deceased_post_office || 'বাদুরা হাট-৮৬০০';
 
-      var decAddressText = (decWard ? decWard + ' নং ওয়ার্ড, ' : '') +
-        (decVillage ? decVillage + ' গ্রাম, ' : '') +
-        (decPost ? 'ডাকঘর ' + decPost + ', ' : '') +
-        '১১নং আউলিয়াপুর ইউনিয়ন, পটুয়াখালী সদর, পটুয়াখালী';
+      var decAddressText = `${toBn(decWard)} নং ওয়ার্ড, ${decVillage} গ্রাম, ডাকঘর: ${decPost}, ১১নং আউলিয়াপুর ইউনিয়ন, পটুয়াখালী সদর, পটুয়াখালী`;
 
       var tableRows = '';
       tree.forEach(function(grp, idx) {
@@ -451,42 +601,70 @@
 
       var today = new Date();
       var runningDate = toBn(String(today.getDate()).padStart(2, '0') + '/' + String(today.getMonth() + 1).padStart(2, '0') + '/' + today.getFullYear());
+      
+      // 🟢 স্মারক নম্বর ০০১ ফরম্যাটে
+      var rawNum = String(data.smarakNo || appId || '').replace(/\D/g, '');
+      var lastDigits = rawNum.slice(-3) || '1';
+      var paddedSl = toBn(String(parseInt(lastDigits, 10)).padStart(3, '0'));
+      var smarakFormatted = `আ/ইউ/পটুয়া/সদর/${toBn(today.getFullYear())}/${paddedSl}`;
 
       var html = `
         <div class="war-page-container">
           <img src="https://lh3.googleusercontent.com/d/1_LMOoAtirVZeGxE4sz_CVQtQpInPPQTs" class="war-watermark-bg" alt="Watermark">
           <div class="war-content-body">
             <div>
-              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2.5px solid #006837; padding-bottom: 5px;">
-                <div style="width: 75px;"><img src="https://upload.wikimedia.org/wikipedia/commons/8/84/Government_Seal_of_Bangladesh.svg" width="65" height="65"></div>
-                <div style="text-align: center; flex-grow: 1;">
-                  <h2 style="font-weight: 800; margin: 0; font-size: 25px; color: #000;">১১নং আউলিয়াপুর ইউনিয়ন পরিষদ কার্যালয়</h2>
-                  <p style="margin: 2px 0 0 0; font-weight: bold; font-size: 15px;">ডাকঘরঃ আউলিয়াপুর ময়দান, উপজেলা ও জেলাঃ পটুয়াখালী ।</p>
-                  <p style="margin: 0; font-size: 13px; font-weight: bold; color: #006837;">web site: www.aup.auliapur.com</p>
-                </div>
-                <div style="width: 75px; text-align: right;"><img src="https://lh3.googleusercontent.com/d/1_LMOoAtirVZeGxE4sz_CVQtQpInPPQTs" width="65" height="65"></div>
-              </div>
-              <div style="display: flex; justify-content: space-between; align-items: center; margin: 6px 0; font-size: 15px; font-weight: bold;">
-                <div>স্মারক নং- ${data.smarakNo || 'আ/ইউ/পটুয়া/সদর/' + toBn(today.getFullYear()) + '/০১'}</div>
+              <!-- শীর্ষ আকর্ষণীয় ও মার্জিত অফিশিয়াল হেডার -->
+              <table style="width: 100%; border-collapse: collapse; margin-bottom: 2px;">
+                <tr>
+                  <td style="width: 85px; vertical-align: middle; text-align: left;">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/8/84/Government_Seal_of_Bangladesh.svg" width="70" height="70" style="object-fit: contain;">
+                  </td>
+                  <td style="text-align: center; vertical-align: middle;">
+                    <div style="font-size: 14.5px; font-weight: bold; color: #222;">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার (স্থানীয় সরকার বিভাগ)</div>
+                    <h1 style="margin: 2px 0; font-size: 28.5px; font-weight: 800; color: #005a2b; letter-spacing: 0.5px; font-family: 'Nikosh', sans-serif;">১১নং আউলিয়াপুর ইউনিয়ন পরিষদ কার্যালয়</h1>
+                    <div style="font-size: 16px; font-weight: bold; color: #000;">ডাকঘরঃ আউলিয়াপুর ময়দান, উপজেলা ও জেলাঃ পটুয়াখালী ।</div>
+                    <div style="font-size: 12px; font-weight: bold; color: #006837; margin-top: 1px;">web site: www.aup.auliapur.com</div>
+                  </td>
+                  <td style="width: 85px; vertical-align: middle; text-align: right;">
+                    <img src="https://lh3.googleusercontent.com/d/1_LMOoAtirVZeGxE4sz_CVQtQpInPPQTs" width="70" height="70" style="object-fit: contain;">
+                  </td>
+                </tr>
+              </table>
+
+              <div style="border-top: 2px solid #006837; border-bottom: 1px solid #b89446; height: 4px; margin: 4px 0 8px 0;"></div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 15px; font-weight: bold;">
+                <div>স্মারক নং- ${smarakFormatted}</div>
                 <div>তারিখঃ ${runningDate} ইং</div>
               </div>
+
+              <!-- 🟢 ৩ডি রয়্যাল রিবন ব্যানার -->
               <div class="royal-ribbon-wrapper">
-                <div class="royal-ribbon-3d"><span>ওয়ারিশ সার্টিফিকেট</span></div>
+                <div class="royal-ribbon-3d">
+                  <span>ওয়ারিশ সার্টিফিকেট</span>
+                  <div class="ribbon-fold-left"></div>
+                  <div class="ribbon-fold-right"></div>
+                </div>
               </div>
-              <div style="margin-bottom: 8px; text-align: justify; font-size: 15.5px; line-height: 1.8; text-indent: 40px;">
+
+              <!-- বিবরণী (মৃত ব্যক্তির ঠিকানা সহ) -->
+              <div style="margin-bottom: 8px; text-align: justify; font-size: 15.5px; line-height: 1.85; text-indent: 40px;">
                 এই মর্মে ওয়ারিশ সার্টিফিকেট প্রদান করা যাইতেছে যে, ${decAddressText}-এর ${decFatherText}<strong>${decNameText}</strong> এর লোকান্তরে নিম্নলিখিত ব্যক্তিগণ তাহার স্থাবর-অস্থাবর সকল সম্পত্তির ওয়ারিশ বিদ্যমান থাকেন।
               </div>
+
               <table class="war-main-table">
                 <thead><tr><th>ক্রমিক নং</th><th>ওয়ারিশগণের নাম</th><th>পিতা/স্বামী নাম</th><th>গ্রাম</th><th>সম্পর্ক</th></tr></thead>
                 <tbody>${tableRows}</tbody>
               </table>
+
               <div style="margin-top: 10px; font-size: 13.5px; line-height: 1.5;">
                 <p style="margin: 0; font-weight: bold;">সংশ্লিষ্ট গ্রাম পুলিশ ও ওয়ার্ড মেম্বার এর প্রত্যয়ন মতে ইহা ছাড়া আর কোন ওয়ারিশ নাই ।</p>
                 <p style="margin: 3px 0 0 0;">ভবিষ্যতে বর্ণিত তথ্যের কোনরূপ গড়মিল পরিলক্ষিত হইলে উক্ত ওয়ারিশ সনদপত্র বাতিল বলিয়া গণ্য হইবে ।</p>
               </div>
             </div>
+
             <div>
-              <div style="display: flex; justify-content: space-between; align-items: flex-end; text-align: center; margin-top: 30px; padding-bottom: 10px; font-size: 14.5px;">
+              <div style="display: flex; justify-content: space-between; align-items: flex-end; text-align: center; margin-top: 30px; padding-bottom: 8px; font-size: 14.5px;">
                 <div style="width: 30%;"><span class="war-sig-line"></span><strong>গ্রাম পুলিশ</strong><br>১১নং আউলিয়াপুর ইউনিয়ন পরিষদ</div>
                 <div style="width: 30%;"><span class="war-sig-line"></span><strong>ইউপি সদস্য</strong><br>১১নং আউলিয়াপুর ইউনিয়ন পরিষদ</div>
                 <div style="width: 38%;"><span class="war-sig-line"></span><strong>(অ্যাড. মোঃ হুমায়ুন কবির)</strong><br>চেয়ারম্যান<br>১১নং আউলিয়াপুর ইউনিয়ন পরিষদ</div>
@@ -511,7 +689,7 @@
     directPrintWarishan(appId);
   }
 
-  // 🟢 সরাসরি আবেদন কপি প্রিন্ট ফাংশন (১০০% সচল)
+  // 🟢 আবেদন কপি সরাসরি প্রিন্ট ফাংশন
   async function printWarishanApplicationCopy(appId) {
     var data = await callBackendAPI('getWarishanDetails', appId);
     if (!data || !data.found) return alert('আবেদনের তথ্য পাওয়া যায়নি!');
@@ -536,16 +714,16 @@
     var runningDate = toBn(String(today.getDate()).padStart(2, '0') + '/' + String(today.getMonth() + 1).padStart(2, '0') + '/' + today.getFullYear());
 
     var html = `
-      <div style="padding: 15mm 18mm; font-family:'Nikosh',sans-serif; font-size:15px; line-height:1.7;">
+      <div style="padding: 12mm 15mm; font-family:'Nikosh',sans-serif; font-size:15px; line-height:1.7;">
         <div style="display:flex; justify-content:space-between; border-bottom:2px solid #006837; padding-bottom:5px;">
-          <div><h2 style="margin:0; color:#006837;">১১নং আউলিয়াপুর ইউনিয়ন পরিষদ</h2><small>পটুয়াখালী সদর, পটুয়াখালী | ওয়ারিশান আবেদন কপি</small></div>
+          <div><h2 style="margin:0; color:#006837;">১১নং আউলিয়াপুর ইউনিয়ন পরিষদ কার্যালয়</h2><small>পটুয়াখালী সদর, পটুয়াখালী | ওয়ারিশান আবেদন কপি</small></div>
           <div style="text-align:right;"><span style="border:1px solid #333; padding:2px 8px; font-weight:bold;">ট্র্যাকিং: ${data.appId}</span><br><small>তারিখ: ${runningDate} ইং</small></div>
         </div>
         <p style="margin-top:15px;"><strong>বরাবর,</strong><br>চেয়ারম্যান মহোদয়,<br>১১নং আউলিয়াপুর ইউনিয়ন পরিষদ, পটুয়াখালী সদর, পটুয়াখালী।<br><strong>বিষয়: ওয়ারিশ সার্টিফিকেট পাওয়ার জন্য আবেদনপত্র।</strong></p>
         <p style="text-align:justify;">জনাব, বিনীত নিবেদন এই যে, আমি <strong>${applicantName}</strong>, পিতা/স্বামী: <strong>${fatherName}</strong>, ওয়ার্ড: <strong>${toBn(data.wardNo || '০১')}</strong>, গ্রাম: <strong>${data.village || '-'}</strong>, ডাকঘর: <strong>${data.postOffice || 'আউলিয়াপুর ময়দান'}</strong>, ১১নং আউলিয়াপুর ইউনিয়নের একজন স্থায়ী বাসিন্দা। আমাদের পরিবারে <strong>${formatMrito(decName)}</strong>, পিতা: <strong>${decFather}</strong>, সম্পর্ক: <strong>${decRel}</strong> এর অবর্তমানে নিম্নলিখিত ওয়ারিশগণ বিদ্যমান রহিয়াছেন। প্রয়োজনীয় তদন্ত সাপেক্ষে ওয়ারিশান সনদপত্র প্রদানের জন্য আবেদন করছি।</p>
-        <h4 style="text-align:center; margin:10px 0; text-decoration:underline;">ওয়ারিশগণের তালিকা</h4>
+        <h4 style="text-align:center; margin:10px 0; text-decoration:underline;">ওয়ারিশগণের বিবরণ</h4>
         ${tableRows}
-        <div style="display:flex; justify-content:space-between; margin-top:50px; text-align:center;">
+        <div style="display:flex; justify-content:space-between; margin-top:45px; text-align:center;">
           <div style="border-top:1px dashed #000; width:28%;">গ্রাম পুলিশ</div>
           <div style="border-top:1px dashed #000; width:28%;">ইউপি সদস্য</div>
           <div style="border-top:1px dashed #000; width:34%;"><strong>${applicantName}</strong><br>আবেদনকারীর স্বাক্ষর<br><small>মোবাইল: ${toBn(data.mobile || '-')}</small></div>
@@ -564,7 +742,7 @@
       <!DOCTYPE html>
       <html>
       <head>
-        <title>Print Document</title>
+        <title>Warishan Certificate</title>
         <link href="https://fonts.maateen.me/nikosh/font.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Kalpurush&family=Tiro+Bangla&display=swap" rel="stylesheet">
         <style>
@@ -574,13 +752,19 @@
           .war-page-container { width: 210mm !important; height: 295mm !important; padding: 10mm 15mm 12mm 15mm !important; margin: 0 auto !important; background: #ffffff !important; border: 3.5px double #006837 !important; outline: 1.5px solid #006837 !important; outline-offset: 3px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; overflow: hidden !important; }
           .war-watermark-bg { position: absolute !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%) !important; width: 440px !important; opacity: 0.11 !important; z-index: 1 !important; }
           .war-content-body { position: relative !important; z-index: 2 !important; height: 100% !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; }
-          .royal-ribbon-wrapper { text-align: center !important; margin: 6px 0 10px 0 !important; }
-          .royal-ribbon-3d { position: relative !important; display: inline-block !important; background: linear-gradient(180deg, #007a3d 0%, #005a2d 60%, #004622 100%) !important; color: #ffffff !important; font-size: 22px !important; font-weight: 800 !important; padding: 6px 45px !important; border-radius: 2px !important; }
+          .royal-ribbon-wrapper { text-align: center !important; margin: 8px 0 14px 0 !important; }
+          .royal-ribbon-3d { position: relative !important; display: inline-block !important; background: linear-gradient(180deg, #0a7340 0%, #04522c 50%, #02331b 100%) !important; color: #ffffff !important; font-size: 23px !important; font-weight: 800 !important; padding: 6px 50px !important; border-radius: 3px !important; border-top: 1.5px solid #a7f3d0 !important; border-bottom: 2px solid #001a0d !important; }
+          .royal-ribbon-3d::before, .royal-ribbon-3d::after { content: "" !important; position: absolute !important; top: 8px !important; border: 18px solid #012413 !important; z-index: -1 !important; }
+          .royal-ribbon-3d::before { left: -26px !important; border-right-width: 14px !important; border-left-color: transparent !important; }
+          .royal-ribbon-3d::after { right: -26px !important; border-left-width: 14px !important; border-right-color: transparent !important; }
+          .ribbon-fold-left, .ribbon-fold-right { position: absolute !important; bottom: -7px !important; width: 0 !important; height: 0 !important; border: 3.5px solid transparent !important; z-index: 1 !important; }
+          .ribbon-fold-left { left: 0 !important; border-top-color: #001208 !important; border-left-color: #001208 !important; }
+          .ribbon-fold-right { right: 0 !important; border-top-color: #001208 !important; border-right-color: #001208 !important; }
           .war-main-table { width: 100% !important; border-collapse: collapse !important; font-size: 14.5px !important; }
-          .war-main-table th, .war-main-table td { border: 1.2px solid #000 !important; padding: 4px 6px !important; text-align: center !important; }
+          .war-main-table th, .war-main-table td { border: 1.2px solid #000 !important; padding: 4.5px 6px !important; text-align: center !important; }
           .war-main-table th { background: #f1f5f9 !important; font-weight: bold !important; }
           .war-sig-line { border-top: 1.5px solid #000 !important; display: block !important; width: 80% !important; margin: 0 auto 4px auto !important; }
-          .war-bottom-banner { border-top: 1.5px solid #006837 !important; padding-top: 4px !important; display: flex !important; justify-content: space-between !important; font-size: 13px !important; font-weight: bold; color: #006837 !important; }
+          .war-bottom-banner { border-top: 1.5px solid #006837 !important; padding-top: 4px !important; display: flex !important; justify-content: space-between !important; font-size: 12.5px !important; font-weight: bold; color: #006837 !important; }
         </style>
       </head>
       <body>${htmlContent}</body>
@@ -594,7 +778,7 @@
     }, 400);
   }
 
-  // 🟢 এডিট মোডাল ওপেন করা
+  // 🟢 এডিট মোডাল
   async function openEditWarishanModal(appId) {
     var data = await callBackendAPI('getWarishanDetails', appId);
     if (!data || !data.found) return alert('আবেদনের তথ্য পাওয়া যায়নি!');
@@ -612,7 +796,7 @@
     document.getElementById('editWarDeceasedRelation').value = data.deceasedRelation || 'পুত্র';
     document.getElementById('editWarDeceasedWard').value = data.deceasedWardNo || '০১';
     document.getElementById('editWarDeceasedVillage').value = data.deceasedVillage || '';
-    document.getElementById('editWarDeceasedPost').value = data.deceasedPostOffice || 'আউলিয়াপুর ময়দান';
+    document.getElementById('editWarDeceasedPost').value = data.deceasedPostOffice || 'বাদুরা হাট-৮৬০০';
 
     var container = document.getElementById('editWarGroupsContainer');
     container.innerHTML = '';
@@ -632,7 +816,6 @@
     bootstrap.Modal.getOrCreateInstance(document.getElementById('editWarishanModal')).show();
   }
 
-  // 🟢 সংশোধিত তথ্য সংরক্ষণ
   async function saveEditedWarishanData() {
     var btn = document.getElementById('saveEditWarBtn');
     btn.disabled = true; btn.innerText = 'সংরক্ষণ হচ্ছে...';
@@ -667,6 +850,9 @@
       deceasedName: document.getElementById('editWarDeceasedName').value.trim(),
       deceasedFather: document.getElementById('editWarDeceasedFather').value.trim(),
       deceasedRelation: document.getElementById('editWarDeceasedRelation').value,
+      deceasedWardNo: document.getElementById('editWarDeceasedWard').value,
+      deceasedVillage: document.getElementById('editWarDeceasedVillage').value.trim(),
+      deceasedPostOffice: document.getElementById('editWarDeceasedPost').value.trim(),
       warishanTree: tree
     };
 
