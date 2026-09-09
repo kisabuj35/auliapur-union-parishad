@@ -1,6 +1,6 @@
 <!-- ======================================================= -->
 <!-- 11NO AULIAPUR UNION PARISHAD - WARISHAN MODULE          -->
-<!-- File: Warishan.html (Royal 3D Ribbon & Master Tools)    -->
+<!-- File: Warishan.html (Cancellation & Master Order)       -->
 <!-- ======================================================= -->
 
 <!-- Google & Maateen Fonts -->
@@ -176,8 +176,8 @@
       <button class="btn btn-light btn-sm fw-bold text-success" onclick="navToSection('publicHome')"><i class="fa fa-arrow-left me-1"></i> হোম পেজ</button>
     </div>
 
-    <!-- সাব-ট্যাব সুইচার (নতুন আবেদন বনাম বাতিল আবেদন) -->
-    <div class="bg-light p-2 border-bottom d-flex gap-2">
+    <!-- সাব-ট্যাব সুইচার -->
+    <div class="bg-light p-2 border-bottom d-flex gap-2 flex-wrap">
       <button type="button" class="btn btn-sm btn-success fw-bold px-3 rounded-pill" id="warNewTabBtn" onclick="switchWarPublicTab('new')">
         <i class="fa fa-file-signature me-1"></i> নতুন ওয়ারিশ সনদের আবেদন
       </button>
@@ -198,7 +198,7 @@
           <p class="small text-muted mb-0">জনাব, বিনীত নিবেদন এই যে, আমি আপনার ইউনিয়নের একজন স্থায়ী বাসিন্দা। আমাদের মৃত অভিভাবকের মৃত্যুর পর নিম্নরূপ ওয়ারিশান সনদ পাওয়ার জন্য আবেদন করছি।</p>
         </div>
 
-        <!-- আবেদনকারীর তথ্য -->
+        <!-- ১. আবেদনকারীর তথ্য -->
         <div class="card p-3 mb-4 bg-white border">
           <h6 class="fw-bold text-success border-bottom pb-2 mb-3"><i class="fa fa-user-pen me-2"></i> ১. আবেদনকারীর ব্যক্তিগত তথ্য</h6>
           <div class="row g-3">
@@ -213,7 +213,7 @@
           </div>
         </div>
 
-        <!-- মূল মৃত ব্যক্তির তথ্য (সনদের মূল বর্ণনায় এই তথ্যটি বসবে) -->
+        <!-- ২. মূল মৃত ব্যক্তির তথ্য (যা সনদে আসবে) -->
         <div class="card p-3 mb-4 bg-white border">
           <h6 class="fw-bold text-danger border-bottom pb-2 mb-3"><i class="fa fa-book-skull me-2"></i> ২. মূল মৃত ব্যক্তির তথ্য (সনদে এই তথ্যটি আসবে)</h6>
           <div class="row g-3">
@@ -226,7 +226,7 @@
           </div>
         </div>
 
-        <!-- ওয়ারিশগণের তালিকা ও কপি/মুভ টুলস -->
+        <!-- ৩. ওয়ারিশগণের তালিকা ও কপি/মুভ টুলস -->
         <div class="card p-3 mb-4 bg-white border">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <h6 class="fw-bold text-primary m-0"><i class="fa fa-users-rectangle me-2"></i> ৩. ওয়ারিশগণের বিবরণ ও ধাপসমূহ</h6>
@@ -267,7 +267,7 @@
                           <button type="button" class="btn btn-sm btn-outline-primary" onclick="duplicateWarRow(this)" title="ডুপ্লিকেট"><i class="fa fa-clone"></i></button>
                           <button type="button" class="btn btn-sm btn-outline-dark" onclick="moveWarRow(this, -1)" title="উপরে"><i class="fa fa-arrow-up"></i></button>
                           <button type="button" class="btn btn-sm btn-outline-dark" onclick="moveWarRow(this, 1)" title="নিচে"><i class="fa fa-arrow-down"></i></button>
-                          <button type="button" class="btn btn-sm text-danger" onclick="removeWarRow(this)"><i class="fa fa-trash"></i></button>
+                          <button type="button" class="btn btn-sm text-danger" onclick="removeWarRow(this)" title="মুছুন"><i class="fa fa-trash"></i></button>
                         </div>
                       </td>
                     </tr>
@@ -284,7 +284,7 @@
       </form>
     </div>
 
-    <!-- 🟢 ১.২ ওয়ারিশ সনদ বাতিলের আবেদন ফরম (নতুন সংযোজন) -->
+    <!-- 🟢 ১.২ ওয়ারিশ সনদ বাতিলের আবেদন ফরম (আবেদনকারীর ঠিকানাসহ) -->
     <div id="warCancelFormSection" class="p-3 p-md-4 bg-light d-none">
       <form id="warishanCancelForm" onsubmit="event.preventDefault(); submitWarishanCancellationForm();">
         <div class="card p-3 mb-4 bg-white border border-danger">
@@ -292,11 +292,11 @@
           <p class="mb-1">চেয়ারম্যান মহোদয়,</p>
           <p class="mb-1">১১নং আউলিয়াপুর ইউনিয়ন পরিষদ কার্যালয় ।</p>
           <p class="mb-2">পটুয়াখালী সদর, পটুয়াখালী ।</p>
-          <p class="fw-bold text-decoration-underline text-danger">বিষয়ঃ পূর্বে ইস্যুকৃত ওয়ারিশ সার্টিফিকেট বাতিলকরণের জন্য আবেদন পত্র ।</p>
-          <p class="small text-muted mb-0">জনাব, বিনীত নিবেদন এই যে, অত্র ইউনিয়ন পরিষদ কার্যালয় হইতে নিম্নে উল্লেখিত স্মারক/আবেদনে একটি ওয়ারিশান সনদ ইস্যু করা হইয়াছিল। উক্ত সনদে তথ্যগত ভুল/প্রতারণা/ওয়ারিশ বাদ পড়ার কারণে সনদটি বাতিল করার জন্য প্রার্থনা করিতেছি।</p>
+          <p class="fw-bold text-decoration-underline text-danger">বিষয়ঃ পূর্বে ইস্যুকৃত ওয়ারিশ সার্টিফিকেট বাতিলকরণ প্রসঙ্গে আবেদন পত্র ।</p>
+          <p class="small text-muted mb-0">জনাব, বিনীত নিবেদন এই যে, অত্র ইউনিয়ন পরিষদ কার্যালয় হইতে নিম্নে উল্লেখিত স্মারকে একটি ওয়ারিশান সনদ ইস্যু করা হইয়াছিল। উক্ত সনদে তথ্যগত ভুল/প্রতারণা/ওয়ারিশ বাদ পড়ার কারণে সনদটি বাতিল করার জন্য প্রার্থনা করিতেছি।</p>
         </div>
 
-        <!-- যে সনদটি বাতিল করতে চান তার তথ্য -->
+        <!-- বাতিলযোগ্য সনদের তথ্য -->
         <div class="card p-3 mb-4 bg-white border">
           <h6 class="fw-bold text-danger border-bottom pb-2 mb-3"><i class="fa fa-file-circle-xmark me-2"></i> ১. বাতিলযোগ্য সনদের তথ্য</h6>
           <div class="row g-3">
@@ -311,15 +311,31 @@
           </div>
         </div>
 
-        <!-- আবেদনকারী ও মূল মৃত ব্যক্তির তথ্য -->
+        <!-- আবেদনকারীর বিবরণ ও পূর্ণাঙ্গ ঠিকানা -->
         <div class="card p-3 mb-4 bg-white border">
-          <h6 class="fw-bold text-success border-bottom pb-2 mb-3"><i class="fa fa-user me-2"></i> ২. আবেদনকারী ও মৃত ব্যক্তির বিবরণ</h6>
+          <h6 class="fw-bold text-success border-bottom pb-2 mb-3"><i class="fa fa-user me-2"></i> ২. আবেদনকারীর বিবরণ ও স্থায়ী ঠিকানা</h6>
           <div class="row g-3">
             <div class="col-md-6"><label class="form-label fw-bold">আবেদনকারীর নাম *</label><input type="text" id="wcnApplicantName" class="form-control" required></div>
             <div class="col-md-6"><label class="form-label fw-bold">পিতার নাম *</label><input type="text" id="wcnApplicantFather" class="form-control" required></div>
-            <div class="col-md-6"><label class="form-label fw-bold">এনআইডি নম্বর *</label><input type="text" id="wcnApplicantNid" class="form-control" required></div>
+            <div class="col-md-6"><label class="form-label fw-bold">জাতীয় পরিচয়পত্র (NID) নম্বর *</label><input type="text" id="wcnApplicantNid" class="form-control" required></div>
             <div class="col-md-6"><label class="form-label fw-bold">মোবাইল নম্বর *</label><input type="tel" id="wcnApplicantMobile" class="form-control" required></div>
-            
+            <div class="col-md-4">
+              <label class="form-label fw-bold">আবেদনকারীর ওয়ার্ড নং *</label>
+              <select id="wcnApplicantWard" class="form-select" required>
+                <option value="০১">০১</option><option value="০২">০২</option><option value="০৩">০৩</option>
+                <option value="০৪">০৪</option><option value="০৫">০৫</option><option value="০৬">০৬</option>
+                <option value="০৭">০৭</option><option value="০৮">০৮</option><option value="০৯">০৯</option>
+              </select>
+            </div>
+            <div class="col-md-4"><label class="form-label fw-bold">আবেদনকারীর গ্রাম/মহল্লা *</label><input type="text" id="wcnApplicantVillage" class="form-control" placeholder="যেমন: উত্তর বাদুরা" required></div>
+            <div class="col-md-4"><label class="form-label fw-bold">ডাকঘর *</label><input type="text" id="wcnApplicantPost" class="form-control" value="আউলিয়াপুর ময়দান" required></div>
+          </div>
+        </div>
+
+        <!-- মূল মৃত ব্যক্তির তথ্য -->
+        <div class="card p-3 mb-4 bg-white border">
+          <h6 class="fw-bold text-danger border-bottom pb-2 mb-3"><i class="fa fa-book-skull me-2"></i> ৩. মূল মৃত ব্যক্তির বিবরণ</h6>
+          <div class="row g-3">
             <div class="col-md-6"><label class="form-label fw-bold text-danger">মৃত ব্যক্তির নাম *</label><input type="text" id="wcnDeceasedName" class="form-control border-danger" required></div>
             <div class="col-md-6"><label class="form-label fw-bold text-danger">মৃত ব্যক্তির পিতা/স্বামী *</label><input type="text" id="wcnDeceasedFather" class="form-control border-danger" required></div>
             <div class="col-md-12"><label class="form-label fw-bold">মৃত ব্যক্তির পূর্ণ ঠিকানা *</label><input type="text" id="wcnDeceasedAddress" class="form-control" placeholder="ওয়ার্ড নং, গ্রাম, ডাকঘর ইত্যাদি" required></div>
@@ -328,10 +344,26 @@
 
         <!-- বাতিলের কারণ -->
         <div class="card p-3 mb-4 bg-white border">
-          <h6 class="fw-bold text-dark border-bottom pb-2 mb-3"><i class="fa fa-circle-exclamation text-warning me-2"></i> ৩. ওয়ারিশ সনদ বাতিল চাওয়ার সুনির্দিষ্ট কারণ</h6>
+          <h6 class="fw-bold text-dark border-bottom pb-2 mb-3"><i class="fa fa-circle-exclamation text-warning me-2"></i> ৪. ওয়ারিশ সনদ বাতিল চাওয়ার সুনির্দিষ্ট কারণ</h6>
           <div class="mb-3">
             <label class="form-label fw-bold">বাতিলের বিস্তারিত কারণ লিখুন *</label>
-            <textarea id="wcnReason" class="form-control" rows="4" placeholder="কেন এই সনদটি বাতিল করা উচিত? (যেমন: আসল ওয়ারিশ ... এর নাম গোপন করা হয়েছে / ভুল তথ্য দেওয়া হয়েছে)" required></textarea>
+            <textarea id="wcnReason" class="form-control" rows="4" placeholder="কেন এই সনদটি বাতিল করা উচিত? (যেমন: আসল ওয়ারিশের নাম গোপন করা হয়েছে / ভুল তথ্য দেওয়া হয়েছে)" required></textarea>
+          </div>
+        </div>
+
+        <!-- 🟢 কঠোর সতর্কবার্তা ও আইনগত ঘোষণা (Declaration Box) -->
+        <div class="card p-3 mb-4 bg-light border border-danger">
+          <div class="alert alert-danger py-2 mb-2 small fw-bold">
+            <i class="fa fa-triangle-exclamation me-1"></i> সতর্কবার্তা ও আইনগত ঘোষণা:
+          </div>
+          <p class="small text-muted mb-2 text-justify">
+            আমি এই মর্মে অঙ্গীকার করিতেছি যে, অত্র বাতিল আবেদনে বর্ণিত অভিযোগ ও তথ্যাদি সম্পূর্ণ সত্য ও সঠিক। কোনো অসত্য, বিভ্রান্তিকর তথ্য প্রদান করিলে বা কোনো বৈধ ওয়ারিশকে ক্ষতিগ্রস্ত বা বঞ্চিত করিবার অসৎ উদ্দেশ্যে মিথ্যা অভিযোগ দায়ের করিলে প্রচলিত আইন ও দণ্ডবিধি মোতাবেক আমার বিরুদ্ধে আনীত যেকোনো শাস্তিমূলক ব্যবস্থা মানিয়া লইতে বাধ্য থাকিব।
+          </p>
+          <div class="form-check">
+            <input class="form-check-input border-danger" type="checkbox" id="wcnDeclaration" required>
+            <label class="form-check-label fw-bold text-dark small" for="wcnDeclaration">
+              আমি সতর্কবার্তাটি সম্পূর্ণ পড়েছি এবং সকল শর্ত মানিয়া আবেদন করিতেছি।
+            </label>
           </div>
         </div>
 
@@ -559,7 +591,7 @@
               <td class="text-center">
                 <div class="war-row-tools">
                   <button type="button" class="btn btn-sm btn-outline-secondary" onclick="copyWarRow(this)"><i class="fa fa-copy"></i></button>
-                  <button type="button" class="btn btn-sm btn-outline-secondary" onclick="pasteWarRow(this)"><i class="fa fa-paste"></i></button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary" onclick="pasteWarRow(this)" title="পেস্ট"><i class="fa fa-paste"></i></button>
                   <button type="button" class="btn btn-sm btn-outline-primary" onclick="duplicateWarRow(this)"><i class="fa fa-clone"></i></button>
                   <button type="button" class="btn btn-sm btn-outline-dark" onclick="moveWarRow(this, -1)"><i class="fa fa-arrow-up"></i></button>
                   <button type="button" class="btn btn-sm btn-outline-dark" onclick="moveWarRow(this, 1)"><i class="fa fa-arrow-down"></i></button>
@@ -633,7 +665,7 @@
     }
   }
 
-  // 🟢 ওয়ারিশ সনদ বাতিলের আবেদন সাবমিট
+  // 🟢 ওয়ারিশ সনদ বাতিলের আবেদন সাবমিট (ঠিকানাসহ)
   async function submitWarishanCancellationForm() {
     var btn = document.getElementById('wcnSubmitBtn');
     btn.disabled = true; btn.innerText = 'জমা হচ্ছে...';
@@ -645,6 +677,9 @@
       applicantFather: document.getElementById('wcnApplicantFather').value.trim(),
       applicantNid: document.getElementById('wcnApplicantNid').value.trim(),
       applicantMobile: document.getElementById('wcnApplicantMobile').value.trim(),
+      applicantWard: document.getElementById('wcnApplicantWard').value,
+      applicantVillage: document.getElementById('wcnApplicantVillage').value.trim(),
+      applicantPost: document.getElementById('wcnApplicantPost').value.trim(),
       deceasedName: document.getElementById('wcnDeceasedName').value.trim(),
       deceasedFather: document.getElementById('wcnDeceasedFather').value.trim(),
       deceasedAddress: document.getElementById('wcnDeceasedAddress').value.trim(),
@@ -834,13 +869,20 @@
     executeIsolatedIframePrint(html);
   }
 
-  // 🟢 ওয়ারিশ সনদ বাতিলের আবেদন কপি প্রিন্ট
+  // 🟢 ওয়ারিশ সনদ বাতিলের আবেদন কপি প্রিন্ট (আবেদনকারীর পূর্ণাঙ্গ ঠিকানাসহ)
   async function printWarishanCancellationCopy(appId) {
     var res = await callBackendAPI('getWarishanCancellationDetails', appId);
     if (!res || !res.found) return alert('বাতিল আবেদনের তথ্য পাওয়া যায়নি!');
 
     var today = new Date();
     var runningDate = toBn(String(today.getDate()).padStart(2, '0') + '/' + String(today.getMonth() + 1).padStart(2, '0') + '/' + today.getFullYear());
+
+    var applicantAddress = [
+      res.applicant_ward ? 'ওয়ার্ড নং- ' + toBn(res.applicant_ward) : '',
+      res.applicant_village ? 'গ্রাম: ' + res.applicant_village : '',
+      res.applicant_post ? 'ডাকঘর: ' + res.applicant_post : 'ডাকঘর: আউলিয়াপুর ময়দান',
+      '১১নং আউলিয়াপুর ইউনিয়ন, পটুয়াখালী সদর, পটুয়াখালী'
+    ].filter(Boolean).join(', ');
 
     var html = `
       <div style="padding: 14mm 16mm; font-family:'Nikosh',sans-serif; font-size:15.5px; line-height:1.75;">
@@ -851,16 +893,20 @@
 
         <p style="margin-top:15px;"><strong>বরাবর,</strong><br>চেয়ারম্যান মহোদয়,<br>১১নং আউলিয়াপুর ইউনিয়ন পরিষদ কার্যালয়,<br>পটুয়াখালী সদর, পটুয়াখালী।<br><strong style="color:#dc2626; text-decoration:underline;">বিষয়: পূর্বে ইস্যুকৃত ওয়ারিশ সার্টিফিকেট বাতিলকরণ প্রসঙ্গে আবেদনপত্র।</strong></p>
 
-        <p style="text-align:justify;">জনাব, বিনীত নিবেদন এই যে, আমি নিম্ন স্বাক্ষরকারী <strong>${res.applicant_name}</strong>, পিতা: <strong>${res.applicant_father}</strong>, এনআইডি: <strong>${toBn(res.applicant_nid)}</strong>, মোবাইল: <strong>${toBn(res.applicant_mobile)}</strong>, অত্র ইউনিয়নের একজন স্থায়ী বাসিন্দা ও বৈধ ওয়ারিশ। অত্র পরিষদ হইতে পূর্বে ইস্যুকৃত ওয়ারিশান সনদ স্মারক নং- <strong>${res.target_smarak_no}</strong> (মৃত ব্যক্তি: <strong>${res.deceased_name}</strong>, পিতা: <strong>${res.deceased_father}</strong>, ঠিকানা: ${res.deceased_address})-এর উপর আমার ঘোরতর আপত্তি রহিয়াছে।</p>
+        <p style="text-align:justify;">জনাব, বিনীত নিবেদন এই যে, আমি নিম্ন স্বাক্ষরকারী <strong>${res.applicant_name}</strong>, পিতা: <strong>${res.applicant_father}</strong>, এনআইডি: <strong>${toBn(res.applicant_nid)}</strong>, মোবাইল: <strong>${toBn(res.applicant_mobile)}</strong>, ঠিকানা: ${applicantAddress} এর একজন স্থায়ী বাসিন্দা ও বৈধ ওয়ারিশ। অত্র পরিষদ হইতে পূর্বে ইস্যুকৃত ওয়ারিশান সনদ স্মারক নং- <strong>${res.target_smarak_no}</strong> (মৃত ব্যক্তি: <strong>${res.deceased_name}</strong>, পিতা: <strong>${res.deceased_father}</strong>, ঠিকানা: ${res.deceased_address})-এর উপর আমার ঘোরতর আপত্তি রহিয়াছে।</p>
 
         <div style="background:#fff2f2; border:1px solid #f87171; padding:10px 14px; border-radius:6px; margin:15px 0;">
           <strong style="color:#b91c1c;">বাতিল প্রার্থনার সুনির্দিষ্ট কারণ:</strong>
           <p style="margin:4px 0 0 0; text-align:justify;">${res.cancellation_reason}</p>
         </div>
 
+        <div style="border-left:3px solid #dc2626; padding-left:10px; font-size:13.5px; color:#555; margin-bottom:12px;">
+          * অঙ্গীকারনামা: আমি ঘোষণা করছি যে, উপরে বর্ণিত অভিযোগ সম্পূর্ণ সত্য। কোনো অসত্য তথ্য দিয়ে থাকলে তার আইনগত দায়ভার আমার ওপর বর্তাবে।
+        </div>
+
         <p style="text-align:justify;">অতএব, মহোদয়ের নিকট আকুল প্রার্থনা, উক্ত বিষয়টি সরেজমিনে তদন্তপূর্বক এবং আইনানুগ রেজুলেশন মূলে পূর্বে ইস্যুকৃত বিতর্কিত ওয়ারিশ সার্টিফিকেটটি বাতিল বলিয়া গণ্য করিতে এবং অত্র আবেদনের সুবিচার করিতে আপনার সদয় মর্জি হয়।</p>
 
-        <div style="display:flex; justify-content:space-between; margin-top:55px; text-align:center;">
+        <div style="display:flex; justify-content:space-between; margin-top:50px; text-align:center;">
           <div style="border-top:1px dashed #000; width:28%;">গ্রাম পুলিশ<br><small>১১নং আউলিয়াপুর ইউ.পি</small></div>
           <div style="border-top:1px dashed #000; width:28%;">ইউপি সদস্য<br><small>১১নং আউলিয়াপুর ইউ.পি</small></div>
           <div style="border-top:1px dashed #000; width:34%;"><strong>${res.applicant_name}</strong><br>আবেদনকারীর স্বাক্ষর<br><small>মোবাইল: ${toBn(res.applicant_mobile)}</small></div>
@@ -871,48 +917,104 @@
     executeIsolatedIframePrint(html);
   }
 
-  function executeIsolatedIframePrint(htmlContent) {
-    var iframe = document.getElementById('isolated_print_frame');
-    var doc = iframe.contentWindow.document;
-    doc.open();
-    doc.write(`
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <title>Print Document</title>
-        <link href="https://fonts.maateen.me/nikosh/font.css" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Kalpurush&family=Tiro+Bangla&display=swap" rel="stylesheet">
-        <style>
-          @page { size: A4 portrait; margin: 0mm !important; }
-          * { box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-          body { margin: 0 !important; padding: 0 !important; background: #ffffff !important; font-family: 'Nikosh', 'Kalpurush', sans-serif; }
-          .war-page-container { width: 210mm !important; height: 295mm !important; padding: 10mm 15mm 12mm 15mm !important; margin: 0 auto !important; background: #ffffff !important; border: 3.5px double #006837 !important; outline: 1.5px solid #006837 !important; outline-offset: 3px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; overflow: hidden !important; }
-          .war-watermark-bg { position: absolute !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%) !important; width: 440px !important; opacity: 0.11 !important; z-index: 1 !important; }
-          .war-content-body { position: relative !important; z-index: 2 !important; height: 100% !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; }
-          .royal-ribbon-wrapper { text-align: center !important; margin: 8px 0 14px 0 !important; }
-          .royal-ribbon-3d { position: relative !important; display: inline-block !important; background: linear-gradient(180deg, #0a7340 0%, #04522c 50%, #02331b 100%) !important; color: #ffffff !important; font-size: 23px !important; font-weight: 800 !important; padding: 6px 50px !important; border-radius: 3px !important; border-top: 1.5px solid #a7f3d0 !important; border-bottom: 2px solid #001a0d !important; }
-          .royal-ribbon-3d::before, .royal-ribbon-3d::after { content: "" !important; position: absolute !important; top: 8px !important; border: 18px solid #012413 !important; z-index: -1 !important; }
-          .royal-ribbon-3d::before { left: -26px !important; border-right-width: 14px !important; border-left-color: transparent !important; }
-          .royal-ribbon-3d::after { right: -26px !important; border-left-width: 14px !important; border-right-color: transparent !important; }
-          .ribbon-fold-left, .ribbon-fold-right { position: absolute !important; bottom: -7px !important; width: 0 !important; height: 0 !important; border: 3.5px solid transparent !important; z-index: 1 !important; }
-          .ribbon-fold-left { left: 0 !important; border-top-color: #001208 !important; border-left-color: #001208 !important; }
-          .ribbon-fold-right { right: 0 !important; border-top-color: #001208 !important; border-right-color: #001208 !important; }
-          .war-main-table { width: 100% !important; border-collapse: collapse !important; font-size: 14.5px !important; }
-          .war-main-table th, .war-main-table td { border: 1.2px solid #000 !important; padding: 4.5px 6px !important; text-align: center !important; }
-          .war-main-table th { background: #f1f5f9 !important; font-weight: bold !important; }
-          .war-sig-line { border-top: 1.5px solid #000 !important; display: block !important; width: 80% !important; margin: 0 auto 4px auto !important; }
-          .war-bottom-banner { border-top: 1.5px solid #006837 !important; padding-top: 4px !important; display: flex !important; justify-content: space-between !important; font-size: 12.5px !important; font-weight: bold; color: #006837 !important; }
-        </style>
-      </head>
-      <body>${htmlContent}</body>
-      </html>
-    `);
-    doc.close();
+  // 🟢 অফিসিয়াল "ওয়ারিশান সনদপত্র বাতিল আদেশ" প্রিন্ট (Official Cancellation Order Document)
+  async function printWarishanCancellationOrder(cancelAppId) {
+    var res = await callBackendAPI('getWarishanCancellationDetails', cancelAppId);
+    if (!res || !res.found) return alert('বাতিল আদেশের তথ্য পাওয়া যায়নি!');
 
-    setTimeout(function() {
-      iframe.contentWindow.focus();
-      iframe.contentWindow.print();
-    }, 400);
+    var today = new Date();
+    var runningDate = toBn(String(today.getDate()).padStart(2, '0') + '/' + String(today.getMonth() + 1).padStart(2, '0') + '/' + today.getFullYear());
+    var orderSmarak = `আ/ইউ/পটুয়া/সদর/${toBn(today.getFullYear())}/বা-${toBn(String(res.id || '০১').padStart(3, '0'))}`;
+
+    var html = `
+      <div class="war-page-container" style="border: 3.5px double #b91c1c !important;">
+        <img src="https://lh3.googleusercontent.com/d/1_LMOoAtirVZeGxE4sz_CVQtQpInPPQTs" class="war-watermark-bg" alt="Watermark">
+        
+        <div class="war-content-body">
+          <div>
+            <!-- শীর্ষ সরকারি ও ইউপি হেডার -->
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 2px;">
+              <tr>
+                <td style="width: 85px; vertical-align: middle; text-align: left;">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/8/84/Government_Seal_of_Bangladesh.svg" width="70" height="70" style="object-fit: contain;">
+                </td>
+                <td style="text-align: center; vertical-align: middle;">
+                  <div style="font-size: 14.5px; font-weight: bold; color: #222;">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার (স্থানীয় সরকার বিভাগ)</div>
+                  <h1 style="margin: 2px 0; font-size: 28px; font-weight: 800; color: #991b1b; letter-spacing: 0.5px;">১১নং আউলিয়াপুর ইউনিয়ন পরিষদ কার্যালয়</h1>
+                  <div style="font-size: 16px; font-weight: bold; color: #000;">ডাকঘরঃ আউলিয়াপুর ময়দান, উপজেলা ও জেলাঃ পটুয়াখালী ।</div>
+                  <div style="font-size: 12px; font-weight: bold; color: #006837; margin-top: 1px;">web site: www.aup.auliapur.com</div>
+                </td>
+                <td style="width: 85px; vertical-align: middle; text-align: right;">
+                  <img src="https://lh3.googleusercontent.com/d/1_LMOoAtirVZeGxE4sz_CVQtQpInPPQTs" width="70" height="70" style="object-fit: contain;">
+                </td>
+              </tr>
+            </table>
+
+            <div style="border-top: 2px solid #b91c1c; border-bottom: 1px solid #000; height: 4px; margin: 4px 0 8px 0;"></div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 15px; font-weight: bold;">
+              <div>আদেশ স্মারক নং- ${orderSmarak}</div>
+              <div>আদেশের তারিখঃ ${runningDate} ইং</div>
+            </div>
+
+            <!-- ৩ডি লাল-কালো বাতিল আদেশ রিবন -->
+            <div class="royal-ribbon-wrapper">
+              <div class="royal-ribbon-3d" style="background: linear-gradient(180deg, #b91c1c 0%, #7f1d1d 50%, #450a0a 100%) !important; border-top:1.5px solid #fca5a5; border-bottom:2px solid #300202;">
+                <span>ওয়ারিশান সনদপত্র বাতিল আদেশ</span>
+              </div>
+            </div>
+
+            <p style="margin: 6px 0 10px 0; font-size: 16.5px; font-weight: bold; color: #991b1b; text-decoration: underline;">
+              বিষয়ঃ পূর্বে ইস্যুকৃত বিতর্কিত ওয়ারিশান সনদপত্র বাতিলকরণ প্রসঙ্গে।
+            </p>
+
+            <div style="font-size: 15.5px; line-height: 1.85; text-align: justify; text-indent: 40px;">
+              এতদ্বারা সর্বসাধারণ ও সংশ্লিষ্ট সকলের অবগতির জন্য জানানো যাইতেছে যে, অত্র ১১নং আউলিয়াপুর ইউনিয়ন পরিষদ কার্যালয় হইতে মৃত <strong>${res.deceased_name}</strong>, পিতা/স্বামী: <strong>${res.deceased_father}</strong>, ঠিকানা: ${res.deceased_address}-এর নামে পূর্বে ইস্যুকৃত ওয়ারিশান সনদ (স্মারক নং- <strong>${res.target_smarak_no}</strong>, ট্র্যাকিং: <strong>${res.target_app_id || '-'}</strong>, ইস্যুর তারিখ: <strong>${res.original_issue_date || '-'} ইং</strong>)-এর বিরুদ্ধে সংক্ষুব্ধ আবেদনকারী <strong>${res.applicant_name}</strong> (পিতা: ${res.applicant_father}, এনআইডি: ${toBn(res.applicant_nid)}, মোবাইল: ${toBn(res.applicant_mobile)}) কর্তৃক লিখিত আপত্তি ও বাতিলের আবেদন (বাতিল ট্র্যাকিং: ${res.cancel_app_id}) দাখিল করা হয়।
+            </div>
+
+            <div style="background:#fef2f2; border: 1.5px dashed #dc2626; padding: 10px 14px; border-radius: 6px; margin: 12px 0; font-size: 15px; line-height: 1.7;">
+              <strong>তদন্ত ও বাতিলের কারণ:</strong> ${res.cancellation_reason}
+            </div>
+
+            <div style="font-size: 15.5px; line-height: 1.85; text-align: justify; text-indent: 40px;">
+              উক্ত আপত্তির প্রেক্ষিতে সংশ্লিষ্ট ওয়ার্ডের ইউপি সদস্য এবং ইউনিয়ন পরিষদের মনোনীত তদন্ত কমিটির সরেজমিন তদন্ত প্রতিবেদন ও স্বাক্ষ্য-প্রমাণ পর্যালোচনায় দেখা যায় যে, উক্ত ওয়ারিশান সনদে তথ্য গোপন/প্রতারণা/প্রকৃত ওয়ারিশ বাদ পড়িয়াছিল। অতএব, অত্র ইউনিয়ন পরিষদের রেজুলেশন ও ক্ষমতাবলে পূর্বে ইস্যুকৃত <strong>স্মারক নং- ${res.target_smarak_no}</strong> এর ওয়ারিশান সনদপত্রটি অদ্য তারিখ হইতে আনুষ্ঠানিকভাবে এবং স্থায়ীভাবে <strong>বাতিল (Cancelled)</strong> ঘোষণা ও প্রত্যাহারের আদেশ প্রদান করা হইল।
+            </div>
+
+            <p style="margin-top: 10px; font-size: 14.5px; font-weight: bold; color: #dc2626; border-left: 3px solid #dc2626; padding-left: 8px;">
+              * আইনগত সতর্কতা: উল্লেখিত বাতিলকৃত ওয়ারিশান সনদটি কোনো ব্যাংক, আদালত, সাব-রেজিস্ট্রি অফিস বা অন্য কোনো সরকারি/বেসরকারি আর্থিক ও জমিজমা সংক্রান্ত কাজে ব্যবহার করা সম্পূর্ণ বেআইনি ও দণ্ডনীয় অপরাধ।
+            </p>
+          </div>
+
+          <!-- স্বাক্ষর ও ফুটার -->
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; text-align: center; margin-top: 30px; padding-bottom: 8px; font-size: 14.5px;">
+              <div style="width: 32%;">
+                <span style="border-top: 1.5px solid #000; display: block; width: 85%; margin: 0 auto 3px auto;"></span>
+                <strong>ইউপি সচিব</strong><br>১১নং আউলিয়াপুর ইউনিয়ন পরিষদ<br>পটুয়াখালী সদর, পটুয়াখালী
+              </div>
+              <div style="width: 36%;">
+                <span style="border: 1.5px solid #b91c1c; color:#b91c1c; padding: 4px 10px; font-weight:bold; font-size:12px; border-radius:4px; display:inline-block;">
+                  <i class="fa fa-stamp me-1"></i> অফিসিয়াল বাতিল আদেশ
+                </span>
+              </div>
+              <div style="width: 32%;">
+                <span style="border-top: 1.5px solid #000; display: block; width: 85%; margin: 0 auto 3px auto;"></span>
+                <strong>(অ্যাড. মোঃ হুমায়ুন কবির)</strong><br>চেয়ারম্যান<br>১১নং আউলিয়াপুর ইউনিয়ন পরিষদ
+              </div>
+            </div>
+
+            <div class="war-bottom-banner" style="border-top-color: #b91c1c; color: #991b1b;">
+              <div>আদেশ যাচাই করুন: www.aup.auliapur.com</div>
+              <div>সত্যের জয় হোক</div>
+              <div>১১নং আউলিয়াপুর ইউনিয়ন পরিষদ বাতায়ন</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    `;
+
+    executeIsolatedIframePrint(html);
   }
 
   // 🟢 এডিট মোডাল
