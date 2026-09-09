@@ -1,868 +1,1046 @@
-<!-- ======================================================= -->
-<!-- 11NO AULIAPUR UNION PARISHAD - MODULAR ADMIN PANEL     -->
-<!-- File: Admin_Panel.html (Mobile Responsive & Sort Fixed) -->
-<!-- ======================================================= -->
-
-<!-- Google & Bangla Fonts -->
-<link href="https://fonts.maateen.me/nikosh/font.css" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Kalpurush&family=Tiro+Bangla&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<style>
-  :root {
-    --admin-bg: #f3f7f5;
-    --admin-sidebar-bg: linear-gradient(180deg, #0b1220 0%, #111827 100%);
-    --admin-sidebar-border: rgba(148, 163, 184, 0.22);
-    --admin-accent: #0ea66f;
-    --admin-text: #e2e8f0;
-  }
-
-  /* এডমিন সাইডবার ও প্রোফাইল */
-  .admin-sidebar {
-    background: var(--admin-sidebar-bg);
-    min-height: calc(100vh - 40px);
-    color: var(--admin-text);
-    border-radius: 18px;
-    font-family: 'Kalpurush', 'Tiro Bangla', sans-serif;
-    border: 1px solid var(--admin-sidebar-border);
-    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.18);
-    position: relative;
-  }
-  .admin-profile-box { text-align: center; padding: 18px 12px 16px; border-bottom: 1px solid rgba(148, 163, 184, 0.22); margin-bottom: 10px; }
-  .admin-avatar-img { width: 75px; height: 75px; border-radius: 50%; border: 3px solid rgba(52,211,153,0.9); object-fit: cover; background: #fff; margin-bottom: 8px; }
-  .admin-sidebar-menu-wrap { padding: 0 8px 12px; }
-  .admin-menu-link {
-    color: #dbeafe;
-    text-decoration: none;
-    padding: 9px 12px;
-    display: flex;
-    align-items: center;
-    border-radius: 10px;
-    margin-bottom: 4px;
-    font-size: 13.5px;
-    font-weight: 600;
-    transition: all 0.2s ease;
-    cursor: pointer;
-    background: rgba(148, 163, 184, 0.02);
-  }
-  .admin-menu-link:hover, .admin-menu-link.active {
-    background: linear-gradient(90deg, rgba(14, 166, 111, 0.25), rgba(8, 127, 85, 0.2));
-    color: #ffffff;
-    font-weight: bold;
-    border-left: 4px solid #10b981;
-  }
-  .admin-menu-link i { width: 22px; font-size: 14px; }
-
-  /* স্ট্যাটাস ব্যাজ */
-  .status-badge-approved { background-color: #00796b !important; color: #fff !important; padding: 4px 8px; border-radius: 4px; font-size: 11.5px; font-weight: bold; display: inline-block; white-space: nowrap; }
-  .status-badge-pending { background-color: #f59e0b !important; color: #1f2937 !important; padding: 4px 8px; border-radius: 4px; font-size: 11.5px; font-weight: bold; display: inline-block; white-space: nowrap; }
-  .status-badge-rejected { background-color: #dc2626 !important; color: #fff !important; padding: 4px 8px; border-radius: 4px; font-size: 11.5px; font-weight: bold; display: inline-block; white-space: nowrap; }
-  .status-badge-cancelled { background-color: #000000 !important; color: #f87171 !important; border: 1px solid #f87171; padding: 4px 8px; border-radius: 4px; font-size: 11.5px; font-weight: bold; display: inline-block; white-space: nowrap; }
-  
-  /* অ্যাকশন বাটনসমূহ */
-  .btn-act-approve { background-color: #00796b; color: #fff; border: none; border-radius: 4px; width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; margin-right: 2px; cursor: pointer; }
-  .btn-act-edit { background-color: #f59e0b; color: #1f2937; border: none; border-radius: 4px; width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; margin-right: 2px; cursor: pointer; }
-  .btn-act-reject { background-color: #dc2626; color: #fff; border: none; border-radius: 4px; width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; margin-right: 2px; cursor: pointer; }
-  .btn-act-print { background-color: #dc2626; color: #fff; border: none; border-radius: 4px; padding: 2px 8px; font-size: 12px; font-weight: bold; height: 28px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; white-space: nowrap; }
-
-  /* পেজিনেশন */
-  .custom-pagination-wrap { display: flex; justify-content: space-between; align-items: center; padding-top: 10px; margin-top: 8px; border-top: 1px solid #e2e8f0; font-size: 13px; flex-wrap: wrap; gap: 6px; }
-  .page-link-btn { padding: 3px 8px; border: 1px solid #cbd5e1; background: #fff; border-radius: 4px; cursor: pointer; font-weight: bold; margin: 0 2px; }
-  .page-link-btn.active-page { background: #006837; color: #fff; border-color: #006837; }
-
-  /* 🟢 মোবাইল রেসপন্সিভ সিএসএস */
-  .admin-mobile-toggle { display: none; }
-  @media (max-width: 991.98px) {
-    .admin-mobile-toggle {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      border-radius: 10px;
-      background: #006837;
-      color: #fff;
-      border: none;
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>এডমিন প্যানেল - ১নং আউলিয়াপুর ইউনিয়ন পরিষদ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
     }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #f0f4f8;
+        overflow-x: hidden;
+    }
+
+    /* সাইডবার */
     .admin-sidebar {
-      position: fixed;
-      left: -110%;
-      top: 0;
-      bottom: 0;
-      width: 280px;
-      z-index: 1050;
-      transition: left 0.3s ease;
-      overflow-y: auto;
-      border-radius: 0;
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 260px;
+        height: 100vh;
+        background: linear-gradient(180deg, #1a1f36 0%, #2d3748 100%);
+        color: #ffffff;
+        overflow-y: auto;
+        z-index: 1000;
+        transition: transform 0.3s ease;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.1);
     }
-    .admin-sidebar.show { left: 0; }
-    .admin-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 1040;
-      display: none;
+
+    .admin-sidebar-header {
+        padding: 20px;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        display: flex;
+        align-items: center;
+        gap: 12px;
     }
-    .admin-backdrop.show { display: block; }
+
+    .admin-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #ffc107;
+    }
+
+    .admin-info h4 {
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 2px;
+    }
+
+    .admin-info p {
+        font-size: 11px;
+        color: rgba(255,255,255,0.7);
+    }
+
+    .admin-menu {
+        padding: 12px 0;
+    }
+
+    .admin-menu-item {
+        display: flex;
+        align-items: center;
+        padding: 12px 20px;
+        color: rgba(255,255,255,0.8);
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 600;
+        transition: all 0.2s;
+        border-left: 3px solid transparent;
+    }
+
+    .admin-menu-item:hover {
+        background: rgba(255,255,255,0.05);
+        color: #ffffff;
+        border-left-color: #ffc107;
+    }
+
+    .admin-menu-item.active {
+        background: rgba(255,255,255,0.1);
+        color: #ffc107;
+        border-left-color: #ffc107;
+    }
+
+    .admin-menu-item i {
+        width: 24px;
+        margin-right: 10px;
+        font-size: 16px;
+    }
+
+    .admin-logout {
+        margin: 20px;
+        padding: 12px;
+        background: #dc2626;
+        color: #ffffff;
+        border: none;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        width: calc(100% - 40px);
+        font-size: 13px;
+        transition: background 0.2s;
+    }
+
+    .admin-logout:hover {
+        background: #b91c1c;
+    }
+
+    /* মূল কন্টেন্ট */
+    .admin-main-content {
+        margin-left: 260px;
+        min-height: 100vh;
+        transition: margin-left 0.3s ease;
+    }
+
+    /* টপ বার */
+    .admin-topbar {
+        background: #ffffff;
+        padding: 16px 24px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+    .admin-topbar-title {
+        font-size: 18px;
+        font-weight: 800;
+        color: #0f172a;
+    }
+
+    .admin-topbar-title i {
+        color: #006837;
+        margin-right: 8px;
+    }
+
+    .admin-topbar-actions {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+    }
+
+    .admin-refresh-btn {
+        background: #006837;
+        color: #ffffff;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: background 0.2s;
+    }
+
+    .admin-refresh-btn:hover {
+        background: #004d28;
+    }
+
+    .mobile-menu-toggle {
+        display: none;
+        background: #006837;
+        color: #ffffff;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-size: 18px;
+        cursor: pointer;
+    }
+
+    /* কন্টেন্ট এরিয়া */
+    .admin-content {
+        padding: 24px;
+    }
+
+    /* ড্যাশবোর্ড কার্ড */
+    .dashboard-stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    .stat-card {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        border-left: 4px solid #006837;
+        transition: transform 0.2s;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-2px);
+    }
+
+    .stat-card-title {
+        font-size: 13px;
+        color: #64748b;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .stat-card-value {
+        font-size: 28px;
+        font-weight: 800;
+        color: #0f172a;
+        margin-bottom: 8px;
+    }
+
+    .stat-card-sub {
+        font-size: 11px;
+        color: #64748b;
+    }
+
+    .stat-card-sub span {
+        font-weight: 700;
+    }
+
+    .stat-card.approved { border-left-color: #006837; }
+    .stat-card.pending { border-left-color: #f59e0b; }
+    .stat-card.citizen { border-left-color: #3b82f6; }
+    .stat-card.trade { border-left-color: #10b981; }
+    .stat-card.family { border-left-color: #8b5cf6; }
+    .stat-card.warish { border-left-color: #ef4444; }
+    .stat-card.general { border-left-color: #06b6d4; }
+
+    /* টেবিল কন্টেইনার */
+    .admin-table-container {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 24px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .admin-table-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .admin-table-title {
+        font-size: 16px;
+        font-weight: 800;
+        color: #0f172a;
+    }
+
+    .admin-table-title i {
+        color: #006837;
+        margin-right: 8px;
+    }
+
     .table-responsive {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
-    .card { padding: 12px !important; }
-  }
-</style>
 
-<!-- ADMIN PANEL VIEW -->
-<div id="adminPanel" class="view-section container-fluid my-2 my-md-3 d-none">
-  <div class="admin-backdrop" id="adminSidebarBackdrop" onclick="toggleAdminSidebar(false)"></div>
-  <div class="row g-3">
-    
-    <!-- 🟢 বাম সাইডবার মেনু -->
-    <div class="col-lg-2 no-print">
-      <div class="admin-sidebar p-2" id="adminSidebar">
-        <div class="d-flex justify-content-between align-items-center px-2 pt-2 d-lg-none">
-          <div class="fw-bold text-white">মেনু তালিকা</div>
-          <button type="button" class="btn btn-sm text-white" onclick="toggleAdminSidebar(false)"><i class="fa fa-times fa-lg"></i></button>
-        </div>
-        
-        <div class="admin-profile-box">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" id="adminActivePhoto" class="admin-avatar-img" alt="Avatar">
-          <h6 class="fw-bold m-0 text-white" id="adminActiveName">এডমিন</h6>
-          <span class="badge bg-success mt-1" id="adminActiveRoleBadge">Admin</span>
-        </div>
-
-        <div id="adminSidebarMenuList" class="admin-sidebar-menu-wrap">
-          <a class="admin-menu-link active" data-menu="dashTab" onclick="switchAdminTab('dashTab')"><i class="fa fa-tachometer-alt"></i> ড্যাশবোর্ড</a>
-          <a class="admin-menu-link" data-menu="citTab" onclick="switchAdminTab('citTab')"><i class="fa fa-id-card text-danger"></i> নাগরিকত্ব সনদ</a>
-          <a class="admin-menu-link" data-menu="tradeTab" onclick="switchAdminTab('tradeTab')"><i class="fa fa-briefcase text-success"></i> ট্রেড লাইসেন্স</a>
-          <a class="admin-menu-link" data-menu="famTab" onclick="switchAdminTab('famTab')"><i class="fa fa-people-roof text-primary"></i> পারিবারিক সনদ</a>
-          <a class="admin-menu-link" data-menu="warTab" onclick="switchAdminTab('warTab')"><i class="fa fa-sitemap text-warning"></i> ওয়ারিশ সার্টিফিকেট</a>
-          <a class="admin-menu-link" data-menu="appsTab" onclick="switchAdminTab('appsTab')"><i class="fa fa-file-invoice text-info"></i> সাধারণ প্রত্যয়নপত্র</a>
-          <a class="admin-menu-link" data-menu="taxTab" onclick="switchAdminTab('taxTab')"><i class="fa fa-hand-holding-dollar text-success"></i> কর আদায় ও সদস্য</a>
-          <a class="admin-menu-link text-info border-top border-secondary mt-2 pt-2" data-menu="upSettingsTab" onclick="switchAdminTab('upSettingsTab')"><i class="fa fa-sliders"></i> ইউপি সেটিংস</a>
-          <a class="admin-menu-link text-warning" id="superAdminSettingsBtn" data-menu="settingsTab" onclick="switchAdminTab('settingsTab')"><i class="fa fa-user-gear"></i> এডমিন পারমিশন</a>
-        </div>
-
-        <hr class="border-secondary my-2">
-        <a href="javascript:void(0)" class="admin-menu-link text-danger fw-bold" onclick="logoutAdmin()"><i class="fa fa-sign-out-alt"></i> লগআউট</a>
-      </div>
-    </div>
-
-    <!-- 🟢 ডান পাশ: মূল কন্টেন্ট প্যানেল -->
-    <div class="col-lg-10 admin-main-panel">
-      <!-- মোবাইল হেডার বার -->
-      <div class="d-lg-none mb-3 d-flex justify-content-between align-items-center bg-white p-2 rounded-3 shadow-sm">
-        <button type="button" class="admin-mobile-toggle" onclick="toggleAdminSidebar(true)"><i class="fa fa-bars"></i></button>
-        <div class="fw-bold text-success">এডমিন প্যানেল</div>
-        <span class="badge bg-success">Live</span>
-      </div>
-      
-      <!-- ১. ড্যাশবোর্ড ট্যাব -->
-      <div id="dashTab" class="admin-tab">
-        <div class="card p-3 shadow-sm border-0 mb-3 bg-success text-white d-flex flex-row justify-content-between align-items-center rounded-3">
-          <h5 class="fw-bold m-0"><i class="fa fa-tachometer-alt me-2"></i> ড্যাশবোর্ড ওভারভিউ</h5>
-          <button class="btn btn-light btn-sm fw-bold text-success" onclick="loadAdminDashboard()"><i class="fa fa-sync me-1"></i> রিফ্রেশ</button>
-        </div>
-        <div class="row g-2 g-md-3">
-          <div class="col-6 col-md-4"><div class="card p-3 bg-primary text-white border-0 rounded-3 shadow-sm"><div class="d-flex justify-content-between align-items-center"><h6>মোট আবেদন</h6><span class="badge bg-light text-primary fs-6" id="dashTotalApps">০</span></div><div class="mt-2 pt-2 border-top border-white-50 d-flex justify-content-between small"><span>অনুমোদিত: <b id="dashTotalApproved">০</b></span><span>পেন্ডিং: <b id="dashTotalPending">০</b></span></div></div></div>
-          <div class="col-6 col-md-4"><div class="card p-3 bg-danger text-white border-0 rounded-3 shadow-sm"><div class="d-flex justify-content-between align-items-center"><h6>নাগরিকত্ব</h6><span class="badge bg-light text-danger fs-6" id="dashCitTotal">০</span></div><div class="mt-2 pt-2 border-top border-white-50 d-flex justify-content-between small"><span>অনুমোদিত: <b id="dashCitApproved">০</b></span><span>পেন্ডিং: <b id="dashCitPending">০</b></span></div></div></div>
-          <div class="col-6 col-md-4"><div class="card p-3 bg-info text-dark border-0 rounded-3 shadow-sm"><div class="d-flex justify-content-between align-items-center"><h6>ট্রেড লাইসেন্স</h6><span class="badge bg-dark text-white fs-6" id="dashTradeTotal">০</span></div><div class="mt-2 pt-2 border-dark-50 d-flex justify-content-between small"><span>অনুমোদিত: <b id="dashTradeActive">০</b></span><span>পেন্ডিং: <b id="dashTradePending">০</b></span></div></div></div>
-          <div class="col-6 col-md-4"><div class="card p-3 bg-dark text-white border-0 rounded-3 shadow-sm"><div class="d-flex justify-content-between align-items-center"><h6>পারিবারিক</h6><span class="badge bg-light text-dark fs-6" id="dashFamTotal">০</span></div><div class="mt-2 pt-2 border-secondary d-flex justify-content-between small"><span>অনুমোদিত: <b id="dashFamApproved">০</b></span><span>পেন্ডিং: <b id="dashFamPending">০</b></span></div></div></div>
-          <div class="col-6 col-md-4"><div class="card p-3 bg-warning text-dark border-0 rounded-3 shadow-sm"><div class="d-flex justify-content-between align-items-center"><h6>ওয়ারিশান</h6><span class="badge bg-dark text-white fs-6" id="dashWarTotal">০</span></div><div class="mt-2 pt-2 border-dark-50 d-flex justify-content-between small"><span>অনুমোদিত: <b id="dashWarApproved">০</b></span><span>পেন্ডিং: <b id="dashWarPending">০</b></span></div></div></div>
-          <div class="col-6 col-md-4"><div class="card p-3 bg-secondary text-white border-0 rounded-3 shadow-sm"><div class="d-flex justify-content-between align-items-center"><h6>সাধারণ প্রত্যয়ন</h6><span class="badge bg-light text-dark fs-6" id="dashGenTotal">০</span></div><div class="mt-2 pt-2 border-top border-white-50 d-flex justify-content-between small"><span>অনুমোদিত: <b id="dashGenApproved">০</b></span><span>পেন্ডিং: <b id="dashGenPending">০</b></span></div></div></div>
-        </div>
-      </div>
-
-      <!-- ২. নাগরিকত্ব সনদ ট্যাব -->
-      <div id="citTab" class="admin-tab d-none">
-        <div class="card p-3 shadow-sm border-0 mb-3 bg-danger text-white d-flex flex-row justify-content-between align-items-center rounded-3 flex-wrap gap-2">
-          <h5 class="fw-bold m-0"><i class="fa fa-id-card me-2"></i> নাগরিকত্ব সনদের আবেদন তালিকা</h5>
-          <button class="btn btn-light btn-sm fw-bold text-danger" onclick="loadCitizenshipApps()"><i class="fa fa-sync me-1"></i> রিফ্রেশ</button>
-        </div>
-        <div class="table-responsive bg-white p-3 shadow-sm rounded-3 border">
-          <table class="table table-hover align-middle">
-            <thead class="table-dark"><tr><th>আবেদন নং</th><th>সনদ নং</th><th>নাম</th><th>পিতার নাম</th><th>মোবাইল</th><th>স্ট্যাটাস</th><th>অ্যাকশন</th></tr></thead>
-            <tbody id="citAppTable"></tbody>
-          </table>
-          <div id="citPagination" class="custom-pagination-wrap"></div>
-        </div>
-      </div>
-
-      <!-- ৩. ট্রেড লাইসেন্স ট্যাব -->
-      <div id="tradeTab" class="admin-tab d-none">
-        <div class="card p-3 shadow-sm border-0 mb-3 bg-info text-dark d-flex flex-row justify-content-between align-items-center rounded-3 flex-wrap gap-2">
-          <h5 class="fw-bold m-0"><i class="fa fa-briefcase me-2"></i> ট্রেড লাইসেন্স আবেদন তালিকা</h5>
-          <button class="btn btn-dark btn-sm fw-bold" onclick="loadTradeLicenses()"><i class="fa fa-sync me-1"></i> রিফ্রেশ</button>
-        </div>
-        <div class="table-responsive bg-white p-3 shadow-sm rounded-3 border">
-          <table class="table table-hover align-middle">
-            <thead class="table-dark"><tr><th>আবেদন নং</th><th>প্রতিষ্ঠানের নাম</th><th>মালিকের নাম</th><th>পিতার নাম</th><th>মোবাইল</th><th>ফি</th><th>স্ট্যাটাস</th><th>অ্যাকশন</th></tr></thead>
-            <tbody id="tradeTableBody"></tbody>
-          </table>
-          <div id="tradePagination" class="custom-pagination-wrap"></div>
-        </div>
-      </div>
-
-      <!-- ৪. পারিবারিক ও উত্তরাধিকারী সনদ ট্যাব -->
-      <div id="famTab" class="admin-tab d-none">
-        <div class="card p-3 shadow-sm border-0 mb-3 bg-primary text-white d-flex flex-row justify-content-between align-items-center rounded-3 flex-wrap gap-2">
-          <h5 class="fw-bold m-0"><i class="fa fa-people-roof me-2"></i> পারিবারিক ও উত্তরাধিকারী আবেদন তালিকা</h5>
-          <button class="btn btn-light btn-sm fw-bold text-primary" onclick="loadFamilyApps()"><i class="fa fa-sync me-1"></i> রিফ্রেশ</button>
-        </div>
-        <div class="table-responsive bg-white p-3 shadow-sm rounded-3 border">
-          <table class="table table-hover align-middle">
-            <thead class="table-dark"><tr><th>আবেদন নং</th><th>ধরন</th><th>নাম</th><th>পিতার নাম</th><th>মোবাইল</th><th>ওয়ার্ড</th><th>স্ট্যাটাস</th><th>অ্যাকশন</th></tr></thead>
-            <tbody id="famAppTable"></tbody>
-          </table>
-          <div id="famPagination" class="custom-pagination-wrap"></div>
-        </div>
-      </div>
-
-      <!-- 🟢 ৫. ওয়ারিশান সনদ ও বাতিলের আবেদন ট্যাব -->
-      <div id="warTab" class="admin-tab d-none">
-        <div class="card p-3 shadow-sm border-0 mb-3 bg-warning text-dark d-flex flex-row justify-content-between align-items-center rounded-3 flex-wrap gap-2">
-          <h5 class="fw-bold m-0"><i class="fa fa-sitemap me-2"></i> ওয়ারিশান সনদ ও বাতিল ব্যবস্থাপনা</h5>
-          <button class="btn btn-dark btn-sm fw-bold" onclick="loadWarishanApps()"><i class="fa fa-sync me-1"></i> রিফ্রেশ</button>
-        </div>
-
-        <!-- সাব-ট্যাব: নিয়মিত তালিকা বনাম বাতিলের আবেদন -->
-        <div class="btn-group mb-3" role="tablist">
-          <button type="button" class="btn btn-outline-warning fw-bold active" id="warRegularTabBtn" onclick="switchWarAdminView('regular')">
-            <i class="fa fa-sitemap me-1"></i> ওয়ারিশ সনদের তালিকা
-          </button>
-          <button type="button" class="btn btn-outline-danger fw-bold" id="warCancelTabBtn" onclick="switchWarAdminView('cancel')">
-            <i class="fa fa-ban me-1"></i> বাতিলের আবেদনসমূহ (<span id="warCancelCountBadge">০</span>)
-          </button>
-        </div>
-
-        <!-- ক. নিয়মিত ওয়ারিশ তালিকা -->
-        <div id="warRegularView">
-          <div class="table-responsive bg-white p-3 shadow-sm rounded-3 border">
-            <table class="table table-hover align-middle">
-              <thead class="table-dark"><tr><th>আবেদন নং</th><th>স্মারক নং</th><th>আবেদনকারী</th><th>মৃত ব্যক্তি</th><th>পিতার নাম</th><th>মোবাইল</th><th>স্ট্যাটাস</th><th>অ্যাকশন</th></tr></thead>
-              <tbody id="warAppTable"></tbody>
-            </table>
-            <div id="warPagination" class="custom-pagination-wrap"></div>
-          </div>
-        </div>
-
-        <!-- খ. বাতিলের আবেদন তালিকা (নতুন) -->
-        <div id="warCancelView" class="d-none">
-          <div class="table-responsive bg-white p-3 shadow-sm rounded-3 border border-danger">
-            <table class="table table-hover align-middle">
-              <thead class="table-danger text-dark">
-                <tr>
-                  <th>বাতিল ট্র্যাকিং</th>
-                  <th>বাতিলযোগ্য স্মারক নং</th>
-                  <th>মৃত ব্যক্তি ও পিতা</th>
-                  <th>আবেদনকারী ও মোবাইল</th>
-                  <th width="30%">বাতিলের কারণ</th>
-                  <th>স্ট্যাটাস</th>
-                  <th width="120">অ্যাকশন</th>
-                </tr>
-              </thead>
-              <tbody id="warCancelTableBody"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- ৬. সাধারণ প্রত্যয়নপত্র ট্যাব -->
-      <div id="appsTab" class="admin-tab d-none">
-        <div class="card p-3 shadow-sm border-0 mb-3 bg-success text-white d-flex flex-row justify-content-between align-items-center rounded-3 flex-wrap gap-2">
-          <h5 class="fw-bold m-0"><i class="fa fa-file-invoice me-2"></i> সাধারণ প্রত্যয়নপত্র তালিকা ও অনুমোদন</h5>
-          <button class="btn btn-light btn-sm fw-bold text-success" onclick="loadAdminApps()"><i class="fa fa-sync me-1"></i> রিফ্রেশ</button>
-        </div>
-        <div class="table-responsive bg-white p-3 shadow-sm rounded-3 border">
-          <table class="table table-hover align-middle">
-            <thead class="table-dark"><tr><th>আবেদন নং</th><th>প্রত্যয়নের নাম</th><th>আবেদনকারী</th><th>NID</th><th>মোবাইল</th><th>ওয়ার্ড</th><th>স্ট্যাটাস</th><th>অ্যাকশন</th></tr></thead>
-            <tbody id="adminAppTable"></tbody>
-          </table>
-          <div id="genPagination" class="custom-pagination-wrap"></div>
-        </div>
-      </div>
-
-      <!-- ৭. কর আদায় ও সদস্য ট্যাব -->
-      <div id="taxTab" class="admin-tab d-none">
-        <div class="card p-3 shadow-sm border-0 mb-3 bg-success text-white d-flex flex-row justify-content-between align-items-center rounded-3">
-          <h5 class="fw-bold m-0"><i class="fa fa-hand-holding-dollar me-2"></i> কর আদায় ও করদাতা সদস্য তালিকা</h5>
-          <button class="btn btn-light btn-sm fw-bold text-success" onclick="loadTaxPayers()"><i class="fa fa-sync me-1"></i> রিফ্রেশ</button>
-        </div>
-        <div class="table-responsive bg-white p-3 shadow-sm rounded-3 border">
-          <table class="table table-striped align-middle">
-            <thead class="table-dark"><tr><th>হোল্ডিং নং</th><th>নাম</th><th>পিতার নাম</th><th>ওয়ার্ড</th><th>গ্রাম</th><th>বাড়ির ধরন</th><th>বার্ষিক কর</th></tr></thead>
-            <tbody id="taxTableBody"></tbody>
-          </table>
-          <div id="taxPagination" class="custom-pagination-wrap"></div>
-        </div>
-      </div>
-
-      <!-- ৮. ইউপি সেটিংস ট্যাব -->
-      <div id="upSettingsTab" class="admin-tab d-none">
-        <div class="card p-3 shadow-sm border-0 mb-3 bg-dark text-white rounded-3">
-          <h5 class="fw-bold m-0 text-info"><i class="fa fa-sliders me-2"></i> চেয়ারম্যান ও সচিব সেটিংস</h5>
-        </div>
-        <div class="card p-4 shadow-sm border-0 bg-white rounded-3">
-          <form onsubmit="event.preventDefault(); saveUPSettings();">
-            <div class="row g-3">
-              <div class="col-md-6"><label class="form-label fw-bold">চেয়ারম্যানের নাম (বাংলা) *</label><input type="text" id="setChairName" class="form-control" value="অ্যাড. মোঃ হুমায়ুন কবির" required></div>
-              <div class="col-md-6"><label class="form-label fw-bold">চেয়ারম্যানের ইংরেজি নাম</label><input type="text" id="setChairNameEn" class="form-control" value="Adv. Md. Humayun Kabir"></div>
-              <div class="col-md-6"><label class="form-label fw-bold">ইউপি সচিবের নাম (বাংলা) *</label><input type="text" id="setSecName" class="form-control" value="মোঃ মোতাহার উদ্দিন" required></div>
-              <div class="col-md-6"><label class="form-label fw-bold">ইউপি সচিবের ইংরেজি নাম</label><input type="text" id="setSecNameEn" class="form-control" value="Md. Motahar Uddin"></div>
-            </div>
-            <div class="text-end mt-4"><button type="submit" class="btn btn-success fw-bold px-4" id="saveUpSettingsBtn"><i class="fa fa-save me-1"></i> সেটিংস সংরক্ষণ করুন</button></div>
-          </form>
-        </div>
-      </div>
-
-      <!-- ৯. এডমিন পারমিশন ট্যাব -->
-      <div id="settingsTab" class="admin-tab d-none">
-        <div class="card p-3 shadow-sm border-0 mb-3 bg-dark text-white d-flex flex-row justify-content-between align-items-center rounded-3 flex-wrap gap-2">
-          <h5 class="fw-bold m-0 text-warning"><i class="fa fa-user-gear me-2"></i> এডমিন ইউজার ও এক্সেস পারমিশন</h5>
-          <div>
-            <button class="btn btn-light btn-sm fw-bold me-1" onclick="loadAdminUsers()"><i class="fa fa-sync me-1"></i> রিফ্রেশ</button>
-            <button class="btn btn-warning btn-sm fw-bold" onclick="openAddUserModal()"><i class="fa fa-plus me-1"></i> নতুন এডমিন যোগ করুন</button>
-          </div>
-        </div>
-        <div class="table-responsive bg-white p-3 shadow-sm rounded-3 border">
-          <table class="table table-hover align-middle">
-            <thead class="table-dark"><tr><th>ছবি</th><th>ইউজারনেম</th><th>নাম</th><th>রোল</th><th>পারমিশন</th><th width="100">অ্যাকশন</th></tr></thead>
-            <tbody id="userTableBody"></tbody>
-          </table>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-<!-- ➕ এডমিন তৈরির মোডাল -->
-<div class="modal fade" id="addUserModal" tabindex="-1">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header bg-dark text-warning">
-        <h5 class="modal-title fw-bold" id="userModalTitle"><i class="fa fa-user-plus me-2"></i> নতুন এডমিন তৈরি</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body p-4">
-        <form id="addUserForm" onsubmit="event.preventDefault(); saveUser();">
-          <div class="row g-3">
-            <div class="col-md-6"><label class="form-label fw-bold">ইউজারনেম *</label><input type="text" id="newUsername" class="form-control" required></div>
-            <div class="col-md-6"><label class="form-label fw-bold">পাসওয়ার্ড *</label><input type="password" id="newPassword" class="form-control" required></div>
-            <div class="col-md-6"><label class="form-label fw-bold">নাম ও পদবী *</label><input type="text" id="newName" class="form-control" required></div>
-            <div class="col-md-6"><label class="form-label fw-bold">রোল *</label>
-              <select id="newRole" class="form-select">
-                <option value="Admin">Admin</option>
-                <option value="SuperAdmin">SuperAdmin</option>
-              </select>
-            </div>
-            <div class="col-md-8"><label class="form-label fw-bold">এডমিনের ছবি</label><input type="file" id="newPhotoFile" class="form-control" accept="image/*" onchange="previewAdminPhoto(this)"><input type="hidden" id="newPhotoBase64"></div>
-            <div class="col-md-4 text-center my-1">
-              <img id="photoPreviewImg" src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" width="60" height="60" class="rounded-circle border" style="object-fit: cover;">
-            </div>
-
-            <div class="col-12 mt-2">
-              <div class="border rounded p-3 bg-light">
-                <h6 class="fw-bold mb-2">পারমিশন অ্যাকশন</h6>
-                <div class="row g-2 mb-3">
-                  <div class="col-3"><label class="form-check"><input class="form-check-input" type="checkbox" id="permApprove" checked> <span>এপ্রুভ</span></label></div>
-                  <div class="col-3"><label class="form-check"><input class="form-check-input" type="checkbox" id="permReject" checked> <span>রিজেক্ট</span></label></div>
-                  <div class="col-3"><label class="form-check"><input class="form-check-input" type="checkbox" id="permEdit" checked> <span>সংশোধন</span></label></div>
-                  <div class="col-3"><label class="form-check"><input class="form-check-input" type="checkbox" id="permDelete" checked> <span>ডিলিট</span></label></div>
-                </div>
-                <h6 class="fw-bold mb-2">অনুমোদিত মেনুসমূহ</h6>
-                <div class="row g-2">
-                  <div class="col-md-4"><label class="form-check"><input class="form-check-input admin-menu-check" type="checkbox" value="citTab" checked> <span>নাগরিকত্ব</span></label></div>
-                  <div class="col-md-4"><label class="form-check"><input class="form-check-input admin-menu-check" type="checkbox" value="tradeTab" checked> <span>ট্রেড লাইসেন্স</span></label></div>
-                  <div class="col-md-4"><label class="form-check"><input class="form-check-input admin-menu-check" type="checkbox" value="famTab" checked> <span>পারিবারিক</span></label></div>
-                  <div class="col-md-4"><label class="form-check"><input class="form-check-input admin-menu-check" type="checkbox" value="warTab" checked> <span>ওয়ারিশান</span></label></div>
-                  <div class="col-md-4"><label class="form-check"><input class="form-check-input admin-menu-check" type="checkbox" value="appsTab" checked> <span>সাধারণ প্রত্যয়ন</span></label></div>
-                  <div class="col-md-4"><label class="form-check"><input class="form-check-input admin-menu-check" type="checkbox" value="taxTab" checked> <span>কর আদায়</span></label></div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="text-end mt-4">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">বাতিল</button>
-            <button type="submit" class="btn btn-warning fw-bold px-4" id="saveUserBtn">সংরক্ষণ করুন</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ========================================================== -->
-<!-- 🟢 JAVASCRIPT MASTER ENGINE (SORT & CANCEL SYNC)           -->
-<!-- ========================================================== -->
-<script>
-  var rawDataStore = { cit: [], trade: [], fam: [], war: [], gen: [], tax: [], users: [], warCancel: [] };
-  var currentPageStore = { cit: 1, trade: 1, fam: 1, war: 1, gen: 1, tax: 1 };
-  var PAGE_SIZE = 15;
-
-  function toBnNumber(n) {
-    if (n === null || n === undefined || n === '') return '০';
-    return (n + '').replace(/\d/g, d => "০১২৩৪৫৬৭৮৯"[d]);
-  }
-
-  function getActiveSession() {
-    try {
-      var s = sessionStorage.getItem('upAdminSession');
-      return s ? JSON.parse(s) : null;
-    } catch(e) { return null; }
-  }
-
-  function getSessionPermissions(session) {
-    if (!session) return { canApprove: false, canReject: false, canEdit: false, canDelete: false, allowedMenus: ['dashTab'] };
-    if (session.role === 'SuperAdmin') {
-      return {
-        canApprove: true, canReject: true, canEdit: true, canDelete: true,
-        allowedMenus: ['dashTab','citTab','tradeTab','famTab','warTab','appsTab','taxTab','upSettingsTab','settingsTab']
-      };
+    .admin-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 600px;
     }
-    var perms = session.permissions || {};
-    return {
-      canApprove: perms.canApprove === true,
-      canReject: perms.canReject === true,
-      canEdit: perms.canEdit === true,
-      canDelete: perms.canDelete === true,
-      allowedMenus: perms.allowedMenus || session.allowedMenus || ['dashTab']
-    };
-  }
 
-  function hasAccessToMenu(menuId, session) {
-    var s = session || getActiveSession();
-    if (!s) return false;
-    if (s.role === 'SuperAdmin') return true;
-    var perms = getSessionPermissions(s);
-    return (perms.allowedMenus || []).indexOf(menuId) !== -1;
-  }
-
-  function applyAdminRolePermissions(session) {
-    var s = session || getActiveSession();
-    if (!s) return;
-    var isSuper = (s.role === 'SuperAdmin');
-    var perms = getSessionPermissions(s);
-    var allowed = perms.allowedMenus || [];
-
-    document.querySelectorAll('.admin-menu-link[data-menu]').forEach(function(item) {
-      var key = item.getAttribute('data-menu');
-      if (key === 'settingsTab') item.style.display = isSuper ? 'flex' : 'none';
-      else if (isSuper) item.style.display = 'flex';
-      else item.style.display = (allowed.indexOf(key) !== -1) ? 'flex' : 'none';
-    });
-    var superBtn = document.getElementById('superAdminSettingsBtn');
-    if (superBtn) superBtn.style.display = isSuper ? 'flex' : 'none';
-  }
-
-  function updateSidebarProfile(userData) {
-    if (!userData) return;
-    var nameEl = document.getElementById('adminActiveName');
-    var roleEl = document.getElementById('adminActiveRoleBadge');
-    var photoEl = document.getElementById('adminActivePhoto');
-    if (nameEl) nameEl.innerText = userData.name || userData.username;
-    if (roleEl) roleEl.innerText = userData.role || 'Admin';
-    if (photoEl && userData.photoUrl && userData.photoUrl.length > 20) photoEl.src = userData.photoUrl;
-    applyAdminRolePermissions(userData);
-  }
-
-  function toggleAdminSidebar(force) {
-    var sb = document.getElementById('adminSidebar');
-    var bd = document.getElementById('adminSidebarBackdrop');
-    if (!sb) return;
-    var show = (typeof force === 'boolean') ? force : !sb.classList.contains('show');
-    sb.classList.toggle('show', show);
-    if (bd) bd.classList.toggle('show', show);
-  }
-
-  function switchAdminTab(tabId) {
-    var s = getActiveSession();
-    if (s && !hasAccessToMenu(tabId, s)) {
-      var allowed = getSessionPermissions(s).allowedMenus || [];
-      tabId = allowed.length ? allowed[0] : 'dashTab';
+    .admin-table thead {
+        background: #f8fafc;
     }
-    sessionStorage.setItem('adminActiveTab', tabId);
 
-    document.querySelectorAll('.admin-tab').forEach(el => el.classList.add('d-none'));
-    var target = document.getElementById(tabId);
-    if (target) target.classList.remove('d-none');
-
-    document.querySelectorAll('.admin-menu-link').forEach(el => el.classList.remove('active'));
-    var activeBtn = document.querySelector(`[data-menu="${tabId}"]`);
-    if (activeBtn) activeBtn.classList.add('active');
-
-    toggleAdminSidebar(false);
-
-    if (tabId === 'citTab') loadCitizenshipApps();
-    else if (tabId === 'tradeTab') loadTradeLicenses();
-    else if (tabId === 'famTab') loadFamilyApps();
-    else if (tabId === 'warTab') loadWarishanApps();
-    else if (tabId === 'appsTab') loadAdminApps();
-    else if (tabId === 'taxTab') loadTaxPayers();
-    else if (tabId === 'dashTab') loadAdminDashboard();
-    else if (tabId === 'upSettingsTab') loadUPSettingsForm();
-    else if (tabId === 'settingsTab') loadAdminUsers();
-  }
-
-  // 🟢 অ্যাকশন বাটন রেন্ডারার
-  function renderActionButtons(appId, status, printCallback, editCallback) {
-    var s = getActiveSession() || {};
-    var perms = getSessionPermissions(s);
-
-    var badge = (status === 'Approved') 
-      ? '<span class="status-badge-approved">Approved</span>' 
-      : ((status === 'Cancelled' || status === 'বাতিলকৃত') 
-        ? '<span class="status-badge-cancelled">Cancelled</span>' 
-        : ((status === 'Rejected') ? '<span class="status-badge-rejected">Rejected</span>' : '<span class="status-badge-pending">Pending</span>'));
-
-    var approveBtn = perms.canApprove ? `<button class="btn-act-approve" onclick="changeStatus('${appId}', 'Approved')" title="অনুমোদন"><i class="fa fa-check"></i></button>` : '';
-    var editBtn = perms.canEdit ? `<button class="btn-act-edit" onclick="${editCallback}('${appId}')" title="সংশোধন"><i class="fa fa-edit"></i></button>` : '';
-    var rejectBtn = perms.canReject ? `<button class="btn-act-reject" onclick="changeStatus('${appId}', 'Rejected')" title="বাতিল"><i class="fa fa-times"></i></button>` : '';
-    var printBtn = (status === 'Approved') ? `<button type="button" class="btn-act-print" onclick="${printCallback}('${appId}')" title="সরাসরি প্রিন্ট"><i class="fa fa-print me-1"></i>প্রিন্ট</button>` : '';
-    var deleteBtn = perms.canDelete ? `<button class="btn btn-sm btn-outline-danger ms-1" onclick="removeApp('${appId}')" title="ডিলিট"><i class="fa fa-trash"></i></button>` : '';
-
-    return {
-      badge: badge,
-      actions: `<div class="d-flex align-items-center">${approveBtn}${editBtn}${rejectBtn}${printBtn}${deleteBtn}</div>`
-    };
-  }
-
-  // 🟢 পেজিনেশন
-  function renderPagination(type, totalItems, callbackName) {
-    var totalPages = Math.ceil(totalItems / PAGE_SIZE) || 1;
-    var curPage = currentPageStore[type] || 1;
-    var container = document.getElementById(type + 'Pagination');
-    if (!container) return;
-
-    var startIdx = totalItems === 0 ? 0 : ((curPage - 1) * PAGE_SIZE) + 1;
-    var endIdx = Math.min(curPage * PAGE_SIZE, totalItems);
-
-    var html = `<div>মোট <strong>${toBnNumber(totalItems)}</strong> টির মধ্যে <strong>${toBnNumber(startIdx)} - ${toBnNumber(endIdx)}</strong> প্রদর্শিত</div><div>`;
-    if (curPage > 1) html += `<button class="page-link-btn" onclick="${callbackName}(${curPage - 1})">পূর্ববর্তী</button>`;
-    for (var i = 1; i <= totalPages; i++) {
-      if (i === 1 || i === totalPages || (i >= curPage - 1 && i <= curPage + 1)) {
-        html += `<button class="page-link-btn ${i === curPage ? 'active-page' : ''}" onclick="${callbackName}(${i})">${toBnNumber(i)}</button>`;
-      }
+    .admin-table th {
+        padding: 12px;
+        text-align: left;
+        font-size: 12px;
+        font-weight: 700;
+        color: #64748b;
+        text-transform: uppercase;
+        border-bottom: 2px solid #e2e8f0;
     }
-    if (curPage < totalPages) html += `<button class="page-link-btn" onclick="${callbackName}(${curPage + 1})">পরবর্তী</button>`;
-    html += `</div>`;
-    container.innerHTML = html;
-  }
 
-  // 🟢 ড্যাশবোর্ড পরিসংখ্যান লোড
-  async function loadAdminDashboard() {
-    const st = await callBackendAPI('getMasterDashboardStats');
-    if(!st) return;
-    document.getElementById('dashTotalApps').innerText = toBnNumber(st.totalApps);
-    document.getElementById('dashTotalApproved').innerText = toBnNumber(st.totalApprovedApps);
-    document.getElementById('dashTotalPending').innerText = toBnNumber(st.totalPendingApps);
-    document.getElementById('dashCitTotal').innerText = toBnNumber(st.citTotal);
-    document.getElementById('dashCitApproved').innerText = toBnNumber(st.citApproved);
-    document.getElementById('dashCitPending').innerText = toBnNumber(st.citPending);
-    document.getElementById('dashTradeTotal').innerText = toBnNumber(st.tradeTotal);
-    document.getElementById('dashTradeActive').innerText = toBnNumber(st.tradeActive);
-    document.getElementById('dashTradePending').innerText = toBnNumber(st.tradePending);
-    document.getElementById('dashWarTotal').innerText = toBnNumber(st.warTotal);
-    document.getElementById('dashWarApproved').innerText = toBnNumber(st.warApproved);
-    document.getElementById('dashWarPending').innerText = toBnNumber(st.warPending);
-    document.getElementById('dashFamTotal').innerText = toBnNumber(st.famTotal);
-    document.getElementById('dashFamApproved').innerText = toBnNumber(st.famApproved);
-    document.getElementById('dashFamPending').innerText = toBnNumber(st.famPending);
-    document.getElementById('dashGenTotal').innerText = toBnNumber(st.genTotal);
-    document.getElementById('dashGenApproved').innerText = toBnNumber(st.genApproved);
-    document.getElementById('dashGenPending').innerText = toBnNumber(st.genPending);
-  }
+    .admin-table td {
+        padding: 12px;
+        font-size: 13px;
+        color: #0f172a;
+        border-bottom: 1px solid #e2e8f0;
+    }
 
-  // 🟢 নাগরিকত্ব তালিকা লোড (নতুন সবার উপরে)
-  async function loadCitizenshipApps(page = 1) {
-    currentPageStore.cit = page;
-    const res = await callBackendAPI('getCitizenshipApps');
-    rawDataStore.cit = Array.isArray(res) ? res : [];
-    renderCitTable(page);
-  }
-  function renderCitTable(page = 1) {
-    var tbody = document.getElementById('citAppTable');
-    tbody.innerHTML = '';
-    var list = rawDataStore.cit;
-    var slice = list.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-    if (!slice.length) { tbody.innerHTML = '<tr><td colspan="7" class="text-center py-3 text-muted">কোন আবেদন নেই</td></tr>'; return; }
-    slice.forEach(a => {
-      var act = renderActionButtons(a.appId, a.status, 'showCitizenPrintPreview', 'openEditCitizenModal');
-      tbody.innerHTML += `<tr><td><strong>${a.appId}</strong></td><td>${a.certNo || '-'}</td><td>${a.name}</td><td>${a.fatherName || '-'}</td><td>${a.mobile}</td><td>${act.badge}</td><td>${act.actions}</td></tr>`;
-    });
-    renderPagination('cit', list.length, 'renderCitTable');
-  }
+    .admin-table tr:hover {
+        background: #f8fafc;
+    }
 
-  // 🟢 ট্রেড লাইসেন্স তালিকা লোড (নতুন সবার উপরে)
-  async function loadTradeLicenses(page = 1) {
-    currentPageStore.trade = page;
-    const res = await callBackendAPI('getTradeLicenses');
-    rawDataStore.trade = Array.isArray(res) ? res : [];
-    renderTradeTable(page);
-  }
-  function renderTradeTable(page = 1) {
-    var tbody = document.getElementById('tradeTableBody');
-    tbody.innerHTML = '';
-    var list = rawDataStore.trade;
-    var slice = list.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-    if (!slice.length) { tbody.innerHTML = '<tr><td colspan="8" class="text-center py-3 text-muted">কোন লাইসেন্স নেই</td></tr>'; return; }
-    slice.forEach(t => {
-      var act = renderActionButtons(t.appId, t.status, 'showTradeCertPreview', 'openEditTradeModal');
-      tbody.innerHTML += `<tr><td><strong>${t.appId}</strong></td><td>${t.orgName}</td><td>${t.ownerName}</td><td>${t.fatherName || '-'}</td><td>${t.mobile}</td><td>৳${t.totalFee}</td><td>${act.badge}</td><td>${act.actions}</td></tr>`;
-    });
-    renderPagination('trade', list.length, 'renderTradeTable');
-  }
+    .status-badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+    }
 
-  // 🟢 পারিবারিক তালিকা লোড (নতুন সবার উপরে)
-  async function loadFamilyApps(page = 1) {
-    currentPageStore.fam = page;
-    const res = await callBackendAPI('getFamilyApps');
-    rawDataStore.fam = Array.isArray(res) ? res : [];
-    renderFamTable(page);
-  }
-  function renderFamTable(page = 1) {
-    var tbody = document.getElementById('famAppTable');
-    tbody.innerHTML = '';
-    var list = rawDataStore.fam;
-    var slice = list.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-    if (!slice.length) { tbody.innerHTML = '<tr><td colspan="8" class="text-center py-3 text-muted">কোন আবেদন নেই</td></tr>'; return; }
-    slice.forEach(f => {
-      var act = renderActionButtons(f.appId, f.status, 'showFamilyPrintPreview', 'openEditFamilyModal');
-      tbody.innerHTML += `<tr><td><strong>${f.appId}</strong></td><td><span class="badge bg-secondary">${f.type}</span></td><td>${f.name}</td><td>${f.fatherName || '-'}</td><td>${f.mobile}</td><td>ওয়ার্ড-${f.wardNo}</td><td>${act.badge}</td><td>${act.actions}</td></tr>`;
-    });
-    renderPagination('fam', list.length, 'renderFamTable');
-  }
+    .status-badge.approved {
+        background: #eafaf1;
+        color: #0a7a44;
+    }
 
-  // 🟢 ওয়ারিশান ও বাতিলের আবেদন সাব-ট্যাব কন্ট্রোল
-  function switchWarAdminView(mode) {
-    var isRegular = (mode === 'regular');
-    document.getElementById('warRegularView').classList.toggle('d-none', !isRegular);
-    document.getElementById('warCancelView').classList.toggle('d-none', isRegular);
-    document.getElementById('warRegularTabBtn').classList.toggle('active', isRegular);
-    document.getElementById('warCancelTabBtn').classList.toggle('active', !isRegular);
-  }
+    .status-badge.pending {
+        background: #fff7db;
+        color: #8a6200;
+    }
 
-  // 🟢 ওয়ারিশান তালিকা লোড (নিয়মিত ও বাতিল উভয়ের তথ্য)
-  async function loadWarishanApps(page = 1) {
-    currentPageStore.war = page;
-    const [regularRes, cancelRes] = await Promise.all([
-      callBackendAPI('getWarishanApps'),
-      callBackendAPI('getWarishanCancellationApps')
-    ]);
-    rawDataStore.war = Array.isArray(regularRes) ? regularRes : [];
-    rawDataStore.warCancel = Array.isArray(cancelRes) ? cancelRes : [];
-    
-    // বাতিলের আবেদন সংখ্যা আপডেট
-    var badge = document.getElementById('warCancelCountBadge');
-    if (badge) badge.innerText = toBnNumber(rawDataStore.warCancel.length);
+    .status-badge.rejected {
+        background: #feeceb;
+        color: #b42318;
+    }
 
-    renderWarTable(page);
-    renderWarCancelTable();
-  }
+    .action-btn {
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 11px;
+        font-weight: 700;
+        border: none;
+        cursor: pointer;
+        margin-right: 4px;
+        transition: all 0.2s;
+    }
 
-  function renderWarTable(page = 1) {
-    var tbody = document.getElementById('warAppTable');
-    tbody.innerHTML = '';
-    var list = rawDataStore.war;
-    var slice = list.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-    if (!slice.length) { tbody.innerHTML = '<tr><td colspan="8" class="text-center py-3 text-muted">কোন আবেদন নেই</td></tr>'; return; }
-    slice.forEach(w => {
-      var act = renderActionButtons(w.appId, w.status, 'directPrintWarishan', 'openEditWarishanModal');
-      tbody.innerHTML += `<tr><td><strong>${w.appId}</strong></td><td>${w.smarakNo || '-'}</td><td>${w.applicantName}</td><td>${w.deceasedName}</td><td>${w.deceasedFather || '-'}</td><td>${w.mobile}</td><td>${act.badge}</td><td>${act.actions}</td></tr>`;
-    });
-    renderPagination('war', list.length, 'renderWarTable');
-  }
+    .action-btn.view {
+        background: #eef7ff;
+        color: #0b5bc5;
+    }
 
-  // 🟢 ওয়ারিশান বাতিল আবেদন তালিকা রেন্ডারার
-  function renderWarCancelTable() {
-    var tbody = document.getElementById('warCancelTableBody');
-    if (!tbody) return;
-    tbody.innerHTML = '';
-    var list = rawDataStore.warCancel;
-    if (!list.length) { tbody.innerHTML = '<tr><td colspan="7" class="text-center py-3 text-muted">কোন বাতিলের আবেদন নেই</td></tr>'; return; }
+    .action-btn.edit {
+        background: #fff7db;
+        color: #8a6200;
+    }
 
-    list.forEach(c => {
-      var badge = (c.status === 'Approved') 
-        ? '<span class="status-badge-approved">বাতিল অনুমোদিত</span>' 
-        : ((c.status === 'Rejected') ? '<span class="status-badge-rejected">প্রত্যাখ্যাত</span>' : '<span class="status-badge-pending">অপেক্ষমাণ</span>');
+    .action-btn.delete {
+        background: #feeceb;
+        color: #b42318;
+    }
 
-      var approveCancelBtn = (c.status !== 'Approved') 
-        ? `<button class="btn btn-sm btn-danger fw-bold me-1" onclick="approveCancellation('${c.cancel_app_id}', '${c.target_smarak_no}', '${c.target_app_id}')" title="বাতিল অনুমোদন করুন"><i class="fa fa-check me-1"></i>বাতিল অনুমোদন</button>` 
-        : '<span class="badge bg-success me-1">বাতিল কার্যকর</span>';
-      
-      var printCopyBtn = `<button class="btn btn-sm btn-outline-dark" onclick="printWarishanCancellationCopy('${c.cancel_app_id}')" title="বাতিল আবেদন কপি"><i class="fa fa-print"></i></button>`;
+    .action-btn:hover {
+        transform: scale(1.05);
+    }
 
-      tbody.innerHTML += `
-        <tr>
-          <td><strong>${c.cancel_app_id}</strong></td>
-          <td><span class="badge bg-dark text-warning fs-6">${c.target_smarak_no}</span></td>
-          <td>${c.deceased_name}<br><small class="text-muted">পিতা: ${c.deceased_father}</small></td>
-          <td>${c.applicant_name}<br><small class="text-muted">মোবাইল: ${c.applicant_mobile}</small></td>
-          <td class="small text-danger"><b>${c.cancellation_reason}</b></td>
-          <td>${badge}</td>
-          <td><div class="d-flex align-items-center">${approveCancelBtn}${printCopyBtn}</div></td>
-        </tr>
-      `;
-    });
-  }
+    /* ফর্ম স্টাইল */
+    .admin-form-container {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 24px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
 
-  // 🟢 বাতিলের আবেদন অনুমোদন দিয়ে মূল সনদটি Cancelled করা
-  async function approveCancellation(cancelAppId, targetSmarak, targetAppId) {
-    Swal.fire({
-      title: 'ওয়ারিশ সনদটি বাতিল করবেন?',
-      text: `স্মারক নং (${targetSmarak}) এর সনদটি স্থায়ীভাবে বাতিল (Cancelled) ঘোষণা করা হবে!`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#dc2626',
-      confirmButtonText: 'হ্যাঁ, বাতিল নিশ্চিত করুন'
-    }).then(async (res) => {
-      if (res.isConfirmed) {
-        const result = await callBackendAPI('approveWarishanCancellation', {
-          cancelAppId: cancelAppId,
-          targetSmarakNo: targetSmarak,
-          targetAppId: targetAppId
-        });
-        if (result && result.success) {
-          Swal.fire({ icon: 'success', title: 'বাতিল কার্যকর হয়েছে!', text: 'মূল ওয়ারিশ সনদটি সফলভাবে বাতিল করা হয়েছে।', timer: 1800, showConfirmButton: false });
-          loadWarishanApps();
+    .form-group {
+        margin-bottom: 16px;
+    }
+
+    .form-label {
+        display: block;
+        font-size: 13px;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 6px;
+    }
+
+    .form-label .required {
+        color: #dc2626;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: border-color 0.2s;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: #006837;
+    }
+
+    .form-submit-btn {
+        background: #006837;
+        color: #ffffff;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background 0.2s;
+    }
+
+    .form-submit-btn:hover {
+        background: #004d28;
+    }
+
+    /* পারমিশন চেকবক্স */
+    .permission-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 12px;
+        margin-top: 12px;
+    }
+
+    .permission-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px;
+        background: #f8fafc;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+    }
+
+    .permission-item input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+    }
+
+    .permission-item label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #0f172a;
+        cursor: pointer;
+    }
+
+    /* ========================================= */
+    /* মোবাইল রেসপন্সিভ */
+    /* ========================================= */
+
+    @media (max-width: 991.98px) {
+        .admin-sidebar {
+            transform: translateX(-100%);
         }
-      }
-    });
-  }
 
-  // 🟢 সাধারণ প্রত্যয়ন তালিকা লোড (নতুন সবার উপরে)
-  async function loadAdminApps(page = 1) {
-    currentPageStore.gen = page;
-    const res = await callBackendAPI('getAllApplications');
-    rawDataStore.gen = Array.isArray(res) ? res : [];
-    renderGenTable(page);
-  }
-  function renderGenTable(page = 1) {
-    var tbody = document.getElementById('adminAppTable');
-    tbody.innerHTML = '';
-    var list = rawDataStore.gen;
-    var slice = list.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-    if (!slice.length) { tbody.innerHTML = '<tr><td colspan="8" class="text-center py-3 text-muted">কোন আবেদন নেই</td></tr>'; return; }
-    slice.forEach(g => {
-      var act = renderActionButtons(g.appId, g.status, 'printGeneralCertificate', 'openEditGeneralModal');
-      tbody.innerHTML += `<tr><td><strong>${g.appId}</strong></td><td><span class="badge bg-success">${g.type}</span></td><td>${g.name}</td><td>${toBnNumber(g.nid)}</td><td>${toBnNumber(g.mobile)}</td><td>ওয়ার্ড-${toBnNumber(g.wardNo)}</td><td>${act.badge}</td><td>${act.actions}</td></tr>`;
-    });
-    renderPagination('gen', list.length, 'renderGenTable');
-  }
-
-  // 🟢 স্ট্যাটাস পরিবর্তন ও ডিলিট
-  async function changeStatus(appId, status) {
-    const res = await callBackendAPI('updateAppStatus', { appId: appId, status: status });
-    if(res && res.success) {
-      Swal.fire({ icon: 'success', title: 'স্ট্যাটাস আপডেট!', timer: 1200, showConfirmButton: false });
-      loadCitizenshipApps(currentPageStore.cit);
-      loadTradeLicenses(currentPageStore.trade);
-      loadFamilyApps(currentPageStore.fam);
-      loadWarishanApps(currentPageStore.war);
-      loadAdminApps(currentPageStore.gen);
-      loadAdminDashboard();
-    }
-  }
-
-  async function removeApp(appId) {
-    Swal.fire({
-      title: 'আপনি কি নিশ্চিত?',
-      text: "আবেদনটি ডাটাবেস থেকে মুছে ফেলা হবে!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      confirmButtonText: 'হ্যাঁ, ডিলিট করুন'
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        const res = await callBackendAPI('deleteApplication', appId);
-        if(res && res.success) {
-          Swal.fire({ icon: 'success', title: 'মুছে ফেলা হয়েছে!', timer: 1200, showConfirmButton: false });
-          loadCitizenshipApps(); loadTradeLicenses(); loadFamilyApps(); loadWarishanApps(); loadAdminApps(); loadAdminDashboard();
+        .admin-sidebar.active {
+            transform: translateX(0);
         }
-      }
-    });
-  }
 
-  // 🟢 ইউজার ম্যানেজমেন্ট
-  async function loadAdminUsers() {
-    const users = await callBackendAPI('getAdminUsers');
-    var tbody = document.getElementById('userTableBody');
-    tbody.innerHTML = '';
-    (Array.isArray(users) ? users : []).forEach(u => {
-      var photo = u.photoUrl && u.photoUrl.length > 20 ? u.photoUrl : 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png';
-      tbody.innerHTML += `
-        <tr>
-          <td><img src="${photo}" width="40" height="40" class="rounded-circle border" style="object-fit:cover;"></td>
-          <td><strong>${u.username}</strong></td>
-          <td>${u.name}</td>
-          <td><span class="badge ${u.role==='SuperAdmin'?'bg-warning text-dark':'bg-primary'}">${u.role}</span></td>
-          <td><span class="badge bg-success">সক্রিয়</span></td>
-          <td><button class="btn btn-sm btn-outline-danger" onclick="deleteUser('${u.username}')"><i class="fa fa-trash"></i></button></td>
-        </tr>
-      `;
-    });
-  }
+        .admin-main-content {
+            margin-left: 0;
+        }
 
-  function openAddUserModal() {
-    document.getElementById('addUserForm').reset();
-    bootstrap.Modal.getOrCreateInstance(document.getElementById('addUserModal')).show();
-  }
+        .mobile-menu-toggle {
+            display: block;
+        }
 
-  function previewAdminPhoto(input) {
-    if (input.files && input.files[0]) {
-      var reader = new FileReader();
-      reader.onload = function(e) {
-        document.getElementById('photoPreviewImg').src = e.target.result;
-        document.getElementById('newPhotoBase64').value = e.target.result;
-      };
-      reader.readAsDataURL(input.files[0]);
+        .dashboard-stats-grid {
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        }
     }
-  }
 
-  async function saveUser() {
-    var allowedMenus = [];
-    document.querySelectorAll('.admin-menu-check:checked').forEach(c => allowedMenus.push(c.value));
-    var payload = {
-      username: document.getElementById('newUsername').value.trim(),
-      password: document.getElementById('newPassword').value.trim(),
-      name: document.getElementById('newName').value.trim(),
-      role: document.getElementById('newRole').value,
-      photo: document.getElementById('newPhotoBase64').value || '',
-      permissions: {
-        canApprove: document.getElementById('permApprove').checked,
-        canReject: document.getElementById('permReject').checked,
-        canEdit: document.getElementById('permEdit').checked,
-        canDelete: document.getElementById('permDelete').checked,
-        allowedMenus: allowedMenus
-      }
-    };
-    const res = await callBackendAPI('saveAdminUser', payload);
-    if(res && res.success) {
-      bootstrap.Modal.getInstance(document.getElementById('addUserModal')).hide();
-      loadAdminUsers();
-      Swal.fire({ icon: 'success', title: 'নতুন এডমিন সফলভাবে তৈরি হয়েছে!', timer: 1500, showConfirmButton: false });
+    @media (max-width: 767.98px) {
+        .admin-topbar {
+            padding: 12px 16px;
+        }
+
+        .admin-topbar-title {
+            font-size: 15px;
+        }
+
+        .admin-content {
+            padding: 16px;
+        }
+
+        .dashboard-stats-grid {
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .stat-card {
+            padding: 16px;
+        }
+
+        .stat-card-value {
+            font-size: 24px;
+        }
+
+        .admin-table-container {
+            padding: 16px;
+        }
+
+        .admin-table-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .admin-form-container {
+            padding: 16px;
+        }
+
+        .permission-grid {
+            grid-template-columns: 1fr;
+        }
     }
-  }
 
-  async function deleteUser(uname) {
-    if (confirm('এই এডমিন মুছে ফেলতে চান?')) {
-      await callBackendAPI('deleteAdminUser', uname);
-      loadAdminUsers();
+    @media (max-width: 479.98px) {
+        .admin-topbar-title {
+            font-size: 13px;
+        }
+
+        .admin-refresh-btn {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .stat-card-value {
+            font-size: 20px;
+        }
     }
-  }
 
-  function logoutAdmin() {
-    sessionStorage.removeItem('upAdminSession');
-    location.reload();
-  }
-
-  // অটো-ইনিশিয়ালাইজ
-  document.addEventListener("DOMContentLoaded", function() {
-    var s = getActiveSession();
-    if (s) {
-      updateSidebarProfile(s);
-      switchAdminTab('dashTab');
+    /* ওভারলে */
+    .sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 999;
     }
-  });
-</script>
+
+    .sidebar-overlay.active {
+        display: block;
+    }
+    </style>
+</head>
+<body>
+    <!-- সাইডবার ওভারলে -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <!-- সাইডবার -->
+    <aside class="admin-sidebar" id="adminSidebar">
+        <div class="admin-sidebar-header">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" alt="Admin" class="admin-avatar">
+            <div class="admin-info">
+                <h4>এডমিন</h4>
+                <p>Admin</p>
+            </div>
+        </div>
+        <nav class="admin-menu">
+            <a href="#" class="admin-menu-item active">
+                <i class="fa-solid fa-gauge-high"></i> ড্যাশবোর্ড
+            </a>
+            <a href="#" class="admin-menu-item">
+                <i class="fa-solid fa-id-card"></i> নাগরিকত্ব সনদ
+            </a>
+            <a href="#" class="admin-menu-item">
+                <i class="fa-solid fa-briefcase"></i> ট্রেড লাইসেন্স
+            </a>
+            <a href="#" class="admin-menu-item">
+                <i class="fa-solid fa-people-roof"></i> পারিবারিক সনদ
+            </a>
+            <a href="#" class="admin-menu-item">
+                <i class="fa-solid fa-sitemap"></i> ওয়ারিশ সার্টিফিকেট
+            </a>
+            <a href="#" class="admin-menu-item">
+                <i class="fa-solid fa-file-signature"></i> সাধারণ প্রত্যয়নপত্র
+            </a>
+            <a href="#" class="admin-menu-item">
+                <i class="fa-solid fa-money-bill-wave"></i> কর আদায় ও সদস্য
+            </a>
+            <a href="#" class="admin-menu-item">
+                <i class="fa-solid fa-gear"></i> ইউপি সেটিংস
+            </a>
+            <a href="#" class="admin-menu-item">
+                <i class="fa-solid fa-user-shield"></i> এডমিন পারমিশন
+            </a>
+        </nav>
+        <button class="admin-logout" onclick="logout()">
+            <i class="fa-solid fa-right-from-bracket"></i> লগআউট
+        </button>
+    </aside>
+
+    <!-- মূল কন্টেন্ট -->
+    <main class="admin-main-content">
+        <!-- টপ বার -->
+        <header class="admin-topbar">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <button class="mobile-menu-toggle" onclick="toggleSidebar()">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <h1 class="admin-topbar-title">
+                    <i class="fa-solid fa-gauge-high"></i> এডমিন প্যানেল
+                    <span class="badge bg-success" style="font-size: 10px; padding: 2px 8px; border-radius: 20px;">Live</span>
+                </h1>
+            </div>
+            <div class="admin-topbar-actions">
+                <button class="admin-refresh-btn" onclick="refreshDashboard()">
+                    <i class="fa-solid fa-rotate-right"></i> রিফ্রেশ
+                </button>
+            </div>
+        </header>
+
+        <!-- কন্টেন্ট এরিয়া -->
+        <div class="admin-content">
+            <!-- ড্যাশবোর্ড স্ট্যাটস -->
+            <div class="dashboard-stats-grid">
+                <div class="stat-card">
+                    <div class="stat-card-title">মোট আবেদন</div>
+                    <div class="stat-card-value">০</div>
+                    <div class="stat-card-sub">
+                        অনুমোদিত: <span>০</span> | পেন্ডিং: <span>০</span>
+                    </div>
+                </div>
+                <div class="stat-card citizen">
+                    <div class="stat-card-title">নাগরিকত্ব</div>
+                    <div class="stat-card-value">০</div>
+                    <div class="stat-card-sub">
+                        অনুমোদিত: <span>০</span> | পেন্ডিং: <span>০</span>
+                    </div>
+                </div>
+                <div class="stat-card trade">
+                    <div class="stat-card-title">ট্রেড লাইসেন্স</div>
+                    <div class="stat-card-value">০</div>
+                    <div class="stat-card-sub">
+                        অনুমোদিত: <span>০</span> | পেন্ডিং: <span>০</span>
+                    </div>
+                </div>
+                <div class="stat-card family">
+                    <div class="stat-card-title">পারিবারিক</div>
+                    <div class="stat-card-value">০</div>
+                    <div class="stat-card-sub">
+                        অনুমোদিত: <span>০</span> | পেন্ডিং: <span>০</span>
+                    </div>
+                </div>
+                <div class="stat-card warish">
+                    <div class="stat-card-title">ওয়ারিশান</div>
+                    <div class="stat-card-value">০</div>
+                    <div class="stat-card-sub">
+                        অনুমোদিত: <span>০</span> | পেন্ডিং: <span>০</span>
+                    </div>
+                </div>
+                <div class="stat-card general">
+                    <div class="stat-card-title">সাধারণ প্রত্যয়ন</div>
+                    <div class="stat-card-value">০</div>
+                    <div class="stat-card-sub">
+                        অনুমোদিত: <span>০</span> | পেন্ডিং: <span>০</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- নাগরিকত্ব সনদ টেবিল -->
+            <div class="admin-table-container">
+                <div class="admin-table-header">
+                    <h2 class="admin-table-title">
+                        <i class="fa-solid fa-id-card"></i> নাগরিকত্ব সনদের আবেদন তালিকা
+                    </h2>
+                    <button class="admin-refresh-btn" onclick="refreshTable('citizen')">
+                        <i class="fa-solid fa-rotate-right"></i> রিফ্রেশ
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>আবেদন নং</th>
+                                <th>সনদ নং</th>
+                                <th>নাম</th>
+                                <th>পিতার নাম</th>
+                                <th>মোবাইল</th>
+                                <th>স্ট্যাটাস</th>
+                                <th>অ্যাকশন</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="7" style="text-align: center; padding: 40px; color: #64748b;">
+                                    <i class="fa-solid fa-inbox" style="font-size: 48px; margin-bottom: 12px; display: block;"></i>
+                                    কোনো আবেদন পাওয়া যায়নি
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ট্রেড লাইসেন্স টেবিল -->
+            <div class="admin-table-container">
+                <div class="admin-table-header">
+                    <h2 class="admin-table-title">
+                        <i class="fa-solid fa-briefcase"></i> ট্রেড লাইসেন্স আবেদন তালিকা
+                    </h2>
+                    <button class="admin-refresh-btn" onclick="refreshTable('trade')">
+                        <i class="fa-solid fa-rotate-right"></i> রিফ্রেশ
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>আবেদন নং</th>
+                                <th>প্রতিষ্ঠানের নাম</th>
+                                <th>মালিকের নাম</th>
+                                <th>পিতার নাম</th>
+                                <th>মোবাইল</th>
+                                <th>ফি</th>
+                                <th>স্ট্যাটাস</th>
+                                <th>অ্যাকশন</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="8" style="text-align: center; padding: 40px; color: #64748b;">
+                                    <i class="fa-solid fa-inbox" style="font-size: 48px; margin-bottom: 12px; display: block;"></i>
+                                    কোনো আবেদন পাওয়া যায়নি
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- পারিবারিক সনদ টেবিল -->
+            <div class="admin-table-container">
+                <div class="admin-table-header">
+                    <h2 class="admin-table-title">
+                        <i class="fa-solid fa-people-roof"></i> পারিবারিক ও উত্তরাধিকারী আবেদন তালিকা
+                    </h2>
+                    <button class="admin-refresh-btn" onclick="refreshTable('family')">
+                        <i class="fa-solid fa-rotate-right"></i> রিফ্রেশ
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>আবেদন নং</th>
+                                <th>ধরন</th>
+                                <th>নাম</th>
+                                <th>পিতার নাম</th>
+                                <th>মোবাইল</th>
+                                <th>ওয়ার্ড</th>
+                                <th>স্ট্যাটাস</th>
+                                <th>অ্যাকশন</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="8" style="text-align: center; padding: 40px; color: #64748b;">
+                                    <i class="fa-solid fa-inbox" style="font-size: 48px; margin-bottom: 12px; display: block;"></i>
+                                    কোনো আবেদন পাওয়া যায়নি
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ওয়ারিশান সনদ টেবিল -->
+            <div class="admin-table-container">
+                <div class="admin-table-header">
+                    <h2 class="admin-table-title">
+                        <i class="fa-solid fa-sitemap"></i> ওয়ারিশান সনদ ও বাতিল ব্যবস্থাপনা
+                    </h2>
+                    <button class="admin-refresh-btn" onclick="refreshTable('warish')">
+                        <i class="fa-solid fa-rotate-right"></i> রিফ্রেশ
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>আবেদন নং</th>
+                                <th>স্মারক নং</th>
+                                <th>আবেদনকারী</th>
+                                <th>মৃত ব্যক্তি</th>
+                                <th>পিতার নাম</th>
+                                <th>মোবাইল</th>
+                                <th>স্ট্যাটাস</th>
+                                <th>অ্যাকশন</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="8" style="text-align: center; padding: 40px; color: #64748b;">
+                                    <i class="fa-solid fa-inbox" style="font-size: 48px; margin-bottom: 12px; display: block;"></i>
+                                    কোনো আবেদন পাওয়া যায়নি
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- সাধারণ প্রত্যয়নপত্র টেবিল -->
+            <div class="admin-table-container">
+                <div class="admin-table-header">
+                    <h2 class="admin-table-title">
+                        <i class="fa-solid fa-file-signature"></i> সাধারণ প্রত্যয়নপত্র তালিকা ও অনুমোদন
+                    </h2>
+                    <button class="admin-refresh-btn" onclick="refreshTable('general')">
+                        <i class="fa-solid fa-rotate-right"></i> রিফ্রেশ
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>আবেদন নং</th>
+                                <th>প্রত্যয়নের নাম</th>
+                                <th>আবেদনকারী</th>
+                                <th>NID</th>
+                                <th>মোবাইল</th>
+                                <th>ওয়ার্ড</th>
+                                <th>স্ট্যাটাস</th>
+                                <th>অ্যাকশন</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="8" style="text-align: center; padding: 40px; color: #64748b;">
+                                    <i class="fa-solid fa-inbox" style="font-size: 48px; margin-bottom: 12px; display: block;"></i>
+                                    কোনো আবেদন পাওয়া যায়নি
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- কর আদায় টেবিল -->
+            <div class="admin-table-container">
+                <div class="admin-table-header">
+                    <h2 class="admin-table-title">
+                        <i class="fa-solid fa-money-bill-wave"></i> কর আদায় ও করদাতা সদস্য তালিকা
+                    </h2>
+                    <button class="admin-refresh-btn" onclick="refreshTable('tax')">
+                        <i class="fa-solid fa-rotate-right"></i> রিফ্রেশ
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>হোল্ডিং নং</th>
+                                <th>নাম</th>
+                                <th>পিতার নাম</th>
+                                <th>ওয়ার্ড</th>
+                                <th>গ্রাম</th>
+                                <th>বাড়ির ধরন</th>
+                                <th>বার্ষিক কর</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="7" style="text-align: center; padding: 40px; color: #64748b;">
+                                    <i class="fa-solid fa-inbox" style="font-size: 48px; margin-bottom: 12px; display: block;"></i>
+                                    কোনো রেকর্ড পাওয়া যায়নি
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ইউপি সেটিংস -->
+            <div class="admin-form-container">
+                <h2 class="admin-table-title" style="margin-bottom: 20px;">
+                    <i class="fa-solid fa-gear"></i> চেয়ারম্যান ও সচিব সেটিংস
+                </h2>
+                <form onsubmit="event.preventDefault(); saveSettings();">
+                    <div class="form-group">
+                        <label class="form-label">চেয়ারম্যানের নাম (বাংলা) <span class="required">*</span></label>
+                        <input type="text" class="form-input" placeholder="চেয়ারম্যানের নাম লিখুন">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">চেয়ারম্যানের ইংরেজি নাম</label>
+                        <input type="text" class="form-input" placeholder="Chairman Name in English">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">ইউপি সচিবের নাম (বাংলা) <span class="required">*</span></label>
+                        <input type="text" class="form-input" placeholder="সচিবের নাম লিখুন">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">ইউপি সচিবের ইংরেজি নাম</label>
+                        <input type="text" class="form-input" placeholder="Secretary Name in English">
+                    </div>
+                    <button type="submit" class="form-submit-btn">
+                        <i class="fa-solid fa-floppy-disk"></i> সেটিংস সংরক্ষণ করুন
+                    </button>
+                </form>
+            </div>
+
+            <!-- এডমিন পারমিশন -->
+            <div class="admin-form-container">
+                <div class="admin-table-header">
+                    <h2 class="admin-table-title">
+                        <i class="fa-solid fa-user-shield"></i> এডমিন ইউজার ও এক্সেস পারমিশন
+                    </h2>
+                    <button class="admin-refresh-btn" onclick="refreshAdminList()">
+                        <i class="fa-solid fa-rotate-right"></i> রিফ্রেশ
+                    </button>
+                </div>
+
+                <!-- নতুন এডমিন ফর্ম -->
+                <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 16px; color: #0f172a;">
+                    <i class="fa-solid fa-user-plus" style="color: #006837;"></i> নতুন এডমিন তৈরি
+                </h3>
+                <form onsubmit="event.preventDefault(); createAdmin();">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                        <div class="form-group">
+                            <label class="form-label">ইউজারনেম <span class="required">*</span></label>
+                            <input type="text" class="form-input" placeholder="Username">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">পাসওয়ার্ড <span class="required">*</span></label>
+                            <input type="password" class="form-input" placeholder="Password">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">নাম ও পদবী <span class="required">*</span></label>
+                            <input type="text" class="form-input" placeholder="Name & Designation">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">রোল <span class="required">*</span></label>
+                            <select class="form-input">
+                                <option value="Admin">Admin</option>
+                                <option value="SuperAdmin">SuperAdmin</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">এডমিনের ছবি</label>
+                        <input type="file" class="form-input" accept="image/*">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">পারমিশন অ্যাকশন</label>
+                        <div class="permission-grid">
+                            <div class="permission-item">
+                                <input type="checkbox" id="perm-approve" checked>
+                                <label for="perm-approve">এপ্রুভ</label>
+                            </div>
+                            <div class="permission-item">
+                                <input type="checkbox" id="perm-reject" checked>
+                                <label for="perm-reject">রিজেক্ট</label>
+                            </div>
+                            <div class="permission-item">
+                                <input type="checkbox" id="perm-edit" checked>
+                                <label for="perm-edit">সংশোধন</label>
+                            </div>
+                            <div class="permission-item">
+                                <input type="checkbox" id="perm-delete">
+                                <label for="perm-delete">ডিলিট</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">অনুমোদিত মেনুসমূহ</label>
+                        <div class="permission-grid">
+                            <div class="permission-item">
+                                <input type="checkbox" id="menu-citizen" checked>
+                                <label for="menu-citizen">নাগরিকত্ব</label>
+                            </div>
+                            <div class="permission-item">
+                                <input type="checkbox" id="menu-trade" checked>
+                                <label for="menu-trade">ট্রেড লাইসেন্স</label>
+                            </div>
+                            <div class="permission-item">
+                                <input type="checkbox" id="menu-family" checked>
+                                <label for="menu-family">পারিবারিক</label>
+                            </div>
+                            <div class="permission-item">
+                                <input type="checkbox" id="menu-warish" checked>
+                                <label for="menu-warish">ওয়ারিশান</label>
+                            </div>
+                            <div class="permission-item">
+                                <input type="checkbox" id="menu-general" checked>
+                                <label for="menu-general">সাধারণ প্রত্যয়ন</label>
+                            </div>
+                            <div class="permission-item">
+                                <input type="checkbox" id="menu-tax">
+                                <label for="menu-tax">কর আদায়</label>
+                            </div>
+                            <div class="permission-item">
+                                <input type="checkbox" id="menu-cancel">
+                                <label for="menu-cancel">বাতিল</label>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="form-submit-btn">
+                        <i class="fa-solid fa-user-plus"></i> সংরক্ষণ করুন
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+    function toggleSidebar() {
+        var sidebar = document.getElementById('adminSidebar');
+        var overlay = document.getElementById('sidebarOverlay');
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+    }
+
+    function refreshDashboard() {
+        console.log('Refreshing dashboard...');
+        alert('ড্যাশবোর্ড রিফ্রেশ হচ্ছে...');
+    }
+
+    function refreshTable(type) {
+        console.log('Refreshing table:', type);
+        alert('টেবিল রিফ্রেশ হচ্ছে...');
+    }
+
+    function saveSettings() {
+        console.log('Saving settings...');
+        alert('সেটিংস সংরক্ষণ করা হয়েছে!');
+    }
+
+    function createAdmin() {
+        console.log('Creating admin...');
+        alert('নতুন এডমিন তৈরি করা হয়েছে!');
+    }
+
+    function refreshAdminList() {
+        console.log('Refreshing admin list...');
+        alert('এডমিন লিস্ট রিফ্রেশ হচ্ছে...');
+    }
+
+    function logout() {
+        if (confirm('আপনি কি নিশ্চিত লগআউট করতে চান?')) {
+            console.log('Logging out...');
+            window.location.href = '/login';
+        }
+    }
+    </script>
+</body>
+</html>
