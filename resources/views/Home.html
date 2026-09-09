@@ -1,743 +1,1300 @@
 <!-- ========================================== -->
-<!-- 11NO AULIAPUR UNION PARISHAD - MODERN HOME -->
-<!-- File: Home.html (Enriched Verification Card)-->
+<!-- 11NO AULIAPUR UNION PARISHAD - MOBILE OPTIMIZED -->
+<!-- File: Home.html (Fully Responsive) -->
 <!-- ========================================== -->
 <style>
+/* 🟢 গ্লোবাল রিসেট এবং বেস স্টাইল */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f0f4f8;
+    overflow-x: hidden;
+}
+
+/* 🟢 টপ হেডার - একই লাইনে */
+.top-header-bar {
+    background: linear-gradient(135deg, #6a1b9a 0%, #8e24aa 50%, #ab47bc 100%);
+    padding: 8px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.top-header-title {
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.3;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.top-header-title i {
+    color: #ffd54f;
+    margin-right: 4px;
+}
+
+.top-header-helpline {
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.top-header-helpline i {
+    color: #ffd54f;
+}
+
+/* 🟢 ইউনিয়ন হেডার সেকশন */
+.union-header-section {
+    background: linear-gradient(135deg, #00582f 0%, #0a7a44 50%, #024e2b 100%);
+    padding: 16px 12px;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: nowrap;
+}
+
+.union-logo-wrap {
+    flex-shrink: 0;
+    width: 70px;
+    height: 70px;
+    background: #ffffff;
+    border-radius: 50%;
+    padding: 4px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.union-logo-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 50%;
+}
+
+.union-info-wrap {
+    flex: 1;
+    min-width: 0;
+}
+
+.union-title {
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 1.3;
+    margin-bottom: 4px;
+    color: #ffffff;
+}
+
+.union-subtitle {
+    font-size: 11px;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.4;
+}
+
+.union-badges {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+}
+
+.union-badge {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.union-badge.verified {
+    background: #ffc107;
+    color: #000000;
+    border-color: #ffc107;
+}
+
+/* 🟢 নেভিগেশন মেনু */
+.nav-menu-container {
+    background: #1a1f36;
+    padding: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.nav-toggle-btn {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #ffffff;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.nav-menu-list {
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.nav-menu-list.active {
+    display: flex;
+}
+
+.nav-menu-item {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #ffffff;
+    padding: 12px 16px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.2s;
+}
+
+.nav-menu-item:hover {
+    background: rgba(255,255,255,0.1);
+    transform: translateX(4px);
+}
+
+.nav-menu-item i {
+    width: 20px;
+    text-align: center;
+    color: #ffc107;
+}
+
+.nav-menu-item.admin-login {
+    background: #ffc107;
+    color: #000000;
+    border-color: #ffc107;
+    font-weight: 700;
+}
+
 /* 🟢 হিরো ব্যানার স্টাইল */
 .hero-smart-banner {
-  background: linear-gradient(135deg, #00582f 0%, #0a7a44 52%, #024e2b 100%);
-  border-radius: 20px;
-  padding: 24px 20px;
-  color: #ffffff;
-  box-shadow: 0 12px 30px rgba(0, 98, 52, 0.22);
-  position: relative;
-  overflow: hidden;
-  margin-bottom: 22px;
-  border: 1px solid rgba(255,255,255,0.12);
+    background: linear-gradient(135deg, #00582f 0%, #0a7a44 52%, #024e2b 100%);
+    border-radius: 16px;
+    padding: 20px 16px;
+    color: #ffffff;
+    box-shadow: 0 8px 24px rgba(0, 98, 52, 0.25);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 16px;
+    border: 1px solid rgba(255,255,255,0.12);
 }
+
 .hero-smart-banner::after {
-  content: "";
-  position: absolute;
-  top: -50px;
-  right: -50px;
-  width: 180px;
-  height: 180px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 50%;
-  pointer-events: none !important;
+    content: "";
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 150px;
+    height: 150px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+    pointer-events: none !important;
 }
+
 .hero-banner-heading {
-  font-size: clamp(18px, 2.4vw, 24px) !important;
-  line-height: 1.35;
-  font-weight: 800;
+    font-size: clamp(16px, 4vw, 22px) !important;
+    line-height: 1.35;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.hero-banner-subtext {
+    font-size: 12px;
+    color: rgba(255,255,255,0.9);
+    line-height: 1.5;
+    margin-bottom: 12px;
 }
 
 /* 🟢 সার্চ বার */
 .verify-live-search-wrap {
-  position: relative;
-  z-index: 20 !important;
+    position: relative;
+    z-index: 20 !important;
 }
+
 .verify-live-search {
-  background: rgba(255,255,255,0.96);
-  border-radius: 50px;
-  padding: 5px 6px 5px 16px;
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.14);
-  border: 2px solid rgba(255,255,255,0.6);
-  display: flex;
-  align-items: center;
-  width: 100%;
+    background: rgba(255,255,255,0.96);
+    border-radius: 50px;
+    padding: 4px 4px 4px 14px;
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.14);
+    border: 2px solid rgba(255,255,255,0.6);
+    display: flex;
+    align-items: center;
+    width: 100%;
 }
+
 .verify-live-search:focus-within {
-  border-color: #ffc107;
+    border-color: #ffc107;
 }
+
 .verify-live-search input {
-  border: none;
-  outline: none;
-  font-size: 14px;
-  width: 100%;
-  color: #1e293b;
-  background: transparent;
+    border: none;
+    outline: none;
+    font-size: 13px;
+    width: 100%;
+    color: #1e293b;
+    background: transparent;
+    padding: 8px 4px;
 }
+
 .verify-btn-action {
-  background: linear-gradient(135deg, #006837 0%, #004d28 100%) !important;
-  color: #ffffff !important;
-  border: 2px solid #ffc107 !important;
-  font-weight: bold !important;
-  border-radius: 50px !important;
-  padding: 8px 18px !important;
-  font-size: 13.5px !important;
-  white-space: nowrap !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 5px !important;
-  cursor: pointer;
+    background: linear-gradient(135deg, #006837 0%, #004d28 100%) !important;
+    color: #ffffff !important;
+    border: 2px solid #ffc107 !important;
+    font-weight: bold !important;
+    border-radius: 50px !important;
+    padding: 8px 14px !important;
+    font-size: 12px !important;
+    white-space: nowrap !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    cursor: pointer;
+    flex-shrink: 0;
 }
 
 /* 🟢 সার্ভিস কার্ড */
 .service-card-modern {
-  background: linear-gradient(180deg, #ffffff 0%, #f9fbfa 100%);
-  border: 1px solid #e2e8f0;
-  border-radius: 14px;
-  padding: 14px 10px;
-  text-align: center;
-  cursor: pointer;
-  min-height: 125px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
-  transition: all 0.25s ease;
+    background: linear-gradient(180deg, #ffffff 0%, #f9fbfa 100%);
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 12px 8px;
+    text-align: center;
+    cursor: pointer;
+    min-height: 110px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 0 3px 10px rgba(15, 23, 42, 0.04);
+    transition: all 0.25s ease;
 }
+
 .service-card-modern:hover {
-  border-color: #006837;
-  box-shadow: 0 10px 22px rgba(0, 104, 55, 0.15);
-  transform: translateY(-3px);
+    border-color: #006837;
+    box-shadow: 0 8px 20px rgba(0, 104, 55, 0.15);
+    transform: translateY(-2px);
 }
+
 .service-icon-wrap {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 19px;
-  margin-bottom: 8px;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    margin-bottom: 6px;
 }
+
 .service-card-title {
-  font-size: 13px;
-  font-weight: 700;
-  color: #1e293b;
-  margin: 0;
-  line-height: 1.35;
+    font-size: 11px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
+    line-height: 1.3;
 }
+
 .priority-badge {
-  position: absolute;
-  top: 5px;
-  right: 6px;
-  font-size: 9px;
-  font-weight: 700;
-  padding: 2px 6px;
-  border-radius: 20px;
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    font-size: 8px;
+    font-weight: 700;
+    padding: 2px 5px;
+    border-radius: 20px;
 }
 
 /* 🟢 সাইডবার উইজেট */
 .smart-widget-card {
-  background: #ffffff;
-  border-radius: 18px;
-  border: 1px solid #e3e8e5;
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
-  overflow: hidden;
-  margin-bottom: 20px;
-}
-.smart-widget-header {
-  background: linear-gradient(90deg, #00582f 0%, #0a7a44 100%);
-  color: #ffffff;
-  padding: 12px 16px;
-  font-weight: 800;
-  font-size: 14px;
-}
-.smart-hotline-btn {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 9px 12px;
-  border-radius: 10px;
-  color: #ffffff !important;
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 13px;
-  margin-bottom: 7px;
-}
-.service-link-item {
-  display: flex;
-  align-items: center;
-  padding: 9px 12px;
-  margin-bottom: 6px;
-  border-radius: 10px;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  color: #1e293b;
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 600;
+    background: #ffffff;
+    border-radius: 14px;
+    border: 1px solid #e3e8e5;
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.04);
+    overflow: hidden;
+    margin-bottom: 16px;
 }
 
-/* 🟢 ভেরিফিকেশন কার্ড ও রেসপন্সিভ লেআউট */
-.verification-result-card {
-  background: #ffffff;
-  border: 1px solid #dfe7e3;
-  border-left: 5px solid #0b8f52;
-  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
-  border-radius: 16px;
-  padding: 16px;
-  margin-bottom: 16px;
+.smart-widget-header {
+    background: linear-gradient(90deg, #00582f 0%, #0a7a44 100%);
+    color: #ffffff;
+    padding: 10px 14px;
+    font-weight: 800;
+    font-size: 13px;
 }
+
+/* 🟢 চেয়ারম্যান কার্ড - ছবি সমস্যা সমাধান */
+.chairman-photo-wrap {
+    width: 100%;
+    max-width: 200px;
+    margin: 0 auto 12px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 3px solid #e2e8f0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.chairman-photo-wrap img {
+    width: 100%;
+    height: auto;
+    max-height: 180px;
+    object-fit: contain;
+    object-position: top center;
+    display: block;
+    background: #f8fafc;
+}
+
+.chairman-name {
+    font-size: 14px;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 8px 0 4px;
+    line-height: 1.3;
+}
+
+.chairman-designation {
+    font-size: 11px;
+    color: #64748b;
+    margin-bottom: 12px;
+}
+
+.chairman-actions {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.chairman-btn {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    border: 2px solid;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    text-decoration: none;
+}
+
+.chairman-btn.call {
+    background: #ffffff;
+    color: #006837;
+    border-color: #006837;
+}
+
+.chairman-btn.facebook {
+    background: #ffffff;
+    color: #1877f2;
+    border-color: #1877f2;
+}
+
+/* 🟢 হটলাইন বাটন */
+.smart-hotline-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-radius: 8px;
+    color: #ffffff !important;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 12px;
+    margin-bottom: 6px;
+    transition: transform 0.2s;
+}
+
+.smart-hotline-btn:hover {
+    transform: translateX(4px);
+}
+
+.smart-hotline-btn span:first-child {
+    flex: 1;
+}
+
+.smart-hotline-btn span:last-child {
+    font-size: 14px;
+    font-weight: 800;
+    margin-left: 8px;
+}
+
+/* 🟢 সার্ভিস লিংক */
+.service-link-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    margin-bottom: 6px;
+    border-radius: 8px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    color: #1e293b;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.service-link-item:hover {
+    background: #e2e8f0;
+    transform: translateX(4px);
+}
+
+.service-link-item i {
+    margin-right: 8px;
+    font-size: 14px;
+}
+
+/* 🟢 ভেরিফিকেশন কার্ড */
+.verification-result-card {
+    background: #ffffff;
+    border: 1px solid #dfe7e3;
+    border-left: 4px solid #0b8f52;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 12px;
+}
+
 .verification-result-card.status-pending { border-left-color: #f59e0b; }
 .verification-result-card.status-rejected { border-left-color: #dc2626; }
 .verification-result-card.status-cancelled { border-left-color: #000000; background: #fffbfb; }
 
 .verification-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #edf2ef;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #edf2ef;
+    flex-wrap: wrap;
 }
+
 .verification-card-title {
-  margin: 0;
-  font-size: 17px;
-  font-weight: 800;
-  color: #0f172a;
+    margin: 0;
+    font-size: 15px;
+    font-weight: 800;
+    color: #0f172a;
 }
+
 .verification-status-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  border-radius: 999px;
-  padding: 6px 12px;
-  font-size: 12px;
-  font-weight: 800;
-  white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 800;
+    white-space: nowrap;
 }
+
 .verification-status-approved { background: #eafaf1; color: #0a7a44; }
 .verification-status-pending { background: #fff7db; color: #8a6200; }
 .verification-status-rejected { background: #feeceb; color: #b42318; }
 .verification-status-cancelled { background: #000000; color: #f87171; border: 1px solid #ef4444; }
 
 .verification-note {
-  margin-bottom: 12px;
-  padding: 9px 12px;
-  border-radius: 10px;
-  font-size: 13px;
-  font-weight: 700;
+    margin-bottom: 10px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
 }
+
 .verification-note.success { background: #eafaf1; color: #0a7a44; border: 1px solid #cfeed9; }
 .verification-note.warning { background: #fff7db; color: #8a6200; border: 1px solid #f3dd8b; }
 .verification-note.danger { background: #feeceb; color: #b42318; border: 1px solid #f7c2bf; }
 .verification-note.cancelled { background: #fee2e2; color: #991b1b; border: 1.5px solid #f87171; }
 
 .verification-card-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px 14px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 12px;
 }
+
 .verification-meta strong {
-  display: block;
-  font-size: 11px;
-  font-weight: 800;
-  color: #64748b;
-  margin-bottom: 2px;
-  text-transform: uppercase;
+    display: block;
+    font-size: 10px;
+    font-weight: 800;
+    color: #64748b;
+    margin-bottom: 2px;
+    text-transform: uppercase;
 }
+
 .verification-meta span {
-  display: block;
-  font-size: 14.5px;
-  line-height: 1.5;
-  color: #0f172a;
-  font-weight: 600;
+    display: block;
+    font-size: 13px;
+    line-height: 1.4;
+    color: #0f172a;
+    font-weight: 600;
 }
 
 .verification-action-wrap {
-  margin-top: 14px;
-  padding-top: 10px;
-  border-top: 1px solid #edf2ef;
-  display: flex;
-  justify-content: flex-end;
-}
-.verification-print-btn {
-  background: linear-gradient(135deg, #eef7ff 0%, #e7f7ee 100%);
-  color: #0b5bc5;
-  border: 1px solid #bfd9ff;
-  border-radius: 999px;
-  padding: 8px 18px;
-  font-weight: 800;
-  font-size: 13.5px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  text-decoration: none;
-}
-.verification-print-btn:hover {
-  background: #dbeafe;
-  color: #0b5bc5;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid #edf2ef;
+    display: flex;
+    justify-content: flex-end;
 }
 
+.verification-print-btn {
+    background: linear-gradient(135deg, #eef7ff 0%, #e7f7ee 100%);
+    color: #0b5bc5;
+    border: 1px solid #bfd9ff;
+    border-radius: 999px;
+    padding: 7px 14px;
+    font-weight: 800;
+    font-size: 12px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    text-decoration: none;
+}
+
+/*  জরুরি নোটিশ বার */
+.emergency-notice-bar {
+    background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+    color: #ffffff;
+    padding: 10px 14px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+}
+
+.emergency-notice-bar i {
+    font-size: 20px;
+    animation: ring 1s infinite;
+}
+
+@keyframes ring {
+    0%, 100% { transform: rotate(0); }
+    25% { transform: rotate(15deg); }
+    75% { transform: rotate(-15deg); }
+}
+
+.emergency-notice-text {
+    font-size: 13px;
+    font-weight: 700;
+    flex: 1;
+}
+
+/* 🟢 ========================================= */
+/*  মোবাইল রেসপন্সিভ মিডিয়া কোয়েরি */
+/*  ========================================= */
+
+/* ট্যাবলেট এবং ছোট ডেস্কটপ */
+@media (max-width: 991.98px) {
+    .union-title {
+        font-size: 14px;
+    }
+    
+    .union-logo-wrap {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+/* মোবাইল ডিভাইস */
 @media (max-width: 767.98px) {
-  .hero-smart-banner { padding: 18px 14px; }
-  .verify-btn-action { padding: 8px 14px !important; font-size: 12.5px !important; }
-  .verification-card-grid { grid-template-columns: 1fr; gap: 8px; }
-  .verification-card-header { flex-direction: column; align-items: flex-start; gap: 6px; }
-  .verification-action-wrap { justify-content: stretch; }
-  .verification-print-btn { width: 100%; justify-content: center; }
+    /* টপ হেডার */
+    .top-header-bar {
+        padding: 6px 10px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+    
+    .top-header-title {
+        font-size: 11px;
+        white-space: normal;
+    }
+    
+    .top-header-helpline {
+        font-size: 11px;
+    }
+    
+    /* ইউনিয়ন হেডার */
+    .union-header-section {
+        padding: 12px 10px;
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+    
+    .union-logo-wrap {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .union-title {
+        font-size: 15px;
+    }
+    
+    .union-subtitle {
+        font-size: 10px;
+    }
+    
+    .union-badges {
+        justify-content: center;
+    }
+    
+    /* হিরো ব্যানার */
+    .hero-smart-banner {
+        padding: 16px 12px;
+        border-radius: 12px;
+    }
+    
+    .hero-banner-heading {
+        font-size: 16px !important;
+    }
+    
+    .hero-banner-subtext {
+        font-size: 11px;
+    }
+    
+    .verify-btn-action {
+        padding: 7px 12px !important;
+        font-size: 11px !important;
+    }
+    
+    /* সার্ভিস গ্রিড */
+    .service-card-modern {
+        min-height: 100px;
+        padding: 10px 6px;
+    }
+    
+    .service-icon-wrap {
+        width: 36px;
+        height: 36px;
+        font-size: 15px;
+    }
+    
+    .service-card-title {
+        font-size: 10px;
+    }
+    
+    .priority-badge {
+        font-size: 7px;
+        padding: 1px 4px;
+    }
+    
+    /* চেয়ারম্যান কার্ড */
+    .chairman-photo-wrap {
+        max-width: 180px;
+    }
+    
+    .chairman-photo-wrap img {
+        max-height: 160px;
+    }
+    
+    .chairman-name {
+        font-size: 13px;
+    }
+    
+    /* হটলাইন */
+    .smart-hotline-btn {
+        font-size: 11px;
+        padding: 7px 10px;
+    }
+    
+    /* ভেরিফিকেশন কার্ড */
+    .verification-card-grid {
+        grid-template-columns: 1fr;
+        gap: 6px;
+    }
+    
+    .verification-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+    
+    .verification-card-title {
+        font-size: 14px;
+    }
+    
+    .verification-action-wrap {
+        justify-content: stretch;
+    }
+    
+    .verification-print-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    /* জরুরি নোটিশ */
+    .emergency-notice-bar {
+        padding: 8px 12px;
+    }
+    
+    .emergency-notice-text {
+        font-size: 12px;
+    }
+}
+
+/* ছোট মোবাইল */
+@media (max-width: 479.98px) {
+    .top-header-title {
+        font-size: 10px;
+    }
+    
+    .union-title {
+        font-size: 14px;
+    }
+    
+    .union-logo-wrap {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .hero-banner-heading {
+        font-size: 15px !important;
+    }
+    
+    .service-card-modern {
+        min-height: 90px;
+    }
+    
+    .service-card-title {
+        font-size: 9px;
+    }
+}
+
+/* ল্যান্ডস্কেপ মোড */
+@media (max-height: 500px) and (orientation: landscape) {
+    .union-header-section {
+        flex-direction: row;
+        text-align: left;
+    }
+    
+    .union-logo-wrap {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+/* প্রিন্ট স্টাইল */
+@media print {
+    .top-header-bar,
+    .nav-menu-container,
+    .emergency-notice-bar {
+        display: none;
+    }
+    
+    .hero-smart-banner {
+        background: #ffffff !important;
+        color: #000000 !important;
+        border: 1px solid #000000;
+    }
 }
 </style>
 
-<!-- 1. PUBLIC HOME PAGE VIEW -->
-<div id="publicHome" class="view-section container my-3 my-md-4">
-  <!-- 🟢 হিরো ব্যানার -->
-  <div class="hero-smart-banner">
-    <div class="row align-items-center g-3">
-      <div class="col-lg-6">
-        <span class="badge bg-warning text-dark px-3 py-1 rounded-pill fw-bold mb-2">স্মার্ট সেবা • ক্যাশলেস ইউনিয়ন</span>
-        <h2 class="fw-bold mb-2 text-white hero-banner-heading">নাগরিক সেবায় ডিজিটাল ইউনিয়ন পরিষদ</h2>
-        <p class="text-white-50 mb-0" style="font-size: 13.5px;">
-          ঘরে বসেই নির্ভুল ও দ্রুত সময়ে সকল প্রকার সনদ এবং ট্রেড লাইসেন্স গ্রহণ করুন।
-        </p>
-      </div>
-      <div class="col-lg-6 verify-live-search-wrap">
-        <div class="text-end mb-1">
-          <span class="badge bg-light text-success fw-bold px-3 py-1 rounded-pill"><i class="fa-solid fa-shield-halved me-1"></i>আপনার তথ্য যাচাই করুন</span>
-        </div>
-        <form onsubmit="event.preventDefault(); executeHomeSearch();" class="verify-live-search">
-          <i class="fa-solid fa-search text-success me-2 fs-5"></i>
-          <input type="text" id="heroVerifyInput" placeholder="মোবাইল নম্বর / এনআইডি নম্বর / নাম লিখুন" autocomplete="off">
-          <button type="button" class="verify-btn-action" onclick="executeHomeSearch()">
-            <i class="fa-solid fa-search me-1"></i> যাচাই করুন
-          </button>
-        </form>
-      </div>
+<!-- টপ হেডার বার -->
+<div class="top-header-bar">
+    <div class="top-header-title">
+        <i class="fa-solid fa-bolt"></i>
+        ১১নং আউলিয়াপুর ইউনিয়ন পরিষদ • ক্যাশলেস স্মার্ট ডিজিটাল সিটিজেন পোর্টাল
     </div>
-  </div>
-
-  <div class="row g-3 g-md-4">
-    <div class="col-lg-9">
-      <!-- কন্টেইনার ১: ২৫টি সেবার গ্রিড -->
-      <div id="homeServicesContainer" class="smart-widget-card mb-4">
-        <div class="smart-widget-header d-flex justify-content-between align-items-center">
-          <span><i class="fa-solid fa-layer-group me-2"></i>সকল নাগরিক ও প্রশাসনিক সেবাসমূহ</span>
-          <span class="badge bg-warning text-dark">২৫টি ডিজিটাল সেবা</span>
-        </div>
-        <div class="p-3">
-          <div class="row g-2" id="homeServiceGrid">
-            <div class="col-6 col-md-3 service-item"><div class="service-card-modern border-danger" onclick="navToSection('citizenView')"><span class="priority-badge bg-danger text-white">জনপ্রিয়</span><div class="service-icon-wrap bg-danger-subtle text-danger"><i class="fa-solid fa-id-card"></i></div><p class="service-card-title text-danger">নাগরিকত্ব সনদ</p></div></div>
-            <div class="col-6 col-md-3 service-item"><div class="service-card-modern border-success" onclick="navToSection('tradeView')"><span class="priority-badge bg-success text-white">ব্যবসা</span><div class="service-icon-wrap bg-success-subtle text-success"><i class="fa-solid fa-briefcase"></i></div><p class="service-card-title text-success">ট্রেড লাইসেন্স</p></div></div>
-            <div class="col-6 col-md-3 service-item"><div class="service-card-modern border-warning" onclick="openMasterService('ওয়ারিশান সনদ')"><span class="priority-badge bg-warning text-dark">জরুরি</span><div class="service-icon-wrap bg-warning-subtle text-dark"><i class="fa-solid fa-sitemap"></i></div><p class="service-card-title text-dark">ওয়ারিশান সনদ</p></div></div>
-            <div class="col-6 col-md-3 service-item"><div class="service-card-modern border-primary" onclick="openMasterService('উত্তরাধিকারী সনদ')"><div class="service-icon-wrap bg-primary-subtle text-primary"><i class="fa-solid fa-users"></i></div><p class="service-card-title text-primary">উত্তরাধিকারী সনদ</p></div></div>
-            <div class="col-6 col-md-3 service-item"><div class="service-card-modern border-info" onclick="openMasterService('পারিবারিক সনদ')"><div class="service-icon-wrap bg-info-subtle text-info-emphasis"><i class="fa-solid fa-people-roof"></i></div><p class="service-card-title text-dark">পারিবারিক সনদ</p></div></div>
-            
-            <div class="col-6 col-md-3 service-item"><div class="service-card-modern" onclick="openGeneralServicePage('বিবিধ প্রত্যয়নপত্র')"><div class="service-icon-wrap bg-light text-success"><i class="fa-solid fa-file-signature"></i></div><p class="service-card-title">বিবিধ প্রত্যয়নপত্র</p></div></div>
-            <div class="col-6 col-md-3 service-item"><div class="service-card-modern" onclick="openGeneralServicePage('চারিত্রিক সনদ')"><div class="service-icon-wrap bg-light text-success"><i class="fa-solid fa-user-check"></i></div><p class="service-card-title">চারিত্রিক সনদ</p></div></div>
-            <div class="col-6 col-md-3 service-item"><div class="service-card-modern" onclick="openGeneralServicePage('ভূমিহীন সনদ')"><div class="service-icon-wrap bg-light text-success"><i class="fa-solid fa-house-chimney-crack"></i></div><p class="service-card-title">ভূমিহীন সনদ</p></div></div>
-            <div class="col-6 col-md-3 service-item"><div class="service-card-modern" onclick="openGeneralServicePage('অবিবাহিত সনদ')"><div class="service-icon-wrap bg-light text-success"><i class="fa-solid fa-user"></i></div><p class="service-card-title">অবিবাহিত সনদ</p></div></div>
-            <div class="col-6 col-md-3 service-item"><div class="service-card-modern" onclick="openGeneralServicePage('পুনঃ বিবাহ না হওয়া সনদ')"><div class="service-icon-wrap bg-light text-success"><i class="fa-solid fa-ring"></i></div><p class="service-card-title">পুনঃ বিবাহ না হওয়া সনদ</p></div></div>
-            <div class="col-6 col-md-3 service-item"><div class="service-card-modern" onclick="openGeneralServicePage('বার্ষিক আয়ের প্রত্যয়ন')"><div class="service-icon-wrap bg-light text-success"><i class="fa-solid fa-money-bill-wave"></i></div><p class="service-card-title">বার্ষিক আয়ের প্রত্যয়ন</p></div></div>
-            <div class="col-6 col-md-3 service-item"><div class="service-card-modern" onclick="openGeneralServicePage('একই নামের প্রত্যয়ন')"><div class="service-icon-wrap bg-light text-success"><i class="fa-solid fa-equals"></i></div><p class="service-card-title">একই নামের প্রত্যয়ন</p></div></div>
-            <div class="col-6 col-md-3 service-item"><div class="service-card-modern" onclick="openGeneralServicePage('প্রতিবন্ধী সনদপত্র')"><div class="service-icon-wrap bg-light text-success"><i class="fa-solid fa-wheelchair"></i></div><p class="service-card-title">প্রতিবন্ধী সনদপত্র</p></div></div>
-            <div class="col-6 col-md-3 service-item"><div class="service-card-modern" onclick="openGeneralServicePage('অনাপত্তি সনদপত্র')"><div class="service-icon-wrap bg-light text-success"><i class="fa-solid fa-file-contract"></i></div><p class="service-card-title">অনাপত্তি সনদপত্র</p></div></div>
-            <div class="col-6 col-md-3 service-item"><div class="service-card-modern" onclick="openGeneralServicePage('আর্থিক অসচ্ছলতার সনদপত্র')"><div class="service-icon-wrap bg-light text-success"><i class="fa-solid fa-hand-holding-dollar"></i></div><p class="service-card-title">আর্থিক অসচ্ছলতার সনদ</p></div></div>
-            <div class="col-6 col-md-3 service-item"><div class="service-card-modern" onclick="openGeneralServicePage('বিবাহিত সনদ')"><div class="service-icon-wrap bg-light text-success"><i class="fa-solid fa-heart"></i></div><p class="service-card-title">বিবাহিত সনদ</p></div></div>
-            <div class="col-6 col-md-3 service-item"><div class="service-card-modern" onclick="openGeneralServicePage('দ্বিতীয় বিবাহের অনুমতি পত্র')"><div class="service-icon-wrap bg-light text-success"><i class="fa-solid fa-file-signature"></i></div><p class="service-card-title">দ্বিতীয় বিবাহের অনুমতি</p></div></div>
-            <div class="col-6 col-md-3 service-item"><div class="service-card-modern" onclick="openGeneralServicePage('নতুন ভোটারের প্রত্যয়ন পত্র')"><div class="service-icon-wrap bg-light text-success"><i class="fa-solid fa-check-to-slot"></i></div><p class="service-card-title">নতুন ভোটারের প্রত্যয়ন</p></div></div>
-            <div class="col-6 col-md-3 service-item"><div class="service-card-modern" onclick="openGeneralServicePage('ভোটার স্থানান্তরের প্রত্যয়ন পত্র')"><div class="service-icon-wrap bg-light text-success"><i class="fa-solid fa-arrow-right-arrow-left"></i></div><p class="service-card-title">ভোটার স্থানান্তর প্রত্যয়ন</p></div></div>
-            <div class="col-6 col-md-3 service-item"><div class="service-card-modern" onclick="openGeneralServicePage('বেকারত্বের সনদপত্র')"><div class="service-icon-wrap bg-light text-success"><i class="fa-solid fa-user-slash"></i></div><p class="service-card-title">বেকারত্বের সনদপত্র</p></div></div>
-            <div class="col-6 col-md-3 service-item"><div class="service-card-modern" onclick="openGeneralServicePage('অস্থায়ীভাবে বসবাসের প্রত্যয়ন পত্র')"><div class="service-icon-wrap bg-light text-success"><i class="fa-solid fa-house-user"></i></div><p class="service-card-title">অস্থায়ী বসবাসের প্রত্যয়ন</p></div></div>
-            <div class="col-6 col-md-3 service-item"><div class="service-card-modern" onclick="openGeneralServicePage('জাতীয়তা সনদ')"><div class="service-icon-wrap bg-light text-success"><i class="fa-solid fa-flag"></i></div><p class="service-card-title">জাতীয়তা সনদ</p></div></div>
-            <div class="col-6 col-md-3 service-item"><div class="service-card-modern" onclick="openGeneralServicePage('স্থায়ী বাসিন্দা সনদ')"><div class="service-icon-wrap bg-light text-success"><i class="fa-solid fa-location-dot"></i></div><p class="service-card-title">স্থায়ী বাসিন্দা সনদ</p></div></div>
-            <div class="col-6 col-md-3 service-item"><div class="service-card-modern" onclick="openGeneralServicePage('এতিম সনদ')"><div class="service-icon-wrap bg-light text-success"><i class="fa-solid fa-child"></i></div><p class="service-card-title">এতিম সনদ</p></div></div>
-            <div class="col-6 col-md-3 service-item"><div class="service-card-modern" onclick="openGeneralServicePage('মাসিক আয়ের সনদ')"><div class="service-icon-wrap bg-light text-success"><i class="fa-solid fa-sack-dollar"></i></div><p class="service-card-title">মাসিক আয়ের সনদ</p></div></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 🟢 কন্টেইনার ২: সার্চ ফলাফল ভিউ -->
-      <div id="homeVerifyResultsContainer" class="smart-widget-card mb-4 d-none">
-        <div class="smart-widget-header d-flex justify-content-between align-items-center bg-success text-white">
-          <span><i class="fa-solid fa-list-check me-2"></i>নাগরিক সেবা ও সনদ তথ্য যাচাই ফলাফল</span>
-          <button type="button" class="btn btn-sm btn-warning text-dark fw-bold rounded-pill px-3" onclick="closeHomeVerifyResults()">
-            <i class="fa-solid fa-arrow-left me-1"></i> সেবাসমূহ ফিরে যান
-          </button>
-        </div>
-        <div class="p-2 p-md-3 bg-light" id="homeVerifyOutput"></div>
-      </div>
+    <div class="top-header-helpline">
+        <i class="fa-solid fa-phone"></i>
+        হেল্পলাইন: ০১৭০-১৮১০৫৯
     </div>
-
-    <!-- ডান পাশ (col-lg-3): পরিচিতি, হটলাইন ও লিংক -->
-    <div class="col-lg-3">
-      <div class="smart-widget-card text-center">
-        <div class="smart-widget-header text-start"><i class="fa-solid fa-user-tie me-2"></i>পরিকল্পনা ও সার্বিক পরিচালনায়</div>
-        <div class="p-3">
-          <img src="https://lh3.googleusercontent.com/d/1vZUuzu8m0kk5V3rc5x9Meb8nnh-bL660" class="rounded-4 border mb-2 img-fluid shadow-sm" style="max-height: 165px; width: 100%; object-fit: cover;">
-          <h6 class="fw-bold text-dark m-0 mt-2" style="font-size: 15.5px;">মোঃ কামরুল ইসলাম সবুজ</h6>
-          <small class="text-muted d-block" style="font-size: 12.5px;">১১নং আউলিয়াপুর ইউনিয়ন পরিষদ</small>
-          <div class="d-flex justify-content-center gap-2 mt-3">
-            <button type="button" class="btn btn-sm btn-outline-success rounded-pill px-3 fw-bold" onclick="openPhoneCallModal('01710181059', 'মোঃ কামরুল ইসলাম সবুজ')"><i class="fa-solid fa-phone me-1"></i> কল</button>
-            <a href="https://facebook.com/kisabuj35" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold"><i class="fa-brands fa-facebook me-1"></i> ফেসবুক</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="smart-widget-card">
-        <div class="smart-widget-header"><i class="fa-solid fa-phone-volume me-2"></i>জরুরি সরকারি সেবা</div>
-        <div class="p-3">
-          <a href="tel:333" class="smart-hotline-btn bg-primary"><span>জাতীয় তথ্য বাতায়ন</span> <span>৩৩৩</span></a>
-          <a href="tel:999" class="smart-hotline-btn bg-danger"><span>জরুরি পুলিশ ও ফায়ার</span> <span>৯৯৯</span></a>
-          <a href="tel:109" class="smart-hotline-btn bg-warning text-dark"><span>নারী ও শিশু হেল্পলাইন</span> <span>১০৯</span></a>
-          <a href="tel:106" class="smart-hotline-btn bg-info text-dark"><span>দুদক হটলাইন</span> <span>১০৬</span></a>
-        </div>
-      </div>
-
-      <div class="smart-widget-card">
-        <div class="smart-widget-header" style="background: linear-gradient(90deg, #0f172a, #1e293b);">
-          <i class="fa-solid fa-globe me-2 text-warning"></i>জরুরি নাগরিক ই-সেবা লিংক
-        </div>
-        <div class="p-2">
-          <a href="https://bdris.gov.bd" target="_blank" class="service-link-item"><i class="fa-solid fa-baby text-primary me-2"></i> জন্ম ও মৃত্যু নিবন্ধন</a>
-          <a href="https://vsmart.dgf.gov.bd" target="_blank" class="service-link-item"><i class="fa-solid fa-wheat-awn text-warning me-2"></i> ভিজিডি / ভিজিএফ সহায়তা</a>
-          <a href="http://www.dss.gov.bd" target="_blank" class="service-link-item"><i class="fa-solid fa-person-cane text-danger me-2"></i> সামাজিক নিরাপত্তা ভাতা</a>
-          <a href="https://services.nidw.gov.bd" target="_blank" class="service-link-item"><i class="fa-solid fa-id-card-clip text-dark me-2"></i> ভোটার ও স্মার্ট NID সেবা</a>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
 
-<!-- 2. TRACKING SECTION -->
-<div id="trackSection" class="view-section container my-4 d-none">
-  <div class="row justify-content-center">
-    <div class="col-md-9 col-lg-8">
-      <div class="card p-3 p-md-4 shadow border-0 rounded-4 bg-white">
-        <div class="text-center mb-3">
-          <div class="service-icon-wrap bg-success-subtle text-success mx-auto mb-2" style="width:55px; height:55px; font-size:22px;"><i class="fa-solid fa-magnifying-glass"></i></div>
-          <h4 class="fw-bold text-dark">আবেদন ট্র্যাকিং ও নাগরিক সেবা যাচাই</h4>
-          <p class="text-muted small">মোবাইল নম্বর, জাতীয় পরিচয়পত্র (NID), নাম অথবা ট্র্যাকিং নম্বর দিয়ে অনুসন্ধান করুন</p>
+<!-- ইউনিয়ন হেডার সেকশন -->
+<div class="union-header-section">
+    <div class="union-logo-wrap">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Profile_avatar_placeholder_large.png/200px-Profile_avatar_placeholder_large.png" alt="ইউনিয়ন লোগো">
+    </div>
+    <div class="union-info-wrap">
+        <h1 class="union-title">১নং আউলিয়াপুর ইউনিয়ন পরিষদ</h1>
+        <p class="union-subtitle">পটুয়াখালী সদর, পটুয়াখালী | স্থানীয় সরকার বিভাগ (LGD)</p>
+        <div class="union-badges">
+            <span class="union-badge">
+                <i class="fa-solid fa-location-dot"></i>
+                বরিশাল বিভাগ
+            </span>
+            <span class="union-badge">
+                <i class="fa-solid fa-map-marker-alt"></i>
+                পটুয়াখালী সদর
+            </span>
+            <span class="union-badge verified">
+                <i class="fa-solid fa-circle-check"></i>
+                ভেরিফাইড পোর্টাল
+            </span>
         </div>
-        <form onsubmit="event.preventDefault(); executeTrack();" class="input-group mb-3 shadow-sm rounded-pill overflow-hidden border">
-          <input type="text" id="trackInput" class="form-control border-0 px-3 px-md-4" placeholder="মোবাইল নম্বর / এনআইডি নম্বর / নাম লিখুন">
-          <button type="button" class="btn btn-success fw-bold px-3 px-md-4" onclick="executeTrack()"><i class="fa fa-search me-1"></i> ট্র্যাক করুন</button>
-        </form>
-        <div id="trackOutput"></div>
-      </div>
     </div>
-  </div>
 </div>
 
-<!-- 3. SERVICE INFO SECTION -->
-<div id="serviceInfoSection" class="view-section container my-4 d-none">
-  <div class="card p-4 shadow-sm border-0 rounded-4 bg-white">
-    <h4 class="fw-bold text-success mb-3 border-bottom pb-2"><i class="fa fa-info-circle me-2"></i> নাগরিক সেবা গ্রহণ নির্দেশিকা</h4>
-    <div class="row g-3">
-      <div class="col-md-4"><div class="p-3 border rounded-3 bg-light"><h6 class="fw-bold text-dark">১. অনলাইন আবেদন</h6><p class="text-muted small m-0">প্রয়োজনীয় সনদ নির্বাচন করে সঠিক তথ্য ও এনআইডি নম্বর দিয়ে ফরম পূরণ করুন।</p></div></div>
-      <div class="col-md-4"><div class="p-3 border rounded-3 bg-light"><h6 class="fw-bold text-dark">২. প্রশাসনিক যাচাই</h6><p class="text-muted small m-0">ইউপি সচিব ও সংশ্লিষ্ট ওয়ার্ড মেম্বার আপনার দেওয়া তথ্য যাচাই করবেন।</p></div></div>
-      <div class="col-md-4"><div class="p-3 border rounded-3 bg-light"><h6 class="fw-bold text-dark">৩. ডিজিটাল সনদ সংগ্রহ</h6><p class="text-muted small m-0">অনুমোদনের পর ট্র্যাকিং আইডি দিয়ে যেকোনো সময় মূল সনদ ডাউনলোড ও প্রিন্ট করুন।</p></div></div>
+<!-- নেভিগেশন মেনু -->
+<div class="nav-menu-container">
+    <button class="nav-toggle-btn" onclick="toggleNavMenu()">
+        <span><i class="fa-solid fa-bars"></i> মেনু</span>
+        <i class="fa-solid fa-chevron-down" id="navToggleIcon"></i>
+    </button>
+    <div class="nav-menu-list" id="navMenuList">
+        <a href="#" class="nav-menu-item" onclick="navToSection('home')">
+            <i class="fa-solid fa-house"></i> হোম
+        </a>
+        <a href="#" class="nav-menu-item" onclick="navToSection('services')">
+            <i class="fa-solid fa-certificate"></i> সনদের আবেদনসমূহ
+        </a>
+        <a href="#" class="nav-menu-item" onclick="navToSection('tracking')">
+            <i class="fa-solid fa-magnifying-glass"></i> আবেদন ট্র্যাকিং
+        </a>
+        <a href="#" class="nav-menu-item" onclick="navToSection('info')">
+            <i class="fa-solid fa-circle-info"></i> সেবা পরিচিতি
+        </a>
+        <a href="#" class="nav-menu-item" onclick="navToSection('notice')">
+            <i class="fa-solid fa-bullhorn"></i> নোটিশ বাতায়ন
+        </a>
+        <a href="#" class="nav-menu-item" onclick="navToSection('contact')">
+            <i class="fa-solid fa-headset"></i> যোগাযোগ ও ম্যাপ
+        </a>
+        <a href="#" class="nav-menu-item admin-login" onclick="navToSection('login')">
+            <i class="fa-solid fa-lock"></i> এডমিন লগইন
+        </a>
     </div>
-  </div>
 </div>
 
-<!-- 4. NOTICE SECTION -->
-<div id="noticeSection" class="view-section container my-4 d-none">
-  <div class="card p-4 shadow-sm border-0 rounded-4 bg-white">
-    <h4 class="fw-bold text-success mb-3 border-bottom pb-2"><i class="fa fa-bullhorn me-2"></i> নোটিশ বাতায়ন</h4>
-    <div class="alert alert-success border-0 rounded-3">
-      <h6 class="fw-bold">স্মার্ট ক্যাশলেস সেবা চালু সংক্রান্ত বিজ্ঞপ্তি</h6>
-      <p class="m-0 text-muted">১১নং আউলিয়াপুর ইউনিয়নের সকল নাগরিককে ডিজিটাল সেবার আওতায় আনা হয়েছে। ঘরে বসেই সকল সেবার জন্য আবেদন করুন।</p>
+<!-- জরুরি নোটিশ বার -->
+<div class="container my-3">
+    <div class="emergency-notice-bar">
+        <i class="fa-solid fa-bell"></i>
+        <div class="emergency-notice-text">
+            জরুরি নোটিশ: স্মার্ট ক্যাশলেস সেবা চালু সংক্রান্ত বিজ্ঞপ্তি
+        </div>
     </div>
-  </div>
 </div>
 
-<!-- 5. LOGIN SECTION -->
-<div id="loginSection" class="view-section container my-4 d-none">
-  <div class="row justify-content-center">
-    <div class="col-md-5 col-lg-4">
-      <div class="card p-4 shadow-lg border-0 rounded-4 bg-white text-center">
-        <div class="service-icon-wrap bg-success-subtle text-success mx-auto mb-3" style="width:60px; height:60px; font-size:24px;"><i class="fa-solid fa-user-shield"></i></div>
-        <h4 class="fw-bold text-dark mb-1">প্রশাসনিক সাইন ইন</h4>
-        <p class="text-muted small mb-4">ইউপি কর্মকর্তা ও অনুমোদিত এডমিন প্যানেল</p>
-        <form onsubmit="event.preventDefault(); doAdminLogin();">
-          <input type="text" id="admUser" class="form-control rounded-pill mb-3 px-3 py-2" placeholder="ইউজারনেম" required>
-          <input type="password" id="admPass" class="form-control rounded-pill mb-4 px-3 py-2" placeholder="গোপন পাসওয়ার্ড" required>
-          <button type="submit" class="btn btn-success w-100 fw-bold rounded-pill py-2" id="admLoginBtn">লগইন করুন</button>
-        </form>
-      </div>
+<!-- মূল কন্টেন্ট -->
+<div class="container my-3 my-md-4">
+    <!-- হিরো ব্যানার -->
+    <div class="hero-smart-banner">
+        <div class="row align-items-center g-3">
+            <div class="col-lg-6">
+                <span class="badge bg-warning text-dark px-3 py-1 rounded-pill fw-bold mb-2" style="font-size: 11px;">
+                    স্মার্ট সেবা • ক্যাশলেস ইউনিয়ন
+                </span>
+                <h2 class="fw-bold mb-2 text-white hero-banner-heading">
+                    নাগরিক সেবায় ডিজিটাল ইউনিয়ন পরিষদ
+                </h2>
+                <p class="text-white-50 mb-0 hero-banner-subtext">
+                    ঘরে বসেই নির্ভুল ও দ্রুত সময়ে সকল প্রকার সনদ এবং ট্রেড লাইসেন্স গ্রহণ করুন।
+                </p>
+            </div>
+            <div class="col-lg-6 verify-live-search-wrap">
+                <div class="text-end mb-1">
+                    <span class="badge bg-light text-success fw-bold px-3 py-1 rounded-pill" style="font-size: 10px;">
+                        <i class="fa-solid fa-shield-halved me-1"></i>আপনার তথ্য যাচাই করুন
+                    </span>
+                </div>
+                <form onsubmit="event.preventDefault(); executeHomeSearch();" class="verify-live-search">
+                    <i class="fa-solid fa-search text-success me-2 fs-5"></i>
+                    <input type="text" id="heroVerifyInput" placeholder="মোবাইল নম্বর / এনআইডি নম্বর / নাম লিখুন" autocomplete="off">
+                    <button type="button" class="verify-btn-action" onclick="executeHomeSearch()">
+                        <i class="fa-solid fa-search me-1"></i> যাচাই করুন
+                    </button>
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
+
+    <div class="row g-3 g-md-4">
+        <div class="col-lg-9">
+            <!-- কন্টেইনার ১: ২টি সেবার গ্রিড -->
+            <div id="homeServicesContainer" class="smart-widget-card mb-4">
+                <div class="smart-widget-header d-flex justify-content-between align-items-center">
+                    <span><i class="fa-solid fa-layer-group me-2"></i>সকল নাগরিক ও প্রশাসনিক সেবাসমূহ</span>
+                    <span class="badge bg-warning text-dark" style="font-size: 10px;">৫টি ডিজিটাল সেবা</span>
+                </div>
+                <div class="p-3">
+                    <div class="row g-2" id="homeServiceGrid">
+                        <div class="col-6 col-md-3 service-item">
+                            <div class="service-card-modern border-danger" onclick="navToSection('citizenView')">
+                                <span class="priority-badge bg-danger text-white">জনপ্রিয়</span>
+                                <div class="service-icon-wrap bg-danger-subtle text-danger">
+                                    <i class="fa-solid fa-id-card"></i>
+                                </div>
+                                <p class="service-card-title text-danger">নাগরিকত্ব সনদ</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3 service-item">
+                            <div class="service-card-modern border-success" onclick="navToSection('tradeView')">
+                                <span class="priority-badge bg-success text-white">ব্যবসা</span>
+                                <div class="service-icon-wrap bg-success-subtle text-success">
+                                    <i class="fa-solid fa-briefcase"></i>
+                                </div>
+                                <p class="service-card-title text-success">ট্রেড লাইসেন্স</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3 service-item">
+                            <div class="service-card-modern border-warning" onclick="openMasterService('ওয়ারিশান সনদ')">
+                                <span class="priority-badge bg-warning text-dark">জরুরি</span>
+                                <div class="service-icon-wrap bg-warning-subtle text-dark">
+                                    <i class="fa-solid fa-sitemap"></i>
+                                </div>
+                                <p class="service-card-title text-dark">ওয়ারিশান সনদ</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3 service-item">
+                            <div class="service-card-modern border-primary" onclick="openMasterService('উত্তরাধিকারী সনদ')">
+                                <div class="service-icon-wrap bg-primary-subtle text-primary">
+                                    <i class="fa-solid fa-users"></i>
+                                </div>
+                                <p class="service-card-title text-primary">উত্তরাধিকারী সনদ</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3 service-item">
+                            <div class="service-card-modern border-info" onclick="openMasterService('পারিবারিক সনদ')">
+                                <div class="service-icon-wrap bg-info-subtle text-info-emphasis">
+                                    <i class="fa-solid fa-people-roof"></i>
+                                </div>
+                                <p class="service-card-title text-dark">পারিবারিক সনদ</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3 service-item">
+                            <div class="service-card-modern" onclick="openGeneralServicePage('বিবিধ প্রত্যয়নপত্র')">
+                                <div class="service-icon-wrap bg-light text-success">
+                                    <i class="fa-solid fa-file-signature"></i>
+                                </div>
+                                <p class="service-card-title">বিবিধ প্রত্যয়নপত্র</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3 service-item">
+                            <div class="service-card-modern" onclick="openGeneralServicePage('চারিত্রিক সনদ')">
+                                <div class="service-icon-wrap bg-light text-success">
+                                    <i class="fa-solid fa-user-check"></i>
+                                </div>
+                                <p class="service-card-title">চারিত্রিক সনদ</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3 service-item">
+                            <div class="service-card-modern" onclick="openGeneralServicePage('ভূমিহীন সনদ')">
+                                <div class="service-icon-wrap bg-light text-success">
+                                    <i class="fa-solid fa-house-chimney-crack"></i>
+                                </div>
+                                <p class="service-card-title">ভূমিহীন সনদ</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3 service-item">
+                            <div class="service-card-modern" onclick="openGeneralServicePage('অবিবাহিত সনদ')">
+                                <div class="service-icon-wrap bg-light text-success">
+                                    <i class="fa-solid fa-user"></i>
+                                </div>
+                                <p class="service-card-title">অবিবাহিত সনদ</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3 service-item">
+                            <div class="service-card-modern" onclick="openGeneralServicePage('পুনঃ বিবাহ না হওয়া সনদ')">
+                                <div class="service-icon-wrap bg-light text-success">
+                                    <i class="fa-solid fa-ring"></i>
+                                </div>
+                                <p class="service-card-title">পুনঃ বিবাহ না হওয়া সনদ</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3 service-item">
+                            <div class="service-card-modern" onclick="openGeneralServicePage('বার্ষিক আয়ের প্রত্যয়ন')">
+                                <div class="service-icon-wrap bg-light text-success">
+                                    <i class="fa-solid fa-money-bill-wave"></i>
+                                </div>
+                                <p class="service-card-title">বার্ষিক আয়ের প্রত্যয়ন</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3 service-item">
+                            <div class="service-card-modern" onclick="openGeneralServicePage('একই নামের প্রত্যয়ন')">
+                                <div class="service-icon-wrap bg-light text-success">
+                                    <i class="fa-solid fa-equals"></i>
+                                </div>
+                                <p class="service-card-title">একই নামের প্রত্যয়ন</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3 service-item">
+                            <div class="service-card-modern" onclick="openGeneralServicePage('প্রতিবন্ধী সনদপত্র')">
+                                <div class="service-icon-wrap bg-light text-success">
+                                    <i class="fa-solid fa-wheelchair"></i>
+                                </div>
+                                <p class="service-card-title">প্রতিবন্ধী সনদপত্র</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3 service-item">
+                            <div class="service-card-modern" onclick="openGeneralServicePage('অনাপত্তি সনদপত্র')">
+                                <div class="service-icon-wrap bg-light text-success">
+                                    <i class="fa-solid fa-file-contract"></i>
+                                </div>
+                                <p class="service-card-title">অনাপত্তি সনদপত্র</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3 service-item">
+                            <div class="service-card-modern" onclick="openGeneralServicePage('আর্থিক অসচ্ছলতার সনদপত্র')">
+                                <div class="service-icon-wrap bg-light text-success">
+                                    <i class="fa-solid fa-hand-holding-dollar"></i>
+                                </div>
+                                <p class="service-card-title">আর্থিক অসচ্ছলতার সনদ</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3 service-item">
+                            <div class="service-card-modern" onclick="openGeneralServicePage('বিবাহিত সনদ')">
+                                <div class="service-icon-wrap bg-light text-success">
+                                    <i class="fa-solid fa-heart"></i>
+                                </div>
+                                <p class="service-card-title">বিবাহিত সনদ</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3 service-item">
+                            <div class="service-card-modern" onclick="openGeneralServicePage('দ্বিতীয় বিবাহের অনুমতি পত্র')">
+                                <div class="service-icon-wrap bg-light text-success">
+                                    <i class="fa-solid fa-file-signature"></i>
+                                </div>
+                                <p class="service-card-title">দ্বিতীয় বিবাহের অনুমতি</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3 service-item">
+                            <div class="service-card-modern" onclick="openGeneralServicePage('নতুন ভোটারের প্রত্যয়ন পত্র')">
+                                <div class="service-icon-wrap bg-light text-success">
+                                    <i class="fa-solid fa-check-to-slot"></i>
+                                </div>
+                                <p class="service-card-title">নতুন ভোটারের প্রত্যয়ন</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3 service-item">
+                            <div class="service-card-modern" onclick="openGeneralServicePage('ভোটার স্থানান্তরের প্রত্যয়ন পত্র')">
+                                <div class="service-icon-wrap bg-light text-success">
+                                    <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                                </div>
+                                <p class="service-card-title">ভোটার স্থানান্তর প্রত্যয়ন</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3 service-item">
+                            <div class="service-card-modern" onclick="openGeneralServicePage('বেকারত্বের সনদপত্র')">
+                                <div class="service-icon-wrap bg-light text-success">
+                                    <i class="fa-solid fa-user-slash"></i>
+                                </div>
+                                <p class="service-card-title">বেকারত্বের সনদপত্র</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3 service-item">
+                            <div class="service-card-modern" onclick="openGeneralServicePage('অস্থায়ীভাবে বসবাসের প্রত্যয়ন পত্র')">
+                                <div class="service-icon-wrap bg-light text-success">
+                                    <i class="fa-solid fa-house-user"></i>
+                                </div>
+                                <p class="service-card-title">অস্থায়ী বসবাসের প্রত্যয়ন</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3 service-item">
+                            <div class="service-card-modern" onclick="openGeneralServicePage('জাতীয়তা সনদ')">
+                                <div class="service-icon-wrap bg-light text-success">
+                                    <i class="fa-solid fa-flag"></i>
+                                </div>
+                                <p class="service-card-title">জাতীয়তা সনদ</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3 service-item">
+                            <div class="service-card-modern" onclick="openGeneralServicePage('স্থায়ী বাসিন্দা সনদ')">
+                                <div class="service-icon-wrap bg-light text-success">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                </div>
+                                <p class="service-card-title">স্থায়ী বাসিন্দা সনদ</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3 service-item">
+                            <div class="service-card-modern" onclick="openGeneralServicePage('এতিম সনদ')">
+                                <div class="service-icon-wrap bg-light text-success">
+                                    <i class="fa-solid fa-child"></i>
+                                </div>
+                                <p class="service-card-title">এতিম সনদ</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3 service-item">
+                            <div class="service-card-modern" onclick="openGeneralServicePage('মাসিক আয়ের সনদ')">
+                                <div class="service-icon-wrap bg-light text-success">
+                                    <i class="fa-solid fa-sack-dollar"></i>
+                                </div>
+                                <p class="service-card-title">মাসিক আয়ের সনদ</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- কন্টেইনার ২: সার্চ ফলাফল ভিউ -->
+            <div id="homeVerifyResultsContainer" class="smart-widget-card mb-4 d-none">
+                <div class="smart-widget-header d-flex justify-content-between align-items-center bg-success text-white">
+                    <span><i class="fa-solid fa-list-check me-2"></i>নাগরিক সেবা ও সনদ তথ্য যাচাই ফলাফল</span>
+                    <button type="button" class="btn btn-sm btn-warning text-dark fw-bold rounded-pill px-3" onclick="closeHomeVerifyResults()">
+                        <i class="fa-solid fa-arrow-left me-1"></i> সেবাসমূহ ফিরে যান
+                    </button>
+                </div>
+                <div class="p-2 p-md-3 bg-light" id="homeVerifyOutput"></div>
+            </div>
+        </div>
+
+        <!-- ডান পাশ (col-lg-3): পরিচিতি, হটলাইন ও লিংক -->
+        <div class="col-lg-3">
+            <!-- চেয়ারম্যান কার্ড -->
+            <div class="smart-widget-card text-center">
+                <div class="smart-widget-header text-start">
+                    <i class="fa-solid fa-user-tie me-2"></i>পরিকল্পনা ও সার্বিক পরিচালনায়
+                </div>
+                <div class="p-3">
+                    <div class="chairman-photo-wrap">
+                        <img src="https://lh3.googleusercontent.com/d/1vZUuzu8m0kk5V3rc5x9Meb8nnh-bL660" alt="চেয়ারম্যান">
+                    </div>
+                    <h6 class="chairman-name">মোঃ কামরুল ইসলাম সবুজ</h6>
+                    <small class="chairman-designation d-block">১১নং আউলিয়াপুর ইউনিয়ন পরিষদ</small>
+                    <div class="chairman-actions">
+                        <button type="button" class="chairman-btn call" onclick="openPhoneCallModal('01710181059', 'মোঃ কামরুল ইসলাম সবুজ')">
+                            <i class="fa-solid fa-phone"></i> কল
+                        </button>
+                        <a href="https://facebook.com/kisabuj35" target="_blank" class="chairman-btn facebook">
+                            <i class="fa-brands fa-facebook"></i> ফেসবুক
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- হটলাইন -->
+            <div class="smart-widget-card">
+                <div class="smart-widget-header">
+                    <i class="fa-solid fa-phone-volume me-2"></i>জরুরি সরকারি সেবা
+                </div>
+                <div class="p-3">
+                    <a href="tel:333" class="smart-hotline-btn bg-primary">
+                        <span>জাতীয় তথ্য বাতায়ন</span>
+                        <span>৩৩৩</span>
+                    </a>
+                    <a href="tel:999" class="smart-hotline-btn bg-danger">
+                        <span>জরুরি পুলিশ ও ফায়ার</span>
+                        <span>৯৯৯</span>
+                    </a>
+                    <a href="tel:109" class="smart-hotline-btn bg-warning text-dark">
+                        <span>নারী ও শিশু হেল্পলাইন</span>
+                        <span>১০৯</span>
+                    </a>
+                    <a href="tel:106" class="smart-hotline-btn bg-info text-dark">
+                        <span>দুদক হটলাইন</span>
+                        <span>১০৬</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- ই-সেবা লিংক -->
+            <div class="smart-widget-card">
+                <div class="smart-widget-header" style="background: linear-gradient(90deg, #0f172a, #1e293b);">
+                    <i class="fa-solid fa-globe me-2 text-warning"></i>জরুরি নাগরিক ই-সেবা লিংক
+                </div>
+                <div class="p-2">
+                    <a href="https://bdris.gov.bd" target="_blank" class="service-link-item">
+                        <i class="fa-solid fa-baby text-primary"></i> জন্ম ও মৃত্যু নিবন্ধন
+                    </a>
+                    <a href="https://vsmart.dgf.gov.bd" target="_blank" class="service-link-item">
+                        <i class="fa-solid fa-wheat-awn text-warning"></i> ভিজিডি / ভিজিএফ সহায়তা
+                    </a>
+                    <a href="http://www.dss.gov.bd" target="_blank" class="service-link-item">
+                        <i class="fa-solid fa-person-cane text-danger"></i> সামাজিক নিরাপত্তা ভাতা
+                    </a>
+                    <a href="https://services.nidw.gov.bd" target="_blank" class="service-link-item">
+                        <i class="fa-solid fa-id-card-clip text-dark"></i> ভোটার ও স্মার্ট NID সেবা
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<!-- 6. SUCCESS MODAL -->
-<div class="modal fade" id="successModal" tabindex="-1" data-bs-backdrop="static">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content border-0 shadow-lg rounded-4 text-center p-4">
-      <div class="service-icon-wrap bg-success-subtle text-success mx-auto mb-2" style="width:65px; height:65px; font-size:30px;"><i class="fa-solid fa-check"></i></div>
-      <h4 class="fw-bold text-success mb-2">আবেদন সফলভাবে জমা হয়েছে!</h4>
-      <p class="text-muted mb-3">আপনার ট্র্যাকিং নম্বরটি সংরক্ষণ করুন:</p>
-      <div class="mb-3"><span class="badge bg-success-subtle text-success border border-success px-4 py-2 fs-5 fw-bold" id="successAppId">AUL-000000</span></div>
-      <div class="d-flex justify-content-center gap-2">
-        <button class="btn btn-outline-dark fw-bold px-3 btn-sm rounded-pill" onclick="copyTrackingCode()"><i class="fa fa-copy me-1"></i> কপি</button>
-        <button class="btn btn-info text-white fw-bold px-3 btn-sm rounded-pill" id="successAppCopyBtn"><i class="fa fa-print me-1"></i> আবেদন কপি প্রিন্ট</button>
-        <button class="btn btn-success fw-bold px-4 btn-sm rounded-pill" data-bs-dismiss="modal">ঠিক আছে</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- 7. PHONE CALL MODAL -->
-<div class="modal fade" id="phoneCallModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered modal-sm">
-    <div class="modal-content border-0 shadow-lg rounded-4 text-center p-4">
-      <div class="service-icon-wrap bg-success-subtle text-success mx-auto mb-2" style="width:55px; height:55px; font-size:22px;"><i class="fa-solid fa-phone-volume"></i></div>
-      <h5 class="fw-bold text-dark mb-1" id="callPersonName">যোগাযোগ নম্বর</h5>
-      <p class="text-muted small mb-3">১১নং আউলিয়াপুর ইউনিয়ন পরিষদ</p>
-      <div class="p-2 mb-3 bg-light border rounded-3"><strong class="fs-5 text-success tracking-wide" id="callNumberDisplay">০১৭১০-১৮১০৫৯</strong></div>
-      <div class="d-grid gap-2">
-        <a href="tel:01710181059" id="callDirectLink" class="btn btn-success fw-bold rounded-pill"><i class="fa-solid fa-phone me-1"></i> সরাসরি কল করুন</a>
-        <button type="button" class="btn btn-outline-dark fw-bold rounded-pill" onclick="copyModalPhone()"><i class="fa fa-copy me-1"></i> নাম্বার কপি করুন</button>
-        <a href="https://wa.me/8801710181059" id="callWhatsappLink" target="_blank" class="btn btn-outline-success fw-bold rounded-pill"><i class="fa-brands fa-whatsapp me-1"></i> হোয়াটসঅ্যাপে মেসেজ</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ========================================================== -->
-<!-- 🟢 JAVASCRIPT MASTER ENGINE (ENRICHED SEARCH CARD)         -->
-<!-- ========================================================== -->
+<!-- জাভাস্ক্রিপ্ট -->
 <script>
-function toBanglaDigit(str) {
-  if (str === null || str === undefined || str === '') return '-';
-  var s = str.toString();
-  var bn = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
-  for(var i=0; i<10; i++) s = s.replace(new RegExp(i, 'g'), bn[i]);
-  return s;
+function toggleNavMenu() {
+    var menuList = document.getElementById('navMenuList');
+    var toggleIcon = document.getElementById('navToggleIcon');
+    menuList.classList.toggle('active');
+    if (menuList.classList.contains('active')) {
+        toggleIcon.classList.remove('fa-chevron-down');
+        toggleIcon.classList.add('fa-chevron-up');
+    } else {
+        toggleIcon.classList.remove('fa-chevron-up');
+        toggleIcon.classList.add('fa-chevron-down');
+    }
 }
 
-function copyTrackingCode() {
-  var code = document.getElementById('successAppId').innerText;
-  navigator.clipboard.writeText(code);
-  Swal.fire({ icon: 'success', title: 'কপি হয়েছে!', text: 'ট্র্যাকিং আইডি: ' + code, timer: 1500, showConfirmButton: false });
-}
-
-function openPhoneCallModal(phone, name) {
-  var cleanPhone = phone.replace(/[^0-9]/g, '');
-  document.getElementById('callPersonName').innerText = name || 'যোগাযোগ নম্বর';
-  document.getElementById('callNumberDisplay').innerText = phone;
-  document.getElementById('callDirectLink').href = 'tel:' + cleanPhone;
-  document.getElementById('callWhatsappLink').href = 'https://wa.me/88' + cleanPhone;
-  bootstrap.Modal.getOrCreateInstance(document.getElementById('phoneCallModal')).show();
-}
-
-function copyModalPhone() {
-  var p = document.getElementById('callNumberDisplay').innerText;
-  navigator.clipboard.writeText(p);
-  Swal.fire({ icon: 'success', title: 'নাম্বার কপি হয়েছে!', timer: 1400, showConfirmButton: false });
+function navToSection(section) {
+    console.log('Navigating to:', section);
+    // আপনার নেভিগেশন লজিক এখানে যোগ করুন
 }
 
 function executeHomeSearch() {
-  var inputElem = document.getElementById('heroVerifyInput');
-  var query = inputElem ? inputElem.value.trim() : '';
-  if (!query) {
-    return Swal.fire({ icon: 'warning', title: 'তথ্য দিন', text: 'অনুগ্রহ করে মোবাইল নম্বর, এনআইডি নম্বর অথবা আপনার নাম লিখুন।' });
-  }
-  document.getElementById('homeServicesContainer').classList.add('d-none');
-  document.getElementById('homeVerifyResultsContainer').classList.remove('d-none');
-  renderVerificationCards(query, 'homeVerifyOutput', function() {
-    document.getElementById('homeVerifyResultsContainer').scrollIntoView({ behavior: 'smooth' });
-  });
+    var inputElem = document.getElementById('heroVerifyInput');
+    var query = inputElem ? inputElem.value.trim() : '';
+    if (!query) {
+        alert('অনুগ্রহ করে মোবাইল নম্বর, এনআইডি নম্বর অথবা আপনার নাম লিখুন।');
+        return;
+    }
+    console.log('Searching for:', query);
+    // আপনার সার্চ লজিক এখানে যোগ করুন
 }
 
 function closeHomeVerifyResults() {
-  document.getElementById('homeVerifyResultsContainer').classList.add('d-none');
-  document.getElementById('homeServicesContainer').classList.remove('d-none');
-  document.getElementById('homeVerifyOutput').innerHTML = '';
-  document.getElementById('heroVerifyInput').value = '';
-  document.getElementById('homeServicesContainer').scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('homeVerifyResultsContainer').classList.add('d-none');
+    document.getElementById('homeServicesContainer').classList.remove('d-none');
+    document.getElementById('homeVerifyOutput').innerHTML = '';
+    document.getElementById('heroVerifyInput').value = '';
 }
 
-function executeTrack() {
-  var inputElem = document.getElementById('trackInput');
-  var query = inputElem ? inputElem.value.trim() : '';
-  if (!query) return alert('অনুগ্রহ করে ট্র্যাকিং আইডি, মোবাইল বা এনআইডি নম্বর লিখুন!');
-  renderVerificationCards(query, 'trackOutput');
+function openMasterService(serviceName) {
+    console.log('Opening service:', serviceName);
 }
 
-function normalizeStatusValue(rawStatus) {
-  var status = (rawStatus === undefined || rawStatus === null) ? 'Pending' : rawStatus.toString().trim();
-  var lowered = status.toLowerCase();
-  if (lowered.indexOf('approved') !== -1 || lowered.indexOf('approve') !== -1 || lowered.indexOf('verified') !== -1 || lowered.indexOf('অনুমোদিত') !== -1) {
-    return 'Approved';
-  }
-  if (lowered.indexOf('cancelled') !== -1 || lowered.indexOf('বাতিলকৃত') !== -1) {
-    return 'Cancelled';
-  }
-  if (lowered.indexOf('rejected') !== -1 || lowered.indexOf('reject') !== -1 || lowered.indexOf('বাতিল') !== -1) {
-    return 'Rejected';
-  }
-  return 'Pending';
+function openGeneralServicePage(serviceName) {
+    console.log('Opening general service:', serviceName);
 }
 
-// 🟢 সার্বজনীন ভেরিফিকেশন কার্ড রেন্ডারার (স্মারক নং, সনদ নং, লাইসেন্স নং ও পূর্ণাঙ্গ ঠিকানাসহ)
-async function renderVerificationCards(query, outputElementId, onSuccessCallback) {
-  var output = document.getElementById(outputElementId);
-  if (!output) return;
-  
-  output.innerHTML = '<p class="text-center text-success py-4"><i class="fa fa-spinner fa-spin fa-2x"></i><br><span class="mt-2 d-block fw-bold">সার্ভার থেকে আপনার সকল তথ্য যাচাই ও অনুসন্ধান করা হচ্ছে...</span></p>';
-  
-  try {
-    const res = await callBackendAPI('trackApplication', query);
-    var list = [];
-    
-    if (res && res.found) {
-      if (Array.isArray(res.list) && res.list.length > 0) list = res.list;
-      else if (res.appId) list = [res];
-    }
-    
-    if (list.length === 0) {
-      output.innerHTML = '<div class="alert alert-danger text-center shadow-sm mt-3 rounded-4 p-4"><i class="fa-solid fa-triangle-exclamation fa-2x d-block mb-2"></i><h5 class="fw-bold">কোনো রেকর্ড পাওয়া যায়নি!</h5><p class="mb-0">সঠিক তথ্য দিয়ে আবার চেষ্টা করুন।</p></div>';
-      if (typeof onSuccessCallback === 'function') onSuccessCallback();
-      return;
-    }
-    
-    var allCardsHtml = `
-      <div class="alert alert-success d-flex justify-content-between align-items-center mb-3 py-2 px-3 rounded-3 shadow-sm">
-        <div>
-          <i class="fa-solid fa-circle-check me-2 text-white"></i>
-          <span class="fw-bold text-white">মোট <span class="fs-5">${toBanglaDigit(list.length)}</span>টি</span> সেবার রেকর্ড পাওয়া গেছে
-        </div>
-        <span class="badge bg-white text-success fs-6 px-3 py-1">${toBanglaDigit(list.length)} টি</span>
-      </div>
-    `;
-    
-    list.forEach(function(data, index) {
-      var computedStatus = normalizeStatusValue(data.status);
-      var isCancelled = (computedStatus === 'Cancelled' || data.isCancelled === true);
-      var isApproved = (!isCancelled && computedStatus === 'Approved');
-      var isRejected = (!isCancelled && computedStatus === 'Rejected');
-      var isPending = (!isCancelled && !isApproved && !isRejected);
-      
-      // ১. স্ট্যাটাস ব্যাজ (বাতিলকৃত হলে সরাসরি Cancelled)
-      var statusBadge = '';
-      if (isCancelled) {
-        statusBadge = '<span class="verification-status-badge verification-status-cancelled"><i class="fa-solid fa-ban"></i> Cancelled (বাতিলকৃত)</span>';
-      } else if (isApproved) {
-        statusBadge = '<span class="verification-status-badge verification-status-approved"><i class="fa-solid fa-circle-check"></i> Approved (অনুমোদিত)</span>';
-      } else if (isRejected) {
-        statusBadge = '<span class="verification-status-badge verification-status-rejected"><i class="fa-solid fa-circle-xmark"></i> Rejected (বাতিল)</span>';
-      } else {
-        statusBadge = '<span class="verification-status-badge verification-status-pending"><i class="fa-solid fa-clock"></i> Pending (অপেক্ষমাণ)</span>';
-      }
-      
-      // ২. ভেরিফিকেশন সীল ও বাতিল সতর্কবার্তা
-      var verifiedSeal = '';
-      if (isCancelled) {
-        var noticeText = data.cancellationNotice || `সতর্কবার্তা: স্মারক নং- ${data.smarakNo || data.certNo || data.appId} এর ওয়ারিশান সনদটি ইউনিয়ন পরিষদ কর্তৃক বাতিল করা হইল!`;
-        verifiedSeal = `<div class="verification-note cancelled"><i class="fa-solid fa-triangle-exclamation me-1 fs-5"></i> <strong>${noticeText}</strong></div>`;
-      } else if (isApproved) {
-        verifiedSeal = '<div class="verification-note success"><i class="fa-solid fa-circle-check"></i> এই আবেদনটি ১১নং আউলিয়াপুর ইউনিয়ন পরিষদ কর্তৃক অনুমোদিত ও ভেরিফাইড।</div>';
-      } else if (isRejected) {
-        verifiedSeal = '<div class="verification-note danger"><i class="fa-solid fa-circle-xmark"></i> আবেদনটি পরিষদ কর্তৃক বাতিল করা হয়েছে।</div>';
-      } else {
-        verifiedSeal = '<div class="verification-note warning"><i class="fa-solid fa-clock"></i> আবেদনটি বর্তমানে অপেক্ষমাণ রয়েছে।</div>';
-      }
-      
-      var applicationType = data.type || data.serviceType || 'প্রত্যয়নপত্র';
-
-      // ৩. স্মারক নম্বর / সনদ নম্বর / লাইসেন্স নম্বর হাইলাইট
-      var numberMetaHtml = '';
-      if (data.licNo) {
-        numberMetaHtml = `<div class="verification-meta"><strong>ট্রেড লাইসেন্স নং</strong><span class="text-success fw-bold">${toBanglaDigit(data.licNo)}</span></div>`;
-      } else if (data.certNo && applicationType === 'নাগরিকত্ব সনদ') {
-        numberMetaHtml = `<div class="verification-meta"><strong>নাগরিকত্ব সনদ নং</strong><span class="text-danger fw-bold">${toBanglaDigit(data.certNo)}</span></div>`;
-      } else if (data.smarakNo || (applicationType.includes('ওয়ারিশ') && data.certNo)) {
-        var smNo = data.smarakNo || data.certNo;
-        numberMetaHtml = `<div class="verification-meta"><strong>স্মারক নম্বর</strong><span class="text-primary fw-bold">${toBanglaDigit(smNo)}</span></div>`;
-      }
-
-      // ৪. পিতা, মাতা, মৃত ব্যক্তি ও ঠিকানা তথ্য
-      var parentVal = data.fatherName || data.fatherSpouseName || data.father || '-';
-      var motherHtml = data.motherName ? `<div class="verification-meta"><strong>মাতার নাম</strong><span>${data.motherName}</span></div>` : '';
-      var deceasedHtml = data.deceasedName ? `<div class="verification-meta"><strong>মৃত ব্যক্তির নাম</strong><span class="text-danger fw-bold">${data.deceasedName}</span></div>` : '';
-      
-      var addrParts = [];
-      if (data.wardNo) addrParts.push('ওয়ার্ড: ' + toBanglaDigit(data.wardNo));
-      if (data.village) addrParts.push('গ্রাম: ' + data.village);
-      if (data.postOffice) addrParts.push('ডাকঘর: ' + data.postOffice);
-      var fullAddress = addrParts.length ? addrParts.join(', ') : '-';
-
-      // ৫. অ্যাকশন বাটন: শুধুমাত্র "আবেদন কপি প্রিন্ট" বাটন
-      var appCopyBtnHtml = '';
-      if (applicationType.includes('বাতিল')) {
-        appCopyBtnHtml = `<button type="button" class="verification-print-btn" onclick="printWarishanCancellationCopy('${data.appId}')"><i class="fa fa-file-invoice me-1"></i> বাতিল আবেদন কপি প্রিন্ট</button>`;
-      } else if (applicationType.includes('পারিবারিক') || applicationType.includes('উত্তরাধিকারী') || (data.appId && (data.appId.indexOf('AUL-FW-') === 0 || data.appId.indexOf('AUL-UW-') === 0))) {
-        appCopyBtnHtml = `<button type="button" class="verification-print-btn" onclick="printFamilyApplicationCopy('${data.appId}')"><i class="fa fa-file-invoice me-1"></i> আবেদন কপি প্রিন্ট</button>`;
-      } else if (applicationType.includes('ওয়ারিশ') || (data.appId && data.appId.indexOf('WAR') > -1)) {
-        appCopyBtnHtml = `<button type="button" class="verification-print-btn" onclick="printWarishanApplicationCopy('${data.appId}')"><i class="fa fa-file-invoice me-1"></i> আবেদন কপি প্রিন্ট</button>`;
-      } else {
-        appCopyBtnHtml = `<button type="button" class="verification-print-btn" onclick="printGeneralAppCopy('${data.appId}')"><i class="fa fa-file-invoice me-1"></i> আবেদন কপি প্রিন্ট</button>`;
-      }
-
-      var phoneVal = data.mobile || data.phone || data.mobileNo || data.Mobile || '-';
-      var nidVal = data.nid || data.nidNo || data.nationalId || data.NID || '-';
-
-      allCardsHtml += `
-        <div class="verification-result-shell mb-3">
-          <div class="verification-result-card status-${isCancelled ? 'cancelled' : (isApproved ? 'approved' : (isRejected ? 'rejected' : 'pending'))}">
-            <div class="verification-card-header">
-              <h5 class="verification-card-title">
-                <i class="fa-solid fa-circle-user ${isCancelled ? 'text-danger' : 'text-success'}"></i>
-                ${data.applicantName || data.name || 'নাম নেই'}
-                <small class="text-muted ms-2 fs-6">#${toBanglaDigit(index + 1)}</small>
-              </h5>
-              ${statusBadge}
-            </div>
-            ${verifiedSeal}
-            <div class="verification-card-grid">
-              <div class="verification-meta"><strong>সেবার নাম</strong><span>${applicationType}</span></div>
-              <div class="verification-meta"><strong>ট্র্যাকিং আইডি</strong><span style="font-family: monospace; color: #0b5bc5; font-weight: 800;">${data.appId}</span></div>
-              ${numberMetaHtml}
-              ${deceasedHtml}
-              <div class="verification-meta"><strong>পিতা/স্বামীর নাম</strong><span>${parentVal}</span></div>
-              ${motherHtml}
-              <div class="verification-meta"><strong>মোবাইল নম্বর</strong><span class="fw-bold text-dark">${toBanglaDigit(phoneVal)}</span></div>
-              <div class="verification-meta"><strong>NID / জন্মনিবন্ধন</strong><span class="fw-bold text-dark">${toBanglaDigit(nidVal)}</span></div>
-              <div class="verification-meta"><strong>ঠিকানা</strong><span>${fullAddress}</span></div>
-              <div class="verification-meta"><strong>আবেদনের তারিখ</strong><span>${data.applyDate || data.date || '-'}</span></div>
-            </div>
-            <div class="verification-action-wrap">
-              ${appCopyBtnHtml}
-            </div>
-          </div>
-        </div>
-      `;
-    });
-    
-    output.innerHTML = allCardsHtml;
-    if (typeof onSuccessCallback === 'function') onSuccessCallback();
-    
-  } catch (error) {
-    output.innerHTML = '<div class="alert alert-danger text-center shadow-sm mt-3 rounded-4 p-4"><h5 class="fw-bold">সার্ভার সংযোগ সমস্যা!</h5><p class="mb-0">অনুগ্রহ করে আবার চেষ্টা করুন।</p></div>';
-  }
-}
-
-async function doAdminLogin() {
-  var u = document.getElementById('admUser').value.trim();
-  var p = document.getElementById('admPass').value.trim();
-  var btn = document.getElementById('admLoginBtn');
-  if(!u || !p) return alert('ইউজারনেম এবং পাসওয়ার্ড প্রদান করুন!');
-  
-  btn.disabled = true; btn.innerText = 'যাচাই হচ্ছে...';
-  const res = await callBackendAPI('adminLogin', { username: u, password: p });
-  btn.disabled = false; btn.innerText = 'লগইন করুন';
-
-  if(res && res.success) {
-    sessionStorage.setItem('upAdminSession', JSON.stringify(res));
-    if (typeof updateSidebarProfile === 'function') updateSidebarProfile(res);
-    if (typeof applyAdminRolePermissions === 'function') applyAdminRolePermissions(res);
-    navToSection('adminPanel');
-
-    var allowed = (res.permissions && res.permissions.allowedMenus) ? res.permissions.allowedMenus : ['dashTab'];
-    var targetTab = (res.role === 'SuperAdmin') ? 'dashTab' : (allowed[0] || 'dashTab');
-    if (typeof switchAdminTab === 'function') switchAdminTab(targetTab);
-    if (typeof loadAdminDashboard === 'function') loadAdminDashboard();
-
-    Swal.fire({ icon: 'success', title: 'স্বাগতম ' + (res.name || res.username), timer: 1200, showConfirmButton: false });
-  } else {
-    Swal.fire({
-      icon: 'error',
-      title: 'লগইন ব্যর্থ',
-      text: res ? res.message : 'ইউজারনেম বা পাসওয়ার্ড সঠিক নয়!'
-    });
-  }
+function openPhoneCallModal(phone, name) {
+    console.log('Calling:', phone, name);
+    window.location.href = 'tel:' + phone;
 }
 </script>
