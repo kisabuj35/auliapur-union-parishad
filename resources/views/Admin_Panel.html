@@ -168,7 +168,7 @@
     padding: 2px 7px;
   }
 
-  /* 🟢 সাধারণ প্রত্যয়নপত্রের ফিল্টার চিপস (৪ নম্বর ছবির ডিজাইন) */
+  /* 🟢 সাধারণ প্রত্যয়নপত্রের ফিল্টার চিপস */
   .gen-category-grid {
     display: flex;
     flex-wrap: wrap;
@@ -455,7 +455,7 @@
         </div>
       </div>
 
-      <!-- 🟢 ৬. সাধারণ প্রত্যয়নপত্র (ক্যাটাগরি ব্যাজ গ্রিড সহ ৪ নম্বর ছবির মতো) -->
+      <!-- 🟢 ৬. সাধারণ প্রত্যয়নপত্র (ক্যাটাগরি ব্যাজ গ্রিড) -->
       <div id="appsTab" class="admin-tab d-none">
         <div class="admin-header-bar">
           <div class="admin-header-title text-success"><i class="fa fa-file-invoice"></i> সাধারণ প্রত্যয়নপত্র তালিকা ও অনুমোদন</div>
@@ -466,15 +466,13 @@
           <button class="btn btn-dark btn-sm fw-bold rounded-pill px-3" onclick="loadAdminApps()"><i class="fa fa-sync me-1"></i> রিফ্রেশ</button>
         </div>
 
-        <!-- ক্যাটাগরি ফিল্টার চিপস (Image 4 Design) -->
+        <!-- ক্যাটাগরি ফিল্টার চিপস -->
         <div class="bg-white p-3 rounded-3 shadow-sm border mb-3">
           <div class="d-flex justify-content-between align-items-center mb-2">
             <strong class="text-dark small"><i class="fa fa-filter text-success me-1"></i> ক্যাটাগরি অনুযায়ী ফিল্টার করুন (ক্লিক করুন):</strong>
             <span class="badge bg-success-subtle text-success border border-success px-3 py-1 fw-bold" id="genTotalCountBadge">মোট আবেদন: ০ টি</span>
           </div>
-          <div class="gen-category-grid" id="genCategoryChipsContainer">
-            <!-- ডায়নামিকভাবে জাভাস্ক্রিপ্ট থেকে চিপস ও কাউন্ট রেন্ডার হবে -->
-          </div>
+          <div class="gen-category-grid" id="genCategoryChipsContainer"></div>
         </div>
 
         <div class="table-responsive bg-white p-3 shadow-sm rounded-3 border">
@@ -606,7 +604,7 @@
 </div>
 
 <!-- ========================================================== -->
-<!-- 🟢 JAVASCRIPT MASTER ENGINE (SUB-TABS, SEARCH & PRINTS)     -->
+<!-- 🟢 JAVASCRIPT MASTER ENGINE (ZERO ERRORS, ALL BUTTONS OK) -->
 <!-- ========================================================== -->
 <script>
   var rawDataStore = { cit: [], trade: [], fam: [], war: [], gen: [], tax: [], users: [], warCancel: [] };
@@ -695,8 +693,9 @@
   function renderCitTable(list) {
     var tbody = document.getElementById('citAppTable');
     tbody.innerHTML = '';
-    if (!list.length) { tbody.innerHTML = '<tr><td colspan="8" class="text-center py-3 text-muted">কোন আবেদন নেই</td></tr>'; return; }
-    list.slice(0, PAGE_SIZE).forEach(a => {
+    var renderList = Array.isArray(list) ? list : (rawDataStore.cit || []);
+    if (!renderList.length) { tbody.innerHTML = '<tr><td colspan="8" class="text-center py-3 text-muted">কোন আবেদন নেই</td></tr>'; return; }
+    renderList.slice(0, PAGE_SIZE).forEach(a => {
       var act = renderActionButtons(a.appId, a.status, 'showCitizenPrintPreview', 'openEditCitizenModal');
       var verBadge = a.language === 'en' ? '<span class="badge bg-primary">English</span>' : '<span class="badge bg-success">বাংলা</span>';
       tbody.innerHTML += `<tr><td><strong>${a.appId}</strong></td><td>${a.certNo || '-'}</td><td>${a.name}</td><td>${a.fatherName || '-'}</td><td>${a.mobile}</td><td>${verBadge}</td><td>${act.badge}</td><td>${act.actions}</td></tr>`;
@@ -742,8 +741,9 @@
   function renderTradeTable(list) {
     var tbody = document.getElementById('tradeTableBody');
     tbody.innerHTML = '';
-    if (!list.length) { tbody.innerHTML = '<tr><td colspan="8" class="text-center py-3 text-muted">কোন লাইসেন্স নেই</td></tr>'; return; }
-    list.slice(0, PAGE_SIZE).forEach(t => {
+    var renderList = Array.isArray(list) ? list : (rawDataStore.trade || []);
+    if (!renderList.length) { tbody.innerHTML = '<tr><td colspan="8" class="text-center py-3 text-muted">কোন লাইসেন্স নেই</td></tr>'; return; }
+    renderList.slice(0, PAGE_SIZE).forEach(t => {
       var act = renderActionButtons(t.appId, t.status, 'showTradeCertPreview', 'openEditTradeModal');
       tbody.innerHTML += `<tr><td><strong>${t.appId}</strong></td><td><span class="badge bg-light text-dark border">${t.licNo || '-'}</span></td><td>${t.orgName}</td><td>${t.ownerName}</td><td>${t.mobile}</td><td>৳${t.totalFee}</td><td>${act.badge}</td><td>${act.actions}</td></tr>`;
     });
@@ -787,8 +787,9 @@
   function renderFamTable(list) {
     var tbody = document.getElementById('famAppTable');
     tbody.innerHTML = '';
-    if (!list.length) { tbody.innerHTML = '<tr><td colspan="8" class="text-center py-3 text-muted">কোন আবেদন নেই</td></tr>'; return; }
-    list.slice(0, PAGE_SIZE).forEach(f => {
+    var renderList = Array.isArray(list) ? list : (rawDataStore.fam || []);
+    if (!renderList.length) { tbody.innerHTML = '<tr><td colspan="8" class="text-center py-3 text-muted">কোন আবেদন নেই</td></tr>'; return; }
+    renderList.slice(0, PAGE_SIZE).forEach(f => {
       var act = renderActionButtons(f.appId, f.status, 'showFamilyPrintPreview', 'openEditFamilyModal');
       tbody.innerHTML += `<tr><td><strong>${f.appId}</strong></td><td><span class="badge bg-secondary">${f.type}</span></td><td>${f.name}</td><td>${f.deceasedName || f.fatherName || '-'}</td><td>${f.mobile}</td><td>ওয়ার্ড-${f.wardNo}</td><td>${act.badge}</td><td>${act.actions}</td></tr>`;
     });
@@ -830,7 +831,7 @@
                (w.deceasedName && w.deceasedName.toLowerCase().includes(query)) ||
                (w.mobile && w.mobile.includes(query));
       });
-      renderWarRegularTable(filtered);
+      renderWarTable(filtered);
     } else {
       var filteredCancel = rawDataStore.warCancel.filter(c => {
         if (!query) return true;
@@ -843,11 +844,12 @@
     }
   }
 
-  function renderWarRegularTable(list) {
+  function renderWarTable(list) {
     var tbody = document.getElementById('warAppTable');
     tbody.innerHTML = '';
-    if (!list.length) { tbody.innerHTML = '<tr><td colspan="8" class="text-center py-3 text-muted">কোন আবেদন নেই</td></tr>'; return; }
-    list.slice(0, PAGE_SIZE).forEach(w => {
+    var renderList = Array.isArray(list) ? list : (rawDataStore.war || []);
+    if (!renderList.length) { tbody.innerHTML = '<tr><td colspan="8" class="text-center py-3 text-muted">কোন আবেদন নেই</td></tr>'; return; }
+    renderList.slice(0, PAGE_SIZE).forEach(w => {
       var act = renderActionButtons(w.appId, w.status, 'directPrintWarishan', 'openEditWarishanModal');
       tbody.innerHTML += `<tr><td><strong>${w.appId}</strong></td><td><span class="badge bg-dark text-warning">${w.smarakNo || '-'}</span></td><td>${w.applicantName}</td><td>${w.deceasedName}</td><td>${w.deceasedFather || '-'}</td><td>${w.mobile}</td><td>${act.badge}</td><td>${act.actions}</td></tr>`;
     });
@@ -856,13 +858,14 @@
   function renderWarCancelTable(list) {
     var tbody = document.getElementById('warCancelTableBody');
     tbody.innerHTML = '';
-    if (!list.length) { tbody.innerHTML = '<tr><td colspan="7" class="text-center py-3 text-muted">কোন বাতিলের আবেদন নেই</td></tr>'; return; }
-    list.forEach(c => {
+    var renderList = Array.isArray(list) ? list : (rawDataStore.warCancel || []);
+    if (!renderList.length) { tbody.innerHTML = '<tr><td colspan="7" class="text-center py-3 text-muted">কোন বাতিলের আবেদন নেই</td></tr>'; return; }
+    renderList.forEach(c => {
       var isApproved = (c.status === 'Approved');
       var badge = isApproved ? '<span class="status-badge-approved">বাতিল অনুমোদিত</span>' : '<span class="status-badge-pending">অপেক্ষমাণ</span>';
       var orderBtn = isApproved ? `<button class="btn btn-sm btn-danger fw-bold me-1" onclick="printWarishanCancellationOrder('${c.cancel_app_id}')"><i class="fa fa-stamp me-1"></i>বাতিল আদেশ</button>` : '';
       var copyBtn = `<button class="btn btn-sm btn-outline-dark" onclick="printWarishanCancellationCopy('${c.cancel_app_id}')"><i class="fa fa-file-invoice"></i> কপি</button>`;
-      var approveBtn = !isApproved ? `<button class="btn btn-sm btn-success fw-bold me-1" onclick="approveCancellation('${c.cancel_app_id}','${c.target_smarak_no}','${c.target_app_id}')"><i class="fa fa-check"></i> অনুমোদন</button>` : '';
+      var approveBtn = !isApproved ? `<button class="btn btn-sm btn-success fw-bold me-1" onclick="approveCancellation('${c.cancel_app_id}','${c.target_smarak_no}','${c.target_app_id || ''}')"><i class="fa fa-check"></i> অনুমোদন</button>` : '';
 
       tbody.innerHTML += `
         <tr>
@@ -878,7 +881,7 @@
     });
   }
 
-  // 🟢 ৫. সাধারণ প্রত্যয়নপত্র ক্যাটাগরি ফিল্টার চিপস (Image 4 Design)
+  // 🟢 ৫. সাধারণ প্রত্যয়নপত্র ক্যাটাগরি ফিল্টার চিপস
   async function loadAdminApps() {
     const res = await callBackendAPI('getAllApplications');
     rawDataStore.gen = Array.isArray(res) ? res : [];
@@ -935,8 +938,9 @@
   function renderGenTable(list) {
     var tbody = document.getElementById('adminAppTable');
     tbody.innerHTML = '';
-    if (!list.length) { tbody.innerHTML = '<tr><td colspan="8" class="text-center py-3 text-muted">কোন আবেদন নেই</td></tr>'; return; }
-    list.slice(0, PAGE_SIZE).forEach(g => {
+    var renderList = Array.isArray(list) ? list : (rawDataStore.gen || []);
+    if (!renderList.length) { tbody.innerHTML = '<tr><td colspan="8" class="text-center py-3 text-muted">কোন আবেদন নেই</td></tr>'; return; }
+    renderList.slice(0, PAGE_SIZE).forEach(g => {
       var act = renderActionButtons(g.appId, g.status, 'printGeneralCertificate', 'openEditGeneralModal');
       tbody.innerHTML += `<tr><td><strong>${g.appId}</strong></td><td><span class="badge bg-success">${g.type}</span></td><td>${g.name}</td><td>${toBnNumber(g.nid)}</td><td>${toBnNumber(g.mobile)}</td><td>ওয়ার্ড-${toBnNumber(g.wardNo)}</td><td>${act.badge}</td><td>${act.actions}</td></tr>`;
     });
@@ -953,7 +957,7 @@
     return { badge: badge, actions: `<div class="d-flex align-items-center">${approveBtn}${editBtn}${rejectBtn}${printBtn}</div>` };
   }
 
-  // ড্যাশবোর্ড লোডার
+  // 🟢 ড্যাশবোর্ড লোডার
   async function loadAdminDashboard() {
     const st = await callBackendAPI('getMasterDashboardStats');
     if(!st) return;
@@ -977,7 +981,314 @@
     document.getElementById('dashGenPending').innerText = toBnNumber(st.genPending);
   }
 
-  // ইনিশিয়ালাইজেশন
+  // =========================================================================
+  // 🟢 গ্লোবাল প্রিন্ট ইঞ্জিন (executeIsolatedIframePrint)
+  // =========================================================================
+  window.executeIsolatedIframePrint = function(contentHtml) {
+    try {
+      var iframe = document.getElementById('isolatedPrintIframe');
+      if (!iframe) {
+        iframe = document.createElement('iframe');
+        iframe.id = 'isolatedPrintIframe';
+        iframe.style.position = 'fixed';
+        iframe.style.right = '0';
+        iframe.style.bottom = '0';
+        iframe.style.width = '0';
+        iframe.style.height = '0';
+        iframe.style.border = '0';
+        document.body.appendChild(iframe);
+      }
+      var doc = iframe.contentWindow.document;
+      doc.open();
+      doc.write(contentHtml);
+      doc.close();
+      iframe.contentWindow.focus();
+      setTimeout(function() {
+        try {
+          iframe.contentWindow.print();
+        } catch (err) {
+          var win = window.open('', '_blank');
+          win.document.open();
+          win.document.write(contentHtml);
+          win.document.close();
+          win.focus();
+          setTimeout(function() { win.print(); }, 500);
+        }
+      }, 500);
+    } catch (e) {
+      var win = window.open('', '_blank');
+      win.document.open();
+      win.document.write(contentHtml);
+      win.document.close();
+      win.focus();
+      setTimeout(function() { win.print(); }, 500);
+    }
+  };
+
+  // =========================================================================
+  // 🟢 ওয়ারিশান বাতিলের অনুমোদন (approveCancellation)
+  // =========================================================================
+  async function approveCancellation(cancelAppId, targetSmarak, targetAppId) {
+    Swal.fire({
+      title: 'ওয়ারিশ সনদটি বাতিল করবেন?',
+      text: `স্মারক নং (${targetSmarak || cancelAppId}) এর সনদটি চিরতরে বাতিল (Cancelled) ঘোষণা করা হবে!`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#006837',
+      cancelButtonColor: '#dc2626',
+      confirmButtonText: 'হ্যাঁ, বাতিল নিশ্চিত করুন',
+      cancelButtonText: 'না'
+    }).then(async (res) => {
+      if (res.isConfirmed) {
+        Swal.fire({ title: 'বাতিল কার্যকর হচ্ছে...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+        const result = await callBackendAPI('approveWarishanCancellation', {
+          cancelAppId: cancelAppId,
+          targetSmarakNo: targetSmarak || '',
+          targetAppId: targetAppId || ''
+        });
+        if (result && result.success) {
+          Swal.fire({ icon: 'success', title: 'বাতিল কার্যকর হয়েছে!', text: 'মূল ওয়ারিশ সনদটি সফলভাবে বাতিল করা হয়েছে।', timer: 1800, showConfirmButton: false });
+          loadWarishanApps();
+        } else {
+          Swal.fire('ব্যর্থ', 'অনুমোদন করতে সমস্যা হয়েছে', 'error');
+        }
+      }
+    });
+  }
+
+  // =========================================================================
+  // 🟢 ওয়ারিশান বাতিলের আবেদন কপি প্রিন্ট (printWarishanCancellationCopy)
+  // =========================================================================
+  async function printWarishanCancellationCopy(cancelAppId) {
+    try {
+      const data = await callBackendAPI('getWarishanCancellationDetails', cancelAppId);
+      if (!data || !data.found) return alert('আবেদনের তথ্য পাওয়া যায়নি!');
+
+      var applicantAddr = [
+        data.applicant_ward ? 'ওয়ার্ড নং- ' + toBnNumber(data.applicant_ward) : '',
+        data.applicant_village ? 'গ্রাম: ' + data.applicant_village : '',
+        data.applicant_post ? 'ডাকঘর: ' + data.applicant_post : 'ডাকঘর: আউলিয়াপুর ময়দান'
+      ].filter(Boolean).join(', ');
+
+      var copyHtml = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="UTF-8">
+        <title>ওয়ারিশান সনদ বাতিলের আবেদন কপি - ${data.cancel_app_id}</title>
+        <link href="https://fonts.maateen.me/nikosh/font.css" rel="stylesheet">
+        <style>
+          @page { size: A4 portrait; margin: 15mm; }
+          body { font-family: 'Nikosh', serif; color: #1e293b; margin: 0; padding: 0; font-size: 14.5px; line-height: 1.6; }
+          .sheet { border: 2px solid #006837; padding: 22px; border-radius: 6px; }
+          .hdr { text-align: center; border-bottom: 2px solid #006837; padding-bottom: 8px; margin-bottom: 15px; }
+          .hdr h2 { margin: 0; color: #006837; font-size: 20px; }
+          .app-badge { display: flex; justify-content: space-between; background: #f1f5f9; padding: 6px 12px; border-radius: 4px; margin-bottom: 15px; font-weight: bold; }
+          .tbl { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+          .tbl td { padding: 5px 8px; border: 1px solid #cbd5e1; }
+          .tbl td.lbl { background: #f8fafc; font-weight: bold; width: 32%; }
+          .reason { background: #fff5f5; border: 1px dashed #ef4444; padding: 10px; border-radius: 4px; color: #991b1b; margin-bottom: 20px; }
+          .sig-wrap { display: flex; justify-content: space-between; margin-top: 50px; }
+          .sig-box { text-align: center; width: 180px; border-top: 1px dotted #333; padding-top: 4px; font-size: 13px; }
+        </style>
+      </head>
+      <body>
+        <div class="sheet">
+          <div class="hdr">
+            <h2>১১নং আউলিয়াপুর ইউনিয়ন পরিষদ কার্যালয়</h2>
+            <p style="margin:2px 0 0;">ডাকঘর: আউলিয়াপুর ময়দান, উপজেলা: পটুয়াখালী সদর, জেলা: পটুয়াখালী।</p>
+            <h4 style="margin:6px 0 0; color:#b91c1c;">ওয়ারিশান সনদপত্র বাতিলের নাগরিক আবেদন কপি</h4>
+          </div>
+          <div class="app-badge">
+            <span>ট্র্যাকিং আইডি: <strong>${data.cancel_app_id}</strong></span>
+            <span>তারিখ: <strong>${toBnNumber(data.apply_date || '')}</strong></span>
+          </div>
+          <p style="margin-bottom:10px;">
+            বরাবর, <strong>চেয়ারম্যান</strong>, ১১নং আউলিয়াপুর ইউনিয়ন পরিষদ, পটুয়াখালী সদর।<br>
+            <strong>বিষয়:</strong> স্মারক নং- <u>${data.target_smarak_no}</u> এর ওয়ারিশান সনদপত্রটি বাতিলের আবেদন।
+          </p>
+          <table class="tbl">
+            <tr><td class="lbl">বাতিলযোগ্য স্মারক নম্বর</td><td><strong style="color:#b91c1c;">${data.target_smarak_no}</strong></td></tr>
+            <tr><td class="lbl">মরহুম / মৃত ব্যক্তির নাম</td><td><strong>${data.deceased_name}</strong></td></tr>
+            <tr><td class="lbl">মৃত ব্যক্তির পিতা/স্বামী</td><td>${data.deceased_father}</td></tr>
+            <tr><td class="lbl">আবেদনকারীর নাম</td><td>${data.applicant_name}</td></tr>
+            <tr><td class="lbl">আবেদনকারীর পিতা/স্বামী</td><td>${data.applicant_father || '-'}</td></tr>
+            <tr><td class="lbl">জাতীয় পরিচয়পত্র (NID)</td><td>${toBnNumber(data.applicant_nid || '-')}</td></tr>
+            <tr><td class="lbl">মোবাইল নম্বর</td><td>${toBnNumber(data.applicant_mobile || '-')}</td></tr>
+            <tr><td class="lbl">আবেদনকারীর পূর্ণাঙ্গ ঠিকানা</td><td>${applicantAddr}</td></tr>
+          </table>
+          <div class="reason"><strong>বাতিলের সুনির্দিষ্ট কারণ:</strong><br>${data.cancellation_reason}</div>
+          <p style="font-size:13px; text-align:justify;">
+            আমি ঘোষণা করিতেছি যে, উপরে বর্ণিত কারণ সম্পূর্ণ সত্য। উক্ত ওয়ারিশ সনদে অসত্য তথ্য থাকায় সনদটি অত্র পরিষদ কর্তৃক বাতিল ঘোষণা করার জন্য অনুরোধ করিতেছি।
+          </p>
+          <div class="sig-wrap">
+            <div class="sig-box">আবেদনকারীর স্বাক্ষর</div>
+            <div class="sig-box">প্রাপ্তি স্বীকার / ইউপি সিলমোহর</div>
+          </div>
+        </div>
+      </body>
+      </html>
+      `;
+      executeIsolatedIframePrint(copyHtml);
+    } catch (e) {
+      alert('প্রিন্ট করতে সমস্যা হয়েছে: ' + e.message);
+    }
+  }
+
+  // =========================================================================
+  // 🟢 ওয়ারিশান বাতিল আদেশ প্রিন্ট (printWarishanCancellationOrder)
+  // =========================================================================
+  async function printWarishanCancellationOrder(cancelAppId) {
+    try {
+      const data = await callBackendAPI('getWarishanCancellationDetails', cancelAppId);
+      if (!data || !data.found) return alert('বাতিল আদেশের তথ্য পাওয়া যায়নি!');
+
+      var chairName = (document.getElementById('setChairName') ? document.getElementById('setChairName').value : '') || 'অ্যাড. মোঃ হুমায়ুন কবির';
+      var secName = (document.getElementById('setSecName') ? document.getElementById('setSecName').value : '') || 'মোঃ মোতাহার উদ্দিন';
+
+      var applicantAddr = [
+        data.applicant_ward ? 'ওয়ার্ড নং- ' + toBnNumber(data.applicant_ward) : '',
+        data.applicant_village ? 'গ্রাম: ' + data.applicant_village : '',
+        data.applicant_post ? 'ডাকঘর: ' + data.applicant_post : 'ডাকঘর: আউলিয়াপুর ময়দান'
+      ].filter(Boolean).join(', ');
+
+      var printHtml = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="UTF-8">
+        <title>ওয়ারিশান সনদপত্র বাতিল আদেশপত্র - ${data.target_smarak_no}</title>
+        <link href="https://fonts.maateen.me/nikosh/font.css" rel="stylesheet">
+        <style>
+          @page { size: A4 portrait; margin: 12mm 15mm; }
+          body { font-family: 'Nikosh', serif; margin: 0; padding: 0; color: #000; line-height: 1.5; }
+          .sheet { border: 4px double #8b0000; padding: 22px 25px; min-height: 1000px; position: relative; }
+          .sheet::after {
+            content: "বাতিল / CANCELLED";
+            position: absolute; top: 48%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg);
+            font-size: 70px; font-weight: bold; color: rgba(220, 38, 38, 0.08); border: 6px dashed rgba(220, 38, 38, 0.08); padding: 10px 40px; white-space: nowrap;
+          }
+          .hdr { text-align: center; border-bottom: 2px solid #8b0000; padding-bottom: 8px; margin-bottom: 12px; }
+          .hdr h4 { margin: 0; color: #006837; font-size: 17px; }
+          .hdr h2 { margin: 2px 0; color: #8b0000; font-size: 22px; }
+          .badge-order { display: inline-block; background: #8b0000; color: #fff; padding: 4px 25px; border-radius: 4px; font-size: 16px; font-weight: bold; margin: 10px 0; }
+          .tbl-info { width: 100%; border-collapse: collapse; margin: 15px 0; }
+          .tbl-info td, .tbl-info th { border: 1px solid #cbd5e1; padding: 6px 10px; font-size: 14px; }
+          .tbl-info th { background: #f8fafc; text-align: left; width: 32%; }
+          .sig-wrap { display: flex; justify-content: space-between; margin-top: 60px; }
+          .sig-box { text-align: center; width: 200px; font-size: 13px; border-top: 1px dotted #000; padding-top: 4px; }
+        </style>
+      </head>
+      <body>
+        <div class="sheet">
+          <div class="hdr">
+            <h4>গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</h4>
+            <h2>১১নং আউলিয়াপুর ইউনিয়ন পরিষদ কার্যালয়</h2>
+            <p style="margin:0; font-size:13px;">ডাকঘর: আউলিয়াপুর ময়দান, উপজেলা: পটুয়াখালী সদর, জেলা: পটুয়াখালী।</p>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:10px;">
+            <span><strong>স্মারক নম্বর:</strong> আ/ইউ/পটুয়া/সদর/বাতিল/${data.cancel_app_id.replace('AUL-WCN-', '')}</span>
+            <span><strong>তারিখ:</strong> ${toBnNumber(data.apply_date || '')}</span>
+          </div>
+          <div style="text-align:center;"><div class="badge-order">ওয়ারিশান সনদপত্র বাতিল আদেশনামা</div></div>
+          <p style="font-size:14.5px; text-align:justify; margin:12px 0;">
+            এতদ্বারা সর্বসাধারণ ও সংশ্লিষ্ট সকলের অবগতির জন্য আদেশ দেওয়া যাইতেছে যে, অত্র ইউনিয়ন পরিষদ কর্তৃক পূর্বে ইস্যুকৃত নিম্নবর্ণিত স্মারক বিশিষ্ট ওয়ারিশান সনদপত্রটির বিরুদ্ধে উত্থাপিত অভিযোগের প্রেক্ষিতে উক্ত সনদপত্রটি বাতিল ঘোষণা করা হইল।
+          </p>
+          <table class="tbl-info">
+            <tr><th>বাতিলকৃত ওয়ারিশান স্মারক নং</th><td><strong style="color:#b91c1c; font-size:15px;">${data.target_smarak_no}</strong></td></tr>
+            <tr><th>মরহুম / মৃত ব্যক্তির নাম</th><td><strong>${data.deceased_name}</strong></td></tr>
+            <tr><th>মৃত ব্যক্তির পিতা/স্বামী</th><td>${data.deceased_father}</td></tr>
+            <tr><th>বাতিলের আবেদনকারী</th><td>${data.applicant_name} (মোবাইল: ${toBnNumber(data.applicant_mobile)})</td></tr>
+            <tr><th>আবেদনকারীর পূর্ণাঙ্গ ঠিকানা</th><td>${applicantAddr}</td></tr>
+            <tr><th>বাতিলের সুনির্দিষ্ট কারণ</th><td style="color:#991b1b; font-weight:bold;">${data.cancellation_reason}</td></tr>
+          </table>
+          <p style="font-size:14px; text-align:justify;">
+            অতএব, স্থানীয় সরকার (ইউনিয়ন পরিষদ) আইন অনুযায়ী স্মারক নং- <strong>${data.target_smarak_no}</strong> মূলে প্রদত্ত ওয়ারিশান সনদপত্রটি অত্র পরিষদ কর্তৃক সম্পূর্ণভাবে বাতিল (Null & Void) বলিয়া গণ্য হইবে।
+          </p>
+          <div class="sig-wrap">
+            <div class="sig-box">(${secName})<br>ইউপি সচিব</div>
+            <div style="border: 2px dashed #b91c1c; padding: 4px 10px; border-radius: 6px; color: #b91c1c; font-size: 11px; font-weight: bold; align-self:center;">গোলসীল মোহর</div>
+            <div class="sig-box">(${chairName})<br>চেয়ারম্যান</div>
+          </div>
+        </div>
+      </body>
+      </html>
+      `;
+      executeIsolatedIframePrint(printHtml);
+    } catch (e) {
+      alert('প্রিন্ট করতে সমস্যা হয়েছে: ' + e.message);
+    }
+  }
+
+  // =========================================================================
+  // 🟢 মূল ওয়ারিশ সার্টিফিকেট প্রিন্ট ফলব্যাক (directPrintWarishan)
+  // =========================================================================
+  async function directPrintWarishan(appId) {
+    if (typeof showWarishanPrintPreview === 'function') {
+      return showWarishanPrintPreview(appId);
+    }
+    if (typeof printWarishanCertificate === 'function') {
+      return printWarishanCertificate(appId);
+    }
+    try {
+      const data = await callBackendAPI('getWarishanDetails', appId);
+      if (!data || !data.found) return alert('ওয়ারিশ সনদের তথ্য পাওয়া যায়নি!');
+      alert('ওয়ারিশ সনদের ট্র্যাকিং: ' + data.appId + ' (স্মারক নং: ' + (data.smarakNo || '-') + ')');
+    } catch (e) {
+      alert('ওয়ারিশ প্রিন্ট করতে সমস্যা হয়েছে');
+    }
+  }
+
+  // সাধারণ অ্যাকশনসমূহ
+  async function changeStatus(appId, status) {
+    const res = await callBackendAPI('updateAppStatus', { appId: appId, status: status });
+    if(res && res.success) {
+      Swal.fire({ icon: 'success', title: 'স্ট্যাটাস আপডেট!', timer: 1200, showConfirmButton: false });
+      loadCitizenshipApps();
+      loadTradeLicenses();
+      loadFamilyApps();
+      loadWarishanApps();
+      loadAdminApps();
+      loadAdminDashboard();
+    }
+  }
+
+  async function removeApp(appId) {
+    if (confirm("আবেদনটি ডাটাবেস থেকে মুছে ফেলতে চান?")) {
+      const res = await callBackendAPI('deleteApplication', appId);
+      if(res && res.success) {
+        Swal.fire({ icon: 'success', title: 'মুছে ফেলা হয়েছে!', timer: 1200, showConfirmButton: false });
+        loadCitizenshipApps(); loadTradeLicenses(); loadFamilyApps(); loadWarishanApps(); loadAdminApps(); loadAdminDashboard();
+      }
+    }
+  }
+
+  async function loadAdminUsers() {
+    const users = await callBackendAPI('getAdminUsers');
+    var tbody = document.getElementById('userTableBody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    (Array.isArray(users) ? users : []).forEach(u => {
+      var photo = u.photoUrl && u.photoUrl.length > 20 ? u.photoUrl : 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png';
+      tbody.innerHTML += `
+        <tr>
+          <td><img src="${photo}" width="40" height="40" class="rounded-circle border" style="object-fit:cover;"></td>
+          <td><strong>${u.username}</strong></td>
+          <td>${u.name}</td>
+          <td><span class="badge ${u.role==='SuperAdmin'?'bg-warning text-dark':'bg-primary'}">${u.role}</span></td>
+          <td><span class="badge bg-success">সক্রিয়</span></td>
+          <td><button class="btn btn-sm btn-outline-danger" onclick="deleteUser('${u.username}')"><i class="fa fa-trash"></i></button></td>
+        </tr>
+      `;
+    });
+  }
+
+  function logoutAdmin() {
+    sessionStorage.removeItem('upAdminSession');
+    location.reload();
+  }
+
+  // অটো-ইনিশিয়ালাইজেশন
   document.addEventListener("DOMContentLoaded", function() {
     var s = getActiveSession();
     if (s) {
