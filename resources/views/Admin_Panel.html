@@ -1,6 +1,6 @@
 <!-- ======================================================= -->
 <!-- 11NO AULIAPUR UNION PARISHAD - MASTER ADMIN PANEL       -->
-<!-- File: Admin_Panel.html (Full Multi-Tab & Sub-Tabs View) -->
+<!-- File: Admin_Panel.html (Vibrant Headers & Warishan Tools)-->
 <!-- ======================================================= -->
 
 <!-- Google & Bangla Fonts -->
@@ -11,12 +11,10 @@
 
 <style>
   :root {
-    --adm-bg: #f1f5f9;
+    --adm-bg: #f8fafc;
     --adm-surface: #ffffff;
-    --adm-sidebar: #0b1320;
+    --adm-sidebar: #09131f;
     --adm-primary: #006837;
-    --adm-text-dark: #0f172a;
-    --adm-text-muted: #64748b;
     --adm-border: #e2e8f0;
     --adm-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.06);
   }
@@ -24,10 +22,10 @@
   body {
     background-color: var(--adm-bg);
     font-family: 'Hind Siliguri', 'Kalpurush', sans-serif;
-    color: var(--adm-text-dark);
+    color: #0f172a;
   }
 
-  /* 🟢 প্রিমিয়াম সাইডবার স্টাইল */
+  /* 🟢 সাইডবার স্টাইল */
   .admin-sidebar {
     background: var(--adm-sidebar);
     min-height: calc(100vh - 20px);
@@ -80,15 +78,11 @@
     font-weight: 700;
     box-shadow: 0 4px 12px rgba(0, 104, 55, 0.35);
   }
-  .admin-menu-link i {
-    width: 22px;
-    font-size: 14px;
-  }
+  .admin-menu-link i { width: 22px; font-size: 14px; }
 
-  /* 🟢 টপ হেডার বার ও লাইভ সার্চ */
+  /* 🟢 রঙিন হেডার বার */
   .admin-header-bar {
-    background: #ffffff;
-    border-radius: 16px;
+    border-radius: 14px;
     padding: 12px 18px;
     margin-bottom: 15px;
     display: flex;
@@ -96,17 +90,19 @@
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 10px;
-    box-shadow: var(--adm-shadow);
-    border: 1px solid var(--adm-border);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    color: #ffffff;
   }
-  .admin-header-title {
-    font-size: 17px;
-    font-weight: 800;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
+  .bg-header-dash  { background: linear-gradient(135deg, #00582f 0%, #0a7a44 100%); }
+  .bg-header-cit   { background: linear-gradient(135deg, #be123c 0%, #9f1239 100%); }
+  .bg-header-trade { background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); }
+  .bg-header-fam   { background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%); }
+  .bg-header-war   { background: linear-gradient(135deg, #d97706 0%, #b45309 100%); }
+  .bg-header-gen   { background: linear-gradient(135deg, #059669 0%, #047857 100%); }
+  .bg-header-tax   { background: linear-gradient(135deg, #0f766e 0%, #115e59 100%); }
+  
+  .admin-header-title { font-size: 17px; font-weight: 800; margin: 0; display: flex; align-items: center; gap: 8px; }
+
   .admin-search-wrap {
     position: relative;
     min-width: 260px;
@@ -114,67 +110,175 @@
     flex-grow: 1;
   }
   .admin-search-wrap input {
-    background: #f8fafc;
-    border: 1.5px solid #cbd5e1;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1.5px solid rgba(255, 255, 255, 0.8);
     border-radius: 50px;
     padding: 6px 14px 6px 36px;
     font-size: 13px;
     width: 100%;
     outline: none;
-    transition: all 0.2s;
+    color: #1e293b;
+    font-weight: 600;
   }
   .admin-search-wrap input:focus {
-    border-color: #006837;
     background: #ffffff;
-    box-shadow: 0 0 0 3px rgba(0, 104, 55, 0.12);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.4);
   }
   .admin-search-wrap i {
     position: absolute;
     left: 13px;
     top: 50%;
     transform: translateY(-50%);
-    color: #94a3b8;
+    color: #64748b;
     font-size: 13px;
   }
 
-  /* 🟢 সাব-ট্যাব বাটন ডিজাইন */
+  /* 🟢 ৩ নম্বর ছবির মতো সাব-ট্যাব ও স্পষ্ট অ্যাক্টিভ কালার */
   .sub-tab-btn {
-    border: 1.5px solid #cbd5e1;
+    border: 2px solid #e2e8f0;
     background: #ffffff;
     color: #334155;
-    padding: 6px 16px;
-    font-size: 13px;
+    padding: 8px 20px;
+    font-size: 13.5px;
     font-weight: 700;
     border-radius: 50px;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
   }
   .sub-tab-btn:hover {
-    border-color: #94a3b8;
+    border-color: #cbd5e1;
     background: #f8fafc;
   }
+  /* একটিভ ট্যাব স্টাইল */
   .sub-tab-btn.active {
-    background: #006837;
-    color: #ffffff;
-    border-color: #006837;
-    box-shadow: 0 4px 10px rgba(0, 104, 55, 0.25);
+    background: linear-gradient(135deg, #006837 0%, #004d28 100%) !important;
+    color: #ffffff !important;
+    border-color: #006837 !important;
+    box-shadow: 0 4px 14px rgba(0, 104, 55, 0.35);
   }
-  .sub-tab-btn .badge {
-    font-size: 11px;
-    border-radius: 50px;
-    padding: 2px 7px;
+  .sub-tab-btn.active .badge {
+    background: #ffffff !important;
+    color: #006837 !important;
+    font-weight: 800;
+  }
+  /* বাতিল সাব-ট্যাবের একটিভ লাল কালার */
+  .sub-tab-btn.active.tab-cancel-btn {
+    background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%) !important;
+    border-color: #dc2626 !important;
+    box-shadow: 0 4px 14px rgba(220, 38, 38, 0.35);
+  }
+  .sub-tab-btn.active.tab-cancel-btn .badge {
+    background: #ffffff !important;
+    color: #dc2626 !important;
   }
 
-  /* 🟢 সাধারণ প্রত্যয়নপত্রের ফিল্টার চিপস (৪ নম্বর ছবির ডিজাইন) */
-  .gen-category-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 14px;
+  /* 🟢 বিভিন্ন কালারের টেবিল হেডার (thead) */
+  .thead-cit th    { background: linear-gradient(135deg, #be123c, #9f1239) !important; color: #fff !important; }
+  .thead-trade th  { background: linear-gradient(135deg, #0284c7, #0369a1) !important; color: #fff !important; }
+  .thead-fam th    { background: linear-gradient(135deg, #4f46e5, #3730a3) !important; color: #fff !important; }
+  .thead-war th    { background: linear-gradient(135deg, #d97706, #b45309) !important; color: #fff !important; }
+  .thead-cancel th { background: linear-gradient(135deg, #991b1b, #7f1d1d) !important; color: #fff !important; }
+  .thead-gen th    { background: linear-gradient(135deg, #059669, #047857) !important; color: #fff !important; }
+  .thead-tax th    { background: linear-gradient(135deg, #0f766e, #115e59) !important; color: #fff !important; }
+
+  /* 🟢 ৩ নম্বর ছবির অ্যাকশন বাটনসমূহ */
+  .btn-act-square {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    cursor: pointer;
+    color: #ffffff;
+    margin-right: 3px;
+    transition: transform 0.15s;
   }
+  .btn-act-square:hover { transform: scale(1.08); }
+  .btn-act-square.btn-approve { background: #00a86b; }
+  .btn-act-square.btn-edit { background: #f59e0b; }
+  .btn-act-square.btn-reject { background: #ef4444; }
+
+  .btn-act-print-dark {
+    height: 32px;
+    padding: 0 10px;
+    border-radius: 6px;
+    border: none;
+    background: #1e293b;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 12.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .btn-act-print-dark:hover { background: #0f172a; }
+
+  .btn-act-print-red {
+    height: 32px;
+    padding: 0 10px;
+    border-radius: 6px;
+    border: none;
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 12.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  /* 🟢 ১ ও ২ নম্বর ছবির মতো ওয়ারিশ এডিটর বক্স ও টেবিল */
+  .war-tree-group-box {
+    border: 2px solid #006837;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 18px;
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 104, 55, 0.05);
+  }
+  .war-table input {
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 5px 8px;
+    font-size: 13px;
+    width: 100%;
+  }
+  .war-table input:focus { border-color: #006837; outline: none; }
+  .war-row-tools {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+  }
+  .tool-btn {
+    width: 26px;
+    height: 26px;
+    border-radius: 5px;
+    border: 1px solid #cbd5e1;
+    background: #f8fafc;
+    color: #475569;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .tool-btn:hover { background: #e2e8f0; color: #000; }
+  .tool-btn.btn-del { border-color: #fca5a5; color: #dc2626; background: #fff5f5; }
+  .tool-btn.btn-del:hover { background: #fee2e2; }
+
+  /* ক্যাটাগরি ফিল্টার চিপস */
   .gen-chip-btn {
     background: #ffffff;
     border: 1px solid #cbd5e1;
@@ -188,10 +292,6 @@
     cursor: pointer;
     transition: all 0.2s;
   }
-  .gen-chip-btn:hover {
-    background: #f1f5f9;
-    border-color: #006837;
-  }
   .gen-chip-btn.active {
     background: #006837;
     color: #ffffff;
@@ -202,19 +302,7 @@
     color: #006837 !important;
   }
 
-  /* 🟢 স্ট্যাটাস ও বাটন */
-  .status-badge-approved { background: #dcfce7 !important; color: #15803d !important; border: 1px solid #86efac; padding: 4px 8px; border-radius: 50px; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 3px; }
-  .status-badge-pending { background: #fef9c3 !important; color: #854d0e !important; border: 1px solid #fde047; padding: 4px 8px; border-radius: 50px; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 3px; }
-  .status-badge-rejected { background: #fee2e2 !important; color: #991b1b !important; border: 1px solid #fca5a5; padding: 4px 8px; border-radius: 50px; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 3px; }
-  .status-badge-cancelled { background: #000000 !important; color: #f87171 !important; border: 1px solid #dc2626; padding: 4px 8px; border-radius: 50px; font-size: 11px; font-weight: 800; display: inline-flex; align-items: center; gap: 3px; }
-
-  .btn-act-icon { width: 30px; height: 30px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; border: none; font-size: 12px; cursor: pointer; margin-right: 2px; }
-  .btn-act-icon.approve { background: #10b981; color: #fff; }
-  .btn-act-icon.edit { background: #f59e0b; color: #fff; }
-  .btn-act-icon.reject { background: #ef4444; color: #fff; }
-  .btn-act-icon.delete { background: #64748b; color: #fff; }
-
-  /* 🟢 মোবাইল রেসপন্সিভ ড্রয়ার */
+  /* মোবাইল রেসপন্সিভ ড্রয়ার */
   .admin-mobile-toggle { display: none; }
   @media (max-width: 991.98px) {
     .admin-mobile-toggle {
@@ -250,7 +338,6 @@
     }
     .admin-backdrop.show { display: block; }
     .admin-search-wrap { max-width: 100%; width: 100%; order: 3; }
-    .admin-header-bar { gap: 8px; }
   }
 </style>
 
@@ -312,8 +399,8 @@
 
       <!-- ১. ড্যাশবোর্ড -->
       <div id="dashTab" class="admin-tab">
-        <div class="admin-header-bar bg-success text-white">
-          <div class="admin-header-title text-white"><i class="fa fa-gauge-high"></i> ড্যাশবোর্ড ওভারভিউ</div>
+        <div class="admin-header-bar bg-header-dash">
+          <div class="admin-header-title"><i class="fa fa-gauge-high"></i> ড্যাশবোর্ড ওভারভিউ</div>
           <button class="btn btn-light btn-sm fw-bold text-success rounded-pill px-3" onclick="loadAdminDashboard()"><i class="fa fa-sync me-1"></i> রিফ্রেশ</button>
         </div>
         <div class="row g-2 g-md-3">
@@ -326,97 +413,97 @@
         </div>
       </div>
 
-      <!-- 🟢 ২. নাগরিকত্ব সনদ (বাংলা ও ইংরেজি দুটি সাব-ট্যাব) -->
+      <!-- 🟢 ২. নাগরিকত্ব সনদ (রঙিন হেডার ও সাব-ট্যাব) -->
       <div id="citTab" class="admin-tab d-none">
-        <div class="admin-header-bar">
-          <div class="admin-header-title text-danger"><i class="fa fa-id-card"></i> নাগরিকত্ব সনদ আবেদন তালিকা</div>
+        <div class="admin-header-bar bg-header-cit">
+          <div class="admin-header-title"><i class="fa fa-id-card"></i> নাগরিকত্ব সনদ আবেদন তালিকা</div>
           <div class="admin-search-wrap">
             <i class="fa fa-search"></i>
             <input type="text" id="citSearchInput" placeholder="নাম, মোবাইল অথবা NID দিয়ে খুঁজুন..." oninput="filterCitTable()">
           </div>
-          <button class="btn btn-dark btn-sm fw-bold rounded-pill px-3" onclick="loadCitizenshipApps()"><i class="fa fa-sync me-1"></i> রিফ্রেশ</button>
+          <button class="btn btn-light btn-sm fw-bold text-danger rounded-pill px-3" onclick="loadCitizenshipApps()"><i class="fa fa-sync me-1"></i> রিফ্রেশ</button>
         </div>
 
         <div class="d-flex gap-2 mb-3">
           <button type="button" class="sub-tab-btn active" id="citBnTabBtn" onclick="switchCitSubTab('bn')">
-            <i class="fa-solid fa-language text-success"></i> বাংলা সংস্করণ (<span id="citBnCountBadge">০</span>)
+            <i class="fa-solid fa-language text-success"></i> বাংলা সংস্করণ <span class="badge bg-secondary" id="citBnCountBadge">০</span>
           </button>
           <button type="button" class="sub-tab-btn" id="citEnTabBtn" onclick="switchCitSubTab('en')">
-            <i class="fa-solid fa-globe text-primary"></i> ইংরেজি সংস্করণ (<span id="citEnCountBadge">০</span>)
+            <i class="fa-solid fa-globe text-primary"></i> ইংরেজি সংস্করণ <span class="badge bg-secondary" id="citEnCountBadge">০</span>
           </button>
         </div>
 
         <div class="table-responsive bg-white p-3 shadow-sm rounded-3 border">
           <table class="table table-hover align-middle">
-            <thead class="table-dark"><tr><th>আবেদন নং</th><th>সনদ নং</th><th>নাম</th><th>পিতার নাম</th><th>মোবাইল</th><th>ভার্সন</th><th>স্ট্যাটাস</th><th>অ্যাকশন</th></tr></thead>
+            <thead class="thead-cit"><tr><th>আবেদন নং</th><th>সনদ নং</th><th>নাম</th><th>পিতার নাম</th><th>মোবাইল</th><th>ভার্সন</th><th>স্ট্যাটাস</th><th>অ্যাকশন</th></tr></thead>
             <tbody id="citAppTable"></tbody>
           </table>
           <div id="citPagination" class="custom-pagination-wrap"></div>
         </div>
       </div>
 
-      <!-- 🟢 ৩. ট্রেড লাইসেন্স (নতুন ট্রেড লাইসেন্স ও নবায়ন দুটি সাব-ট্যাব) -->
+      <!-- 🟢 ৩. ট্রেড লাইসেন্স (রঙিন হেডার ও সাব-ট্যাব) -->
       <div id="tradeTab" class="admin-tab d-none">
-        <div class="admin-header-bar">
-          <div class="admin-header-title text-info"><i class="fa fa-briefcase"></i> ট্রেড লাইসেন্স তালিকা ও ব্যবস্থাপনা</div>
+        <div class="admin-header-bar bg-header-trade">
+          <div class="admin-header-title"><i class="fa fa-briefcase"></i> ট্রেড লাইসেন্স তালিকা ও ব্যবস্থাপনা</div>
           <div class="admin-search-wrap">
             <i class="fa fa-search"></i>
             <input type="text" id="tradeSearchInput" placeholder="প্রতিষ্ঠান, মালিকের নাম বা মোবাইল দিয়ে খুঁজুন..." oninput="filterTradeTable()">
           </div>
-          <button class="btn btn-dark btn-sm fw-bold rounded-pill px-3" onclick="loadTradeLicenses()"><i class="fa fa-sync me-1"></i> রিফ্রেশ</button>
+          <button class="btn btn-light btn-sm fw-bold text-primary rounded-pill px-3" onclick="loadTradeLicenses()"><i class="fa fa-sync me-1"></i> রিফ্রেশ</button>
         </div>
 
         <div class="d-flex gap-2 mb-3">
           <button type="button" class="sub-tab-btn active" id="tradeNewTabBtn" onclick="switchTradeSubTab('new')">
-            <i class="fa-solid fa-circle-plus text-success"></i> নতুন ট্রেড লাইসেন্স (<span id="tradeNewCountBadge">০</span>)
+            <i class="fa-solid fa-circle-plus text-success"></i> নতুন ট্রেড লাইসেন্স <span class="badge bg-secondary" id="tradeNewCountBadge">০</span>
           </button>
           <button type="button" class="sub-tab-btn" id="tradeRenewTabBtn" onclick="switchTradeSubTab('renew')">
-            <i class="fa-solid fa-rotate text-warning"></i> নবায়ন ও নবায়নকৃত (<span id="tradeRenewCountBadge">০</span>)
+            <i class="fa-solid fa-rotate text-warning"></i> নবায়ন ও নবায়নকৃত <span class="badge bg-secondary" id="tradeRenewCountBadge">০</span>
           </button>
         </div>
 
         <div class="table-responsive bg-white p-3 shadow-sm rounded-3 border">
           <table class="table table-hover align-middle">
-            <thead class="table-dark"><tr><th>আবেদন নং</th><th>লাইসেন্স নং</th><th>প্রতিষ্ঠানের নাম</th><th>মালিকের নাম</th><th>মোবাইল</th><th>ফি</th><th>স্ট্যাটাস</th><th>অ্যাকশন</th></tr></thead>
+            <thead class="thead-trade"><tr><th>আবেদন নং</th><th>লাইসেন্স নং</th><th>প্রতিষ্ঠানের নাম</th><th>মালিকের নাম</th><th>মোবাইল</th><th>ফি</th><th>স্ট্যাটাস</th><th>অ্যাকশন</th></tr></thead>
             <tbody id="tradeTableBody"></tbody>
           </table>
           <div id="tradePagination" class="custom-pagination-wrap"></div>
         </div>
       </div>
 
-      <!-- 🟢 ৪. পারিবারিক সনদ (পারিবারিক ও উত্তরাধিকারী দুটি সাব-ট্যাব) -->
+      <!-- 🟢 ৪. পারিবারিক সনদ (রঙিন হেডার ও সাব-ট্যাব) -->
       <div id="famTab" class="admin-tab d-none">
-        <div class="admin-header-bar">
-          <div class="admin-header-title text-primary"><i class="fa fa-people-roof"></i> পারিবারিক ও উত্তরাধিকারী সনদ ব্যবস্থাপনা</div>
+        <div class="admin-header-bar bg-header-fam">
+          <div class="admin-header-title"><i class="fa fa-people-roof"></i> পারিবারিক ও উত্তরাধিকারী সনদ ব্যবস্থাপনা</div>
           <div class="admin-search-wrap">
             <i class="fa fa-search"></i>
             <input type="text" id="famSearchInput" placeholder="নাম, মৃত ব্যক্তি বা মোবাইল দিয়ে খুঁজুন..." oninput="filterFamTable()">
           </div>
-          <button class="btn btn-dark btn-sm fw-bold rounded-pill px-3" onclick="loadFamilyApps()"><i class="fa fa-sync me-1"></i> রিফ্রেশ</button>
+          <button class="btn btn-light btn-sm fw-bold text-primary rounded-pill px-3" onclick="loadFamilyApps()"><i class="fa fa-sync me-1"></i> রিফ্রেশ</button>
         </div>
 
         <div class="d-flex gap-2 mb-3">
           <button type="button" class="sub-tab-btn active" id="famNormalTabBtn" onclick="switchFamSubTab('পারিবারিক সনদ')">
-            <i class="fa-solid fa-house-user text-primary"></i> পারিবারিক সনদ (<span id="famNormalCountBadge">০</span>)
+            <i class="fa-solid fa-house-user text-primary"></i> পারিবারিক সনদ <span class="badge bg-secondary" id="famNormalCountBadge">০</span>
           </button>
           <button type="button" class="sub-tab-btn" id="famSuccessionTabBtn" onclick="switchFamSubTab('উত্তরাধিকারী সনদ')">
-            <i class="fa-solid fa-users-between-lines text-warning"></i> উত্তরাধিকারী সনদ (<span id="famSuccessionCountBadge">০</span>)
+            <i class="fa-solid fa-users-between-lines text-warning"></i> উত্তরাধিকারী সনদ <span class="badge bg-secondary" id="famSuccessionCountBadge">০</span>
           </button>
         </div>
 
         <div class="table-responsive bg-white p-3 shadow-sm rounded-3 border">
           <table class="table table-hover align-middle">
-            <thead class="table-dark"><tr><th>আবেদন নং</th><th>ধরন</th><th>আবেদনকারীর নাম</th><th>মৃত ব্যক্তি / পিতা</th><th>মোবাইল</th><th>ওয়ার্ড</th><th>স্ট্যাটাস</th><th>অ্যাকশন</th></tr></thead>
+            <thead class="thead-fam"><tr><th>আবেদন নং</th><th>ধরন</th><th>আবেদনকারীর নাম</th><th>মৃত ব্যক্তি / পিতা</th><th>মোবাইল</th><th>ওয়ার্ড</th><th>স্ট্যাটাস</th><th>অ্যাকশন</th></tr></thead>
             <tbody id="famAppTable"></tbody>
           </table>
           <div id="famPagination" class="custom-pagination-wrap"></div>
         </div>
       </div>
 
-      <!-- 🟢 ৫. ওয়ারিশান সনদ ও বাতিলের আবেদন (দুটি সাব-ট্যাব) -->
+      <!-- 🟢 ৫. ওয়ারিশান সনদ ও বাতিলের আবেদন (৩ নম্বর ছবির মতো সাব-ট্যাব ও হেডার) -->
       <div id="warTab" class="admin-tab d-none">
-        <div class="admin-header-bar">
-          <div class="admin-header-title text-warning"><i class="fa fa-sitemap"></i> ওয়ারিশান সনদ ও বাতিল ব্যবস্থাপনা</div>
+        <div class="admin-header-bar bg-header-war">
+          <div class="admin-header-title"><i class="fa fa-sitemap"></i> ওয়ারিশান সনদ ও বাতিল ব্যবস্থাপনা</div>
           <div class="admin-search-wrap">
             <i class="fa fa-search"></i>
             <input type="text" id="warSearchInput" placeholder="স্মারক নং, নাম অথবা ট্র্যাকিং আইডি লিখুন..." oninput="filterWarTable()">
@@ -424,12 +511,13 @@
           <button class="btn btn-dark btn-sm fw-bold rounded-pill px-3" onclick="loadWarishanApps()"><i class="fa fa-sync me-1"></i> রিফ্রেশ</button>
         </div>
 
+        <!-- সাব-ট্যাব বাটন (৩ নম্বর ছবি) -->
         <div class="d-flex gap-2 mb-3">
           <button type="button" class="sub-tab-btn active" id="warRegularTabBtn" onclick="switchWarAdminView('regular')">
-            <i class="fa-solid fa-sitemap text-warning"></i> ওয়ারিশ আবেদনের তালিকা (<span id="warRegularCountBadge">০</span>)
+            <i class="fa-solid fa-sitemap text-warning"></i> ওয়ারিশ আবেদনের তালিকা ( <span id="warRegularCountBadge">০</span> )
           </button>
-          <button type="button" class="sub-tab-btn" id="warCancelTabBtn" onclick="switchWarAdminView('cancel')">
-            <i class="fa-solid fa-ban text-danger"></i> বাতিলের আবেদনসমূহ (<span id="warCancelCountBadge">০</span>)
+          <button type="button" class="sub-tab-btn tab-cancel-btn" id="warCancelTabBtn" onclick="switchWarAdminView('cancel')">
+            <i class="fa-solid fa-ban text-danger"></i> বাতিলের আবেদনসমূহ ( <span id="warCancelCountBadge">০</span> )
           </button>
         </div>
 
@@ -437,49 +525,47 @@
         <div id="warRegularView">
           <div class="table-responsive bg-white p-3 shadow-sm rounded-3 border">
             <table class="table table-hover align-middle">
-              <thead class="table-dark"><tr><th>আবেদন নং</th><th>স্মারক নং</th><th>আবেদনকারী</th><th>মৃত ব্যক্তি</th><th>পিতার নাম</th><th>মোবাইল</th><th>স্ট্যাটাস</th><th>অ্যাকশন</th></tr></thead>
+              <thead class="thead-war"><tr><th>আবেদন নং</th><th>স্মারক নং</th><th>আবেদনকারী</th><th>মৃত ব্যক্তি</th><th>পিতার নাম</th><th>মোবাইল</th><th>স্ট্যাটাস</th><th>অ্যাকশন</th></tr></thead>
               <tbody id="warAppTable"></tbody>
             </table>
             <div id="warPagination" class="custom-pagination-wrap"></div>
           </div>
         </div>
 
-        <!-- খ. বাতিলের আবেদন তালিকা -->
+        <!-- খ. বাতিলের আবেদন তালিকা (৩ নম্বর ছবির মতো ৪টি অ্যাকশন বাটন) -->
         <div id="warCancelView" class="d-none">
           <div class="table-responsive bg-white p-3 shadow-sm rounded-3 border border-danger">
             <table class="table table-hover align-middle">
-              <thead class="table-danger text-dark"><tr><th>বাতিল ট্র্যাকিং</th><th>টার্গেট স্মারক নং</th><th>মৃত ব্যক্তি ও পিতা</th><th>আবেদনকারী ও ঠিকানা</th><th>বাতিলের কারণ</th><th>স্ট্যাটাস</th><th width="200">অ্যাকশন</th></tr></thead>
+              <thead class="thead-cancel"><tr><th>বাতিল ট্র্যাকিং</th><th>টার্গেট স্মারক নং</th><th>মৃত ব্যক্তি ও পিতা</th><th>আবেদনকারী ও ঠিকানা</th><th>বাতিলের কারণ</th><th>স্ট্যাটাস</th><th class="text-end" width="220">অ্যাকশন</th></tr></thead>
               <tbody id="warCancelTableBody"></tbody>
             </table>
           </div>
         </div>
       </div>
 
-      <!-- 🟢 ৬. সাধারণ প্রত্যয়নপত্র (ক্যাটাগরি ব্যাজ গ্রিড সহ ৪ নম্বর ছবির মতো) -->
+      <!-- 🟢 ৬. সাধারণ প্রত্যয়নপত্র (রঙিন হেডার ও ফিল্টার চিপস) -->
       <div id="appsTab" class="admin-tab d-none">
-        <div class="admin-header-bar">
-          <div class="admin-header-title text-success"><i class="fa fa-file-invoice"></i> সাধারণ প্রত্যয়নপত্র তালিকা ও অনুমোদন</div>
+        <div class="admin-header-bar bg-header-gen">
+          <div class="admin-header-title"><i class="fa fa-file-invoice"></i> সাধারণ প্রত্যয়নপত্র তালিকা ও অনুমোদন</div>
           <div class="admin-search-wrap">
             <i class="fa fa-search"></i>
             <input type="text" id="genSearchInput" placeholder="নাম, মোবাইল বা এনআইডি দিয়ে খুঁজুন..." oninput="filterGenTable()">
           </div>
-          <button class="btn btn-dark btn-sm fw-bold rounded-pill px-3" onclick="loadAdminApps()"><i class="fa fa-sync me-1"></i> রিফ্রেশ</button>
+          <button class="btn btn-light btn-sm fw-bold text-success rounded-pill px-3" onclick="loadAdminApps()"><i class="fa fa-sync me-1"></i> রিফ্রেশ</button>
         </div>
 
-        <!-- ক্যাটাগরি ফিল্টার চিপস (Image 4 Design) -->
+        <!-- ফিল্টার চিপস -->
         <div class="bg-white p-3 rounded-3 shadow-sm border mb-3">
           <div class="d-flex justify-content-between align-items-center mb-2">
-            <strong class="text-dark small"><i class="fa fa-filter text-success me-1"></i> ক্যাটাগরি অনুযায়ী ফিল্টার করুন (ক্লিক করুন):</strong>
+            <strong class="text-dark small"><i class="fa fa-filter text-success me-1"></i> ক্যাটাগরি অনুযায়ী ফিল্টার করুন:</strong>
             <span class="badge bg-success-subtle text-success border border-success px-3 py-1 fw-bold" id="genTotalCountBadge">মোট আবেদন: ০ টি</span>
           </div>
-          <div class="gen-category-grid" id="genCategoryChipsContainer">
-            <!-- ডায়নামিকভাবে জাভাস্ক্রিপ্ট থেকে চিপস ও কাউন্ট রেন্ডার হবে -->
-          </div>
+          <div class="d-flex flex-wrap gap-2" id="genCategoryChipsContainer"></div>
         </div>
 
         <div class="table-responsive bg-white p-3 shadow-sm rounded-3 border">
           <table class="table table-hover align-middle">
-            <thead class="table-dark"><tr><th>আবেদন নং</th><th>প্রত্যয়নের নাম</th><th>আবেদনকারী</th><th>NID</th><th>মোবাইল</th><th>ওয়ার্ড</th><th>স্ট্যাটাস</th><th>অ্যাকশন</th></tr></thead>
+            <thead class="thead-gen"><tr><th>আবেদন নং</th><th>প্রত্যয়নের নাম</th><th>আবেদনকারী</th><th>NID</th><th>মোবাইল</th><th>ওয়ার্ড</th><th>স্ট্যাটাস</th><th>অ্যাকশন</th></tr></thead>
             <tbody id="adminAppTable"></tbody>
           </table>
           <div id="genPagination" class="custom-pagination-wrap"></div>
@@ -488,13 +574,13 @@
 
       <!-- ৭. কর আদায় ও সদস্য -->
       <div id="taxTab" class="admin-tab d-none">
-        <div class="admin-header-bar">
-          <div class="admin-header-title text-success"><i class="fa fa-hand-holding-dollar"></i> কর আদায় ও করদাতা সদস্য তালিকা</div>
-          <button class="btn btn-dark btn-sm fw-bold rounded-pill px-3" onclick="loadTaxPayers()"><i class="fa fa-sync me-1"></i> রিফ্রেশ</button>
+        <div class="admin-header-bar bg-header-tax">
+          <div class="admin-header-title"><i class="fa fa-hand-holding-dollar"></i> কর আদায় ও করদাতা সদস্য তালিকা</div>
+          <button class="btn btn-light btn-sm fw-bold text-dark rounded-pill px-3" onclick="loadTaxPayers()"><i class="fa fa-sync me-1"></i> রিফ্রেশ</button>
         </div>
         <div class="table-responsive bg-white p-3 shadow-sm rounded-3 border">
           <table class="table table-striped align-middle">
-            <thead class="table-dark"><tr><th>হোল্ডিং নং</th><th>নাম</th><th>পিতার নাম</th><th>ওয়ার্ড</th><th>গ্রাম</th><th>বাড়ির ধরন</th><th>বার্ষিক কর</th></tr></thead>
+            <thead class="thead-tax"><tr><th>হোল্ডিং নং</th><th>নাম</th><th>পিতার নাম</th><th>ওয়ার্ড</th><th>গ্রাম</th><th>বাড়ির ধরন</th><th>বার্ষিক কর</th></tr></thead>
             <tbody id="taxTableBody"></tbody>
           </table>
           <div id="taxPagination" class="custom-pagination-wrap"></div>
@@ -503,67 +589,42 @@
 
       <!-- ৮. আয়-ব্যয়ের হিসাব -->
       <div id="accountsTab" class="admin-tab d-none">
-        <div class="admin-header-bar">
-          <div class="admin-header-title text-warning"><i class="fa fa-scale-balanced"></i> ইউনিয়ন পরিষদের আয়-ব্যয়ের হিসাব বিবরণী</div>
-          <button class="btn btn-success btn-sm fw-bold rounded-pill px-3"><i class="fa fa-plus me-1"></i> নতুন ভাউচার</button>
+        <div class="admin-header-bar bg-header-war">
+          <div class="admin-header-title"><i class="fa fa-scale-balanced"></i> ইউনিয়ন পরিষদের আয়-ব্যয়ের হিসাব বিবরণী</div>
         </div>
-        <div class="card p-4 text-center bg-white shadow-sm border rounded-3">
-          <i class="fa fa-calculator fa-3x text-warning mb-2"></i>
-          <h5 class="fw-bold">দৈনিক ও বাৎসরিক আয়-ব্যয় ব্যবস্থাপনা</h5>
-          <p class="text-muted">সকল খাতের আয় ও ব্যয় লিপিবদ্ধ করার স্বয়ংক্রিয় মডিউল।</p>
-        </div>
+        <div class="card p-4 text-center bg-white shadow-sm border rounded-3"><i class="fa fa-calculator fa-3x text-warning mb-2"></i><h5 class="fw-bold">দৈনিক ও বাৎসরিক আয়-ব্যয় ব্যবস্থাপনা</h5></div>
       </div>
 
       <!-- ৯. ব্যাংক হিসাব ও ক্যাশ -->
       <div id="bankTab" class="admin-tab d-none">
-        <div class="admin-header-bar">
-          <div class="admin-header-title text-info"><i class="fa fa-building-columns"></i> ব্যাংক হিসাব ও ক্যাশ ব্যালেন্স</div>
-          <button class="btn btn-info btn-sm fw-bold rounded-pill px-3 text-dark"><i class="fa fa-sync me-1"></i> ব্যালেন্স রিফ্রেশ</button>
+        <div class="admin-header-bar bg-header-trade">
+          <div class="admin-header-title"><i class="fa fa-building-columns"></i> ব্যাংক হিসাব ও ক্যাশ ব্যালেন্স</div>
         </div>
-        <div class="card p-4 text-center bg-white shadow-sm border rounded-3">
-          <i class="fa fa-piggy-bank fa-3x text-info mb-2"></i>
-          <h5 class="fw-bold">সরকারি ও উন্নয়ন তহবিল ব্যাংক অ্যাকাউন্ট</h5>
-          <p class="text-muted">ব্যাংক ট্রানজেকশন ও ক্যাশ-বুকের সমন্বিত রেকর্ড।</p>
-        </div>
+        <div class="card p-4 text-center bg-white shadow-sm border rounded-3"><i class="fa fa-piggy-bank fa-3x text-info mb-2"></i><h5 class="fw-bold">সরকারি ও উন্নয়ন তহবিল ব্যাংক অ্যাকাউন্ট</h5></div>
       </div>
 
       <!-- ১০. উপকারভোগীর তালিকা -->
       <div id="beneficiaryTab" class="admin-tab d-none">
-        <div class="admin-header-bar">
-          <div class="admin-header-title text-primary"><i class="fa fa-id-card-clip"></i> সামাজিক নিরাপত্তা ও উপকারভোগীর তালিকা</div>
-          <button class="btn btn-primary btn-sm fw-bold rounded-pill px-3"><i class="fa fa-download me-1"></i> তালিকা এক্সপোর্ট</button>
+        <div class="admin-header-bar bg-header-fam">
+          <div class="admin-header-title"><i class="fa fa-id-card-clip"></i> সামাজিক নিরাপত্তা ও উপকারভোগীর তালিকা</div>
         </div>
-        <div class="card p-4 text-center bg-white shadow-sm border rounded-3">
-          <i class="fa fa-users-line fa-3x text-primary mb-2"></i>
-          <h5 class="fw-bold">ভিজিডি, ভিজিএফ, বয়স্ক ও বিধবা ভাতা ডাটাবেস</h5>
-          <p class="text-muted">ওয়ার্ড ভিত্তিক সুবিধাভোগীদের তথ্য অনুসন্ধান ও তালিকা প্রিন্ট।</p>
-        </div>
+        <div class="card p-4 text-center bg-white shadow-sm border rounded-3"><i class="fa fa-users-line fa-3x text-primary mb-2"></i><h5 class="fw-bold">ভিজিডি, ভিজিএফ, বয়স্ক ও বিধবা ভাতা ডাটাবেস</h5></div>
       </div>
 
       <!-- ১১. উন্নয়নমূলক প্রকল্প -->
       <div id="projectTab" class="admin-tab d-none">
-        <div class="admin-header-bar">
-          <div class="admin-header-title text-success"><i class="fa fa-chart-line"></i> এডিপি ও ইউনিয়ন উন্নয়নমূলক প্রকল্প</div>
-          <button class="btn btn-success btn-sm fw-bold rounded-pill px-3"><i class="fa fa-plus me-1"></i> নতুন প্রকল্প</button>
+        <div class="admin-header-bar bg-header-gen">
+          <div class="admin-header-title"><i class="fa fa-chart-line"></i> এডিপি ও ইউনিয়ন উন্নয়নমূলক প্রকল্প</div>
         </div>
-        <div class="card p-4 text-center bg-white shadow-sm border rounded-3">
-          <i class="fa fa-trowel-bricks fa-3x text-success mb-2"></i>
-          <h5 class="fw-bold">রাস্তাঘাট, কালভার্ট ও অবকাঠামো উন্নয়ন ট্র্যাকিং</h5>
-          <p class="text-muted">বরাদ্দকৃত অর্থ ও প্রকল্প বাস্তবায়নের বর্তমান অগ্রগতি পর্যবেক্ষণ।</p>
-        </div>
+        <div class="card p-4 text-center bg-white shadow-sm border rounded-3"><i class="fa fa-trowel-bricks fa-3x text-success mb-2"></i><h5 class="fw-bold">অবকাঠামো উন্নয়ন প্রকল্প পর্যবেক্ষণ</h5></div>
       </div>
 
       <!-- ১২. রিপোর্ট বাতায়ন -->
       <div id="reportTab" class="admin-tab d-none">
-        <div class="admin-header-bar">
-          <div class="admin-header-title text-warning"><i class="fa fa-clock-rotate-left"></i> রিপোর্ট বাতায়ন ও সামগ্রিক পরিসংখ্যান</div>
-          <button class="btn btn-dark btn-sm fw-bold rounded-pill px-3"><i class="fa fa-print me-1"></i> মাসিক রিপোর্ট</button>
+        <div class="admin-header-bar bg-dark text-white">
+          <div class="admin-header-title"><i class="fa fa-clock-rotate-left"></i> রিপোর্ট বাতায়ন ও সামগ্রিক পরিসংখ্যান</div>
         </div>
-        <div class="card p-4 text-center bg-white shadow-sm border rounded-3">
-          <i class="fa fa-file-pdf fa-3x text-danger mb-2"></i>
-          <h5 class="fw-bold">সকল সনদ ও সেবার সমন্বিত অফিসিয়াল রিপোর্ট</h5>
-          <p class="text-muted">মাসিক ও বার্ষিক বিবরণী প্রিন্ট করার সুবিধা।</p>
-        </div>
+        <div class="card p-4 text-center bg-white shadow-sm border rounded-3"><i class="fa fa-file-pdf fa-3x text-danger mb-2"></i><h5 class="fw-bold">মাসিক ও বার্ষিক বিবরণী প্রিন্ট</h5></div>
       </div>
 
       <!-- ১৩. ইউপি সেটিংস -->
@@ -579,7 +640,7 @@
               <div class="col-md-6"><label class="form-label fw-bold">ইউপি সচিবের নাম (বাংলা) *</label><input type="text" id="setSecName" class="form-control" value="মোঃ মোতাহার উদ্দিন" required></div>
               <div class="col-md-6"><label class="form-label fw-bold">ইউপি সচিবের ইংরেজি নাম</label><input type="text" id="setSecNameEn" class="form-control" value="Md. Motahar Uddin"></div>
             </div>
-            <div class="text-end mt-4"><button type="submit" class="btn btn-success fw-bold px-4 rounded-pill" id="saveUpSettingsBtn"><i class="fa fa-save me-1"></i> সেটিংস সংরক্ষণ করুন</button></div>
+            <div class="text-end mt-4"><button type="submit" class="btn btn-success fw-bold px-4 rounded-pill"><i class="fa fa-save me-1"></i> সেটিংস সংরক্ষণ করুন</button></div>
           </form>
         </div>
       </div>
@@ -588,10 +649,7 @@
       <div id="settingsTab" class="admin-tab d-none">
         <div class="admin-header-bar bg-dark text-white">
           <div class="admin-header-title text-warning"><i class="fa fa-user-gear"></i> এডমিন ইউজার ও এক্সেস পারমিশন</div>
-          <div>
-            <button class="btn btn-light btn-sm fw-bold me-1 rounded-pill" onclick="loadAdminUsers()"><i class="fa fa-sync me-1"></i> রিফ্রেশ</button>
-            <button class="btn btn-warning btn-sm fw-bold rounded-pill text-dark" onclick="openAddUserModal()"><i class="fa fa-plus me-1"></i> নতুন এডমিন যোগ</button>
-          </div>
+          <button class="btn btn-warning btn-sm fw-bold rounded-pill text-dark" onclick="openAddUserModal()"><i class="fa fa-plus me-1"></i> নতুন এডমিন যোগ</button>
         </div>
         <div class="table-responsive bg-white p-3 shadow-sm rounded-3 border">
           <table class="table table-hover align-middle">
@@ -606,13 +664,98 @@
 </div>
 
 <!-- ========================================================== -->
-<!-- 🟢 JAVASCRIPT MASTER ENGINE (SUB-TABS, SEARCH & PRINTS)     -->
+<!-- 🟢 ১ ও ২ নম্বর ছবির মতো "ওয়ারিশান তথ্য সংশোধন" মোডাল       -->
+<!-- ========================================================== -->
+<div class="modal fade" id="editWarishanModal" tabindex="-1" data-bs-backdrop="static">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
+      <div class="modal-header bg-warning text-dark p-3">
+        <h5 class="modal-title fw-bold"><i class="fa-solid fa-pen-to-square me-2"></i> ওয়ারিশান আবেদনের তথ্য সংশোধন</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-3 p-md-4 bg-light">
+        <form id="editWarishanForm" onsubmit="event.preventDefault(); saveEditedWarishanData();">
+          <input type="hidden" id="editWarAppId">
+          
+          <div class="card p-3 border-0 shadow-sm rounded-3 mb-3 bg-white">
+            <div class="row g-3">
+              <div class="col-md-4">
+                <label class="form-label fw-bold">ওয়ার্ড নম্বর *</label>
+                <select id="editWarWard" class="form-select">
+                  <option value="০১">০১</option><option value="০২">০২</option><option value="০৩">০৩</option>
+                  <option value="০৪">০৪</option><option value="০৫">০৫</option><option value="০৬">০৬</option>
+                  <option value="০৭">০৭</option><option value="০৮">০৮</option><option value="০৯">০৯</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label fw-bold">গ্রাম/মহল্লা *</label>
+                <input type="text" id="editWarVillage" class="form-control" placeholder="গ্রাম লিখুন">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label fw-bold">ডাকঘর *</label>
+                <input type="text" id="editWarPostOffice" class="form-control" value="বাদুরা হাট-৮৬০০">
+              </div>
+
+              <div class="col-md-4">
+                <label class="form-label fw-bold">মৃত ব্যক্তির নাম *</label>
+                <input type="text" id="editWarDeceasedName" class="form-control" required>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label fw-bold">মৃত ব্যক্তির পিতা/স্বামী *</label>
+                <input type="text" id="editWarDeceasedFather" class="form-control" required>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label fw-bold">আবেদনকারীর নাম *</label>
+                <input type="text" id="editWarApplicantName" class="form-control" required>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label fw-bold">আবেদনকারীর পিতা/স্বামী</label>
+                <input type="text" id="editWarFatherSpouse" class="form-control">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label fw-bold">মোবাইল নম্বর *</label>
+                <input type="text" id="editWarMobile" class="form-control" required>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label fw-bold">স্মারক নম্বর</label>
+                <input type="text" id="editWarSmarakNo" class="form-control" readonly>
+              </div>
+            </div>
+          </div>
+
+          <!-- ওয়ারিশগণের বিবরণ এবং ১/২ নম্বর ছবির টুলস -->
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6 class="fw-bold text-success m-0"><i class="fa-solid fa-users me-1"></i> ওয়ারিশগণের বিবরণ</h6>
+            <button type="button" class="btn btn-sm btn-outline-success fw-bold rounded-pill" onclick="addWarishanSubGroup()">
+              <i class="fa fa-plus me-1"></i> উপ-গ্রুপ যোগ
+            </button>
+          </div>
+
+          <div id="warTreeGroupsContainer"></div>
+
+          <div class="text-end mt-4">
+            <button type="button" class="btn btn-secondary px-3 rounded-pill" data-bs-dismiss="modal">বাতিল</button>
+            <button type="submit" class="btn btn-warning fw-bold px-4 rounded-pill text-dark shadow-sm" id="saveWarBtn">
+              <i class="fa fa-save me-1"></i> সংশোধন সংরক্ষণ করুন
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================================== -->
+<!-- 🟢 JAVASCRIPT MASTER ENGINE (ROYAL PRINT & FULL TOOLS)     -->
 <!-- ========================================================== -->
 <script>
   var rawDataStore = { cit: [], trade: [], fam: [], war: [], gen: [], tax: [], users: [], warCancel: [] };
   var currentPageStore = { cit: 1, trade: 1, fam: 1, war: 1, gen: 1, tax: 1 };
   var activeSubTabStore = { cit: 'bn', trade: 'new', fam: 'পারিবারিক সনদ', war: 'regular', gen: 'all' };
   var PAGE_SIZE = 15;
+
+  // ওয়ারিশ ট্রি এডিটর ডাটা
+  var currentWarTreeData = [];
 
   function toBnNumber(n) {
     if (n === null || n === undefined || n === '') return '০';
@@ -654,152 +797,57 @@
     else if (tabId === 'appsTab') loadAdminApps();
     else if (tabId === 'taxTab') loadTaxPayers();
     else if (tabId === 'dashTab') loadAdminDashboard();
-    else if (tabId === 'settingsTab') loadAdminUsers();
   }
 
-  // 🟢 ১. নাগরিকত্ব সনদ সাব-ট্যাব ও ফিল্টার
-  function switchCitSubTab(version) {
-    activeSubTabStore.cit = version;
-    document.getElementById('citBnTabBtn').classList.toggle('active', version === 'bn');
-    document.getElementById('citEnTabBtn').classList.toggle('active', version === 'en');
-    filterCitTable();
-  }
+  // 🟢 গ্লোবাল আইফ্রেম প্রিন্ট ইঞ্জিন (প্রিন্ট এরর ফিক্স)
+  window.executeIsolatedIframePrint = function(contentHtml) {
+    try {
+      var iframe = document.getElementById('isolatedPrintIframe');
+      if (!iframe) {
+        iframe = document.createElement('iframe');
+        iframe.id = 'isolatedPrintIframe';
+        iframe.style.position = 'fixed';
+        iframe.style.right = '0';
+        iframe.style.bottom = '0';
+        iframe.style.width = '0';
+        iframe.style.height = '0';
+        iframe.style.border = '0';
+        document.body.appendChild(iframe);
+      }
+      var doc = iframe.contentWindow.document;
+      doc.open();
+      doc.write(contentHtml);
+      doc.close();
+      iframe.contentWindow.focus();
+      setTimeout(function() {
+        try {
+          iframe.contentWindow.print();
+        } catch (err) {
+          var win = window.open('', '_blank');
+          win.document.open();
+          win.document.write(contentHtml);
+          win.document.close();
+          win.focus();
+          setTimeout(() => win.print(), 500);
+        }
+      }, 500);
+    } catch (e) {
+      var win = window.open('', '_blank');
+      win.document.open();
+      win.document.write(contentHtml);
+      win.document.close();
+      win.focus();
+      setTimeout(() => win.print(), 500);
+    }
+  };
 
-  async function loadCitizenshipApps() {
-    const res = await callBackendAPI('getCitizenshipApps');
-    rawDataStore.cit = Array.isArray(res) ? res : [];
-    
-    var bnCount = rawDataStore.cit.filter(a => !a.language || a.language === 'bn').length;
-    var enCount = rawDataStore.cit.filter(a => a.language === 'en').length;
-    document.getElementById('citBnCountBadge').innerText = toBnNumber(bnCount);
-    document.getElementById('citEnCountBadge').innerText = toBnNumber(enCount);
-    
-    filterCitTable();
-  }
-
-  function filterCitTable() {
-    var query = (document.getElementById('citSearchInput').value || '').trim().toLowerCase();
-    var version = activeSubTabStore.cit;
-    var filtered = rawDataStore.cit.filter(a => {
-      var matchesVer = (version === 'en') ? (a.language === 'en') : (!a.language || a.language === 'bn');
-      if (!matchesVer) return false;
-      if (!query) return true;
-      return (a.appId && a.appId.toLowerCase().includes(query)) ||
-             (a.name && a.name.toLowerCase().includes(query)) ||
-             (a.mobile && a.mobile.includes(query)) ||
-             (a.certNo && a.certNo.includes(query));
-    });
-    renderCitTable(filtered);
-  }
-
-  function renderCitTable(list) {
-    var tbody = document.getElementById('citAppTable');
-    tbody.innerHTML = '';
-    if (!list.length) { tbody.innerHTML = '<tr><td colspan="8" class="text-center py-3 text-muted">কোন আবেদন নেই</td></tr>'; return; }
-    list.slice(0, PAGE_SIZE).forEach(a => {
-      var act = renderActionButtons(a.appId, a.status, 'showCitizenPrintPreview', 'openEditCitizenModal');
-      var verBadge = a.language === 'en' ? '<span class="badge bg-primary">English</span>' : '<span class="badge bg-success">বাংলা</span>';
-      tbody.innerHTML += `<tr><td><strong>${a.appId}</strong></td><td>${a.certNo || '-'}</td><td>${a.name}</td><td>${a.fatherName || '-'}</td><td>${a.mobile}</td><td>${verBadge}</td><td>${act.badge}</td><td>${act.actions}</td></tr>`;
-    });
-  }
-
-  // 🟢 ২. ট্রেড লাইসেন্স সাব-ট্যাব ও ফিল্টার
-  function switchTradeSubTab(type) {
-    activeSubTabStore.trade = type;
-    document.getElementById('tradeNewTabBtn').classList.toggle('active', type === 'new');
-    document.getElementById('tradeRenewTabBtn').classList.toggle('active', type === 'renew');
-    filterTradeTable();
-  }
-
-  async function loadTradeLicenses() {
-    const res = await callBackendAPI('getTradeLicenses');
-    rawDataStore.trade = Array.isArray(res) ? res : [];
-    
-    var newCount = rawDataStore.trade.filter(t => !t.isRenewal || t.isRenewal == 0).length;
-    var renewCount = rawDataStore.trade.filter(t => t.isRenewal == 1).length;
-    document.getElementById('tradeNewCountBadge').innerText = toBnNumber(newCount);
-    document.getElementById('tradeRenewCountBadge').innerText = toBnNumber(renewCount);
-
-    filterTradeTable();
-  }
-
-  function filterTradeTable() {
-    var query = (document.getElementById('tradeSearchInput').value || '').trim().toLowerCase();
-    var isRenew = (activeSubTabStore.trade === 'renew');
-    var filtered = rawDataStore.trade.filter(t => {
-      var matchesType = isRenew ? (t.isRenewal == 1) : (!t.isRenewal || t.isRenewal == 0);
-      if (!matchesType) return false;
-      if (!query) return true;
-      return (t.appId && t.appId.toLowerCase().includes(query)) ||
-             (t.orgName && t.orgName.toLowerCase().includes(query)) ||
-             (t.ownerName && t.ownerName.toLowerCase().includes(query)) ||
-             (t.mobile && t.mobile.includes(query)) ||
-             (t.licNo && t.licNo.includes(query));
-    });
-    renderTradeTable(filtered);
-  }
-
-  function renderTradeTable(list) {
-    var tbody = document.getElementById('tradeTableBody');
-    tbody.innerHTML = '';
-    if (!list.length) { tbody.innerHTML = '<tr><td colspan="8" class="text-center py-3 text-muted">কোন লাইসেন্স নেই</td></tr>'; return; }
-    list.slice(0, PAGE_SIZE).forEach(t => {
-      var act = renderActionButtons(t.appId, t.status, 'showTradeCertPreview', 'openEditTradeModal');
-      tbody.innerHTML += `<tr><td><strong>${t.appId}</strong></td><td><span class="badge bg-light text-dark border">${t.licNo || '-'}</span></td><td>${t.orgName}</td><td>${t.ownerName}</td><td>${t.mobile}</td><td>৳${t.totalFee}</td><td>${act.badge}</td><td>${act.actions}</td></tr>`;
-    });
-  }
-
-  // 🟢 ৩. পারিবারিক ও উত্তরাধিকারী সাব-ট্যাব ও ফিল্টার
-  function switchFamSubTab(type) {
-    activeSubTabStore.fam = type;
-    document.getElementById('famNormalTabBtn').classList.toggle('active', type === 'পারিবারিক সনদ');
-    document.getElementById('famSuccessionTabBtn').classList.toggle('active', type === 'উত্তরাধিকারী সনদ');
-    filterFamTable();
-  }
-
-  async function loadFamilyApps() {
-    const res = await callBackendAPI('getFamilyApps');
-    rawDataStore.fam = Array.isArray(res) ? res : [];
-
-    var normCount = rawDataStore.fam.filter(f => !f.type || f.type.includes('পারিবারিক')).length;
-    var succCount = rawDataStore.fam.filter(f => f.type && f.type.includes('উত্তরাধিকারী')).length;
-    document.getElementById('famNormalCountBadge').innerText = toBnNumber(normCount);
-    document.getElementById('famSuccessionCountBadge').innerText = toBnNumber(succCount);
-
-    filterFamTable();
-  }
-
-  function filterFamTable() {
-    var query = (document.getElementById('famSearchInput').value || '').trim().toLowerCase();
-    var curType = activeSubTabStore.fam;
-    var filtered = rawDataStore.fam.filter(f => {
-      var matchesType = (curType === 'উত্তরাধিকারী সনদ') ? (f.type && f.type.includes('উত্তরাধিকারী')) : (!f.type || f.type.includes('পারিবারিক'));
-      if (!matchesType) return false;
-      if (!query) return true;
-      return (f.appId && f.appId.toLowerCase().includes(query)) ||
-             (f.name && f.name.toLowerCase().includes(query)) ||
-             (f.mobile && f.mobile.includes(query)) ||
-             (f.deceasedName && f.deceasedName.toLowerCase().includes(query));
-    });
-    renderFamTable(filtered);
-  }
-
-  function renderFamTable(list) {
-    var tbody = document.getElementById('famAppTable');
-    tbody.innerHTML = '';
-    if (!list.length) { tbody.innerHTML = '<tr><td colspan="8" class="text-center py-3 text-muted">কোন আবেদন নেই</td></tr>'; return; }
-    list.slice(0, PAGE_SIZE).forEach(f => {
-      var act = renderActionButtons(f.appId, f.status, 'showFamilyPrintPreview', 'openEditFamilyModal');
-      tbody.innerHTML += `<tr><td><strong>${f.appId}</strong></td><td><span class="badge bg-secondary">${f.type}</span></td><td>${f.name}</td><td>${f.deceasedName || f.fatherName || '-'}</td><td>${f.mobile}</td><td>ওয়ার্ড-${f.wardNo}</td><td>${act.badge}</td><td>${act.actions}</td></tr>`;
-    });
-  }
-
-  // 🟢 ৪. ওয়ারিশান ও বাতিল সাব-ট্যাব ও ফিল্টার
+  // 🟢 ১. ওয়ারিশান সাব-ট্যাব কন্ট্রোল (৩ নম্বর ছবির মতো)
   function switchWarAdminView(mode) {
     activeSubTabStore.war = mode;
     var isRegular = (mode === 'regular');
     document.getElementById('warRegularView').classList.toggle('d-none', !isRegular);
     document.getElementById('warCancelView').classList.toggle('d-none', isRegular);
+    
     document.getElementById('warRegularTabBtn').classList.toggle('active', isRegular);
     document.getElementById('warCancelTabBtn').classList.toggle('active', !isRegular);
     filterWarTable();
@@ -853,131 +901,289 @@
     });
   }
 
+  // 🟢 বাতিলের আবেদন তালিকা (৩ নম্বর ছবির অ্যাকশন বাটন সহ)
   function renderWarCancelTable(list) {
     var tbody = document.getElementById('warCancelTableBody');
     tbody.innerHTML = '';
     if (!list.length) { tbody.innerHTML = '<tr><td colspan="7" class="text-center py-3 text-muted">কোন বাতিলের আবেদন নেই</td></tr>'; return; }
     list.forEach(c => {
       var isApproved = (c.status === 'Approved');
-      var badge = isApproved ? '<span class="status-badge-approved">বাতিল অনুমোদিত</span>' : '<span class="status-badge-pending">অপেক্ষমাণ</span>';
-      var orderBtn = isApproved ? `<button class="btn btn-sm btn-danger fw-bold me-1" onclick="printWarishanCancellationOrder('${c.cancel_app_id}')"><i class="fa fa-stamp me-1"></i>বাতিল আদেশ</button>` : '';
-      var copyBtn = `<button class="btn btn-sm btn-outline-dark" onclick="printWarishanCancellationCopy('${c.cancel_app_id}')"><i class="fa fa-file-invoice"></i> কপি</button>`;
-      var approveBtn = !isApproved ? `<button class="btn btn-sm btn-success fw-bold me-1" onclick="approveCancellation('${c.cancel_app_id}','${c.target_smarak_no}','${c.target_app_id}')"><i class="fa fa-check"></i> অনুমোদন</button>` : '';
+      var badge = isApproved 
+        ? '<span class="status-badge-approved"><i class="fa fa-check-circle"></i> বাতিল অনুমোদিত</span>' 
+        : '<span class="status-badge-pending"><i class="fa fa-clock"></i> অপেক্ষমাণ</span>';
+
+      var applicantAddr = [
+        c.applicant_ward ? 'ওয়ার্ড: ' + toBnNumber(c.applicant_ward) : '',
+        c.applicant_village ? 'গ্রাম: ' + c.applicant_village : '',
+        c.applicant_post ? 'ডাকঘর: ' + c.applicant_post : ''
+      ].filter(Boolean).join(', ') || '-';
+
+      // ৩ নম্বর ছবির হুবহু বাটন
+      var approveBtn = !isApproved 
+        ? `<button type="button" class="btn-act-square btn-approve" onclick="approveCancellation('${c.cancel_app_id}','${c.target_smarak_no}','${c.target_app_id || ''}')" title="অনুমোদন করুন"><i class="fa fa-check"></i></button>` 
+        : '';
+      var editBtn = `<button type="button" class="btn-act-square btn-edit" onclick="openEditCancellationReason('${c.cancel_app_id}')" title="সংশোধন"><i class="fa fa-pencil"></i></button>`;
+      var rejectBtn = !isApproved 
+        ? `<button type="button" class="btn-act-square btn-reject" onclick="rejectCancellation('${c.cancel_app_id}')" title="বাতিল/প্রত্যাখ্যান"><i class="fa fa-times"></i></button>` 
+        : '';
+      var orderBtn = isApproved 
+        ? `<button type="button" class="btn-act-print-red me-1" onclick="printWarishanCancellationOrder('${c.cancel_app_id}')" title="বাতিল আদেশ প্রিন্ট"><i class="fa fa-stamp"></i> বাতিল আদেশ</button>` 
+        : '';
+      var copyBtn = `<button type="button" class="btn-act-print-dark" onclick="printWarishanCancellationCopy('${c.cancel_app_id}')" title="আবেদন কপি প্রিন্ট"><i class="fa fa-print"></i> কপি</button>`;
 
       tbody.innerHTML += `
         <tr>
-          <td><strong>${c.cancel_app_id}</strong></td>
-          <td><span class="badge bg-dark text-warning">${c.target_smarak_no}</span></td>
-          <td>${c.deceased_name}<br><small class="text-muted">পিতা: ${c.deceased_father}</small></td>
-          <td>${c.applicant_name}<br><small class="text-muted">${c.applicant_mobile}</small></td>
-          <td><small class="text-danger fw-bold">${c.cancellation_reason}</small></td>
+          <td><strong class="text-danger font-monospace">${c.cancel_app_id}</strong></td>
+          <td><span class="badge bg-dark text-warning p-2" style="font-size: 12px;">${c.target_smarak_no}</span></td>
+          <td><strong class="text-dark">${c.deceased_name}</strong><br><small class="text-muted">পিতা: ${c.deceased_father || '-'}</small></td>
+          <td><strong>${c.applicant_name}</strong><br><small class="text-primary">${applicantAddr}</small><br><small class="text-muted">মোবাইল: ${toBnNumber(c.applicant_mobile || '-')}</small></td>
+          <td><div style="background:#fff5f5; border-left:3px solid #ef4444; padding:5px 8px; border-radius:4px; font-size:12px; color:#991b1b; font-weight:bold;">${c.cancellation_reason}</div></td>
           <td>${badge}</td>
-          <td><div class="d-flex">${approveBtn}${orderBtn}${copyBtn}</div></td>
+          <td class="text-end"><div class="d-inline-flex align-items-center">${approveBtn}${editBtn}${rejectBtn}${orderBtn}${copyBtn}</div></td>
         </tr>
       `;
     });
   }
 
-  // 🟢 ৫. সাধারণ প্রত্যয়নপত্র ক্যাটাগরি ফিল্টার চিপস (Image 4 Design)
-  async function loadAdminApps() {
-    const res = await callBackendAPI('getAllApplications');
-    rawDataStore.gen = Array.isArray(res) ? res : [];
-    
-    document.getElementById('genTotalCountBadge').innerText = 'মোট আবেদন: ' + toBnNumber(rawDataStore.gen.length) + ' টি';
-    renderGenCategoryChips();
-    filterGenTable();
+  // 🟢 বাতিল অনুমোদন
+  async function approveCancellation(cancelAppId, targetSmarak, targetAppId) {
+    Swal.fire({
+      title: 'ওয়ারিশ সনদটি বাতিল করবেন?',
+      text: `স্মারক নং (${targetSmarak || cancelAppId}) এর মূল সনদটি স্থায়ীভাবে বাতিল (Cancelled) ঘোষণা করা হবে!`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#00a86b',
+      cancelButtonColor: '#ef4444',
+      confirmButtonText: 'হ্যাঁ, বাতিল নিশ্চিত করুন',
+      cancelButtonText: 'না'
+    }).then(async (res) => {
+      if (res.isConfirmed) {
+        Swal.fire({ title: 'প্রক্রিয়াধীন...', didOpen: () => Swal.showLoading() });
+        const result = await callBackendAPI('approveWarishanCancellation', {
+          cancelAppId: cancelAppId,
+          targetSmarakNo: targetSmarak || '',
+          targetAppId: targetAppId || ''
+        });
+        if (result && result.success) {
+          Swal.fire({ icon: 'success', title: 'বাতিল অনুমোদিত হয়েছে!', timer: 1800, showConfirmButton: false });
+          loadWarishanApps();
+        } else {
+          Swal.fire('ব্যর্থ', 'অনুমোদন সম্পন্ন করা যায়নি', 'error');
+        }
+      }
+    });
   }
 
-  function renderGenCategoryChips() {
-    var counts = {};
-    rawDataStore.gen.forEach(g => {
-      var t = g.type || 'বিবিধ প্রত্যয়নপত্র';
-      counts[t] = (counts[t] || 0) + 1;
-    });
+  // ==========================================================
+  // 🟢 ১ ও ২ নম্বর ছবির মতো ওয়ারিশ ট্রি এডিটর ও টুলস লজিক
+  // ==========================================================
+  async function openEditWarishanModal(appId) {
+    Swal.fire({ title: 'তথ্য লোড হচ্ছে...', didOpen: () => Swal.showLoading() });
+    const data = await callBackendAPI('getWarishanDetails', appId);
+    Swal.close();
 
-    var container = document.getElementById('genCategoryChipsContainer');
-    container.innerHTML = `
-      <div class="gen-chip-btn ${activeSubTabStore.gen === 'all' ? 'active' : ''}" onclick="filterGenByCategory('all')">
-        <i class="fa-solid fa-layer-group"></i> সকল আবেদন <span class="badge bg-dark text-white ms-1">${toBnNumber(rawDataStore.gen.length)}</span>
-      </div>
-    `;
+    if (!data || !data.found) {
+      return Swal.fire('পাওয়া যায়নি', 'আবেদনের তথ্য পাওয়া যায়নি!', 'error');
+    }
 
-    Object.keys(counts).forEach(cat => {
+    document.getElementById('editWarAppId').value = data.appId;
+    document.getElementById('editWarWard').value = data.deceasedWardNo || data.wardNo || '০১';
+    document.getElementById('editWarVillage').value = data.deceasedVillage || data.village || '';
+    document.getElementById('editWarPostOffice').value = data.deceasedPostOffice || data.postOffice || 'বাদুরা হাট-৮৬০০';
+    document.getElementById('editWarDeceasedName').value = data.deceasedName || '';
+    document.getElementById('editWarDeceasedFather').value = data.deceasedFather || '';
+    document.getElementById('editWarApplicantName').value = data.applicantName || '';
+    document.getElementById('editWarFatherSpouse').value = data.fatherSpouseName || '';
+    document.getElementById('editWarMobile').value = data.mobile || '';
+    document.getElementById('editWarSmarakNo').value = data.smarakNo || '';
+
+    // ট্রি ডাটা প্রস্তুতকরণ
+    var rawTree = data.warishanTree || [];
+    if (Array.isArray(rawTree) && rawTree.length > 0) {
+      if (rawTree[0].groupTitle || rawTree[0].members) {
+        currentWarTreeData = JSON.parse(JSON.stringify(rawTree));
+      } else {
+        currentWarTreeData = [{ groupTitle: "মূল মৃত ব্যক্তির ওয়ারিশগণ", members: JSON.parse(JSON.stringify(rawTree)) }];
+      }
+    } else {
+      currentWarTreeData = [{ groupTitle: "মূল মৃত ব্যক্তির ওয়ারিশগণ", members: [{ name: '', father: '', village: '', relation: '' }] }];
+    }
+
+    renderWarishanTreeEditor();
+    bootstrap.Modal.getOrCreateInstance(document.getElementById('editWarishanModal')).show();
+  }
+
+  function renderWarishanTreeEditor() {
+    var container = document.getElementById('warTreeGroupsContainer');
+    container.innerHTML = '';
+
+    currentWarTreeData.forEach((group, gIdx) => {
+      var memberRowsHtml = '';
+      (group.members || []).forEach((m, mIdx) => {
+        memberRowsHtml += `
+          <tr>
+            <td class="text-center font-monospace" style="width: 45px;">${toBnNumber(mIdx + 1)}</td>
+            <td><input type="text" value="${m.name || ''}" placeholder="নাম" oninput="updateMemberField(${gIdx}, ${mIdx}, 'name', this.value)"></td>
+            <td><input type="text" value="${m.father || ''}" placeholder="পিতা/স্বামী" oninput="updateMemberField(${gIdx}, ${mIdx}, 'father', this.value)"></td>
+            <td><input type="text" value="${m.village || ''}" placeholder="গ্রাম" oninput="updateMemberField(${gIdx}, ${mIdx}, 'village', this.value)"></td>
+            <td><input type="text" value="${m.relation || ''}" placeholder="সম্পর্ক" oninput="updateMemberField(${gIdx}, ${mIdx}, 'relation', this.value)"></td>
+            <td class="text-center" style="width: 140px;">
+              <div class="war-row-tools">
+                <button type="button" class="tool-btn" onclick="copyWarRow(${gIdx}, ${mIdx})" title="সারি কপি"><i class="fa-regular fa-copy"></i></button>
+                <button type="button" class="tool-btn" onclick="cloneWarRow(${gIdx}, ${mIdx})" title="ডুপ্লিকেট"><i class="fa-solid fa-clone"></i></button>
+                <button type="button" class="tool-btn" onclick="moveWarRow(${gIdx}, ${mIdx}, -1)" title="উপরে মুভ (↑)"><i class="fa-solid fa-arrow-up"></i></button>
+                <button type="button" class="tool-btn" onclick="moveWarRow(${gIdx}, ${mIdx}, 1)" title="নিচে মুভ (↓)"><i class="fa-solid fa-arrow-down"></i></button>
+                <button type="button" class="tool-btn btn-del" onclick="deleteWarRow(${gIdx}, ${mIdx})" title="মুছে ফেলুন"><i class="fa-solid fa-trash"></i></button>
+              </div>
+            </td>
+          </tr>
+        `;
+      });
+
       container.innerHTML += `
-        <div class="gen-chip-btn ${activeSubTabStore.gen === cat ? 'active' : ''}" onclick="filterGenByCategory('${cat}')">
-          <span>${cat}</span> <span class="badge bg-secondary ms-1">${toBnNumber(counts[cat])}</span>
+        <div class="war-tree-group-box">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <div style="max-width: 320px; width: 100%;">
+              <input type="text" class="form-control form-control-sm fw-bold border-success text-success" value="${group.groupTitle || 'ওয়ারিশগণ'}" oninput="currentWarTreeData[${gIdx}].groupTitle = this.value">
+            </div>
+            <div class="d-flex gap-1">
+              <button type="button" class="btn btn-sm btn-outline-primary fw-bold" onclick="copyWholeWarTable(${gIdx})">
+                <i class="fa-regular fa-copy me-1"></i> পুরো টেবিল কপি
+              </button>
+              <button type="button" class="btn btn-sm btn-success fw-bold text-white" onclick="addWarMember(${gIdx})">
+                <i class="fa fa-plus me-1"></i> সদস্য যোগ
+              </button>
+              ${gIdx > 0 ? `<button type="button" class="btn btn-sm btn-danger fw-bold" onclick="removeWarGroup(${gIdx})"><i class="fa fa-trash"></i></button>` : ''}
+            </div>
+          </div>
+
+          <div class="table-responsive bg-white rounded-3 border">
+            <table class="table war-table align-middle m-0">
+              <thead class="bg-light">
+                <tr class="small fw-bold text-dark">
+                  <th class="text-center" style="width: 45px;">ক্র.নং</th>
+                  <th>ওয়ারিশের নাম</th>
+                  <th>পিতা/স্বামীর নাম</th>
+                  <th>গ্রাম</th>
+                  <th>সম্পর্ক</th>
+                  <th class="text-center" style="width: 140px;">টুলস (কপি/মুভ)</th>
+                </tr>
+              </thead>
+              <tbody>${memberRowsHtml}</tbody>
+            </table>
+          </div>
         </div>
       `;
     });
   }
 
-  function filterGenByCategory(cat) {
-    activeSubTabStore.gen = cat;
-    renderGenCategoryChips();
-    filterGenTable();
+  function updateMemberField(gIdx, mIdx, field, val) {
+    if (currentWarTreeData[gIdx] && currentWarTreeData[gIdx].members[mIdx]) {
+      currentWarTreeData[gIdx].members[mIdx][field] = val;
+    }
   }
 
-  function filterGenTable() {
-    var query = (document.getElementById('genSearchInput').value || '').trim().toLowerCase();
-    var cat = activeSubTabStore.gen;
-    var filtered = rawDataStore.gen.filter(g => {
-      var matchesCat = (cat === 'all') || (g.type === cat);
-      if (!matchesCat) return false;
-      if (!query) return true;
-      return (g.appId && g.appId.toLowerCase().includes(query)) ||
-             (g.name && g.name.toLowerCase().includes(query)) ||
-             (g.mobile && g.mobile.includes(query)) ||
-             (g.nid && g.nid.includes(query));
+  function addWarMember(gIdx) {
+    var lastMember = currentWarTreeData[gIdx].members.slice(-1)[0] || {};
+    currentWarTreeData[gIdx].members.push({
+      name: '',
+      father: lastMember.father || '',
+      village: lastMember.village || '',
+      relation: ''
     });
-    renderGenTable(filtered);
+    renderWarishanTreeEditor();
   }
 
-  function renderGenTable(list) {
-    var tbody = document.getElementById('adminAppTable');
-    tbody.innerHTML = '';
-    if (!list.length) { tbody.innerHTML = '<tr><td colspan="8" class="text-center py-3 text-muted">কোন আবেদন নেই</td></tr>'; return; }
-    list.slice(0, PAGE_SIZE).forEach(g => {
-      var act = renderActionButtons(g.appId, g.status, 'printGeneralCertificate', 'openEditGeneralModal');
-      tbody.innerHTML += `<tr><td><strong>${g.appId}</strong></td><td><span class="badge bg-success">${g.type}</span></td><td>${g.name}</td><td>${toBnNumber(g.nid)}</td><td>${toBnNumber(g.mobile)}</td><td>ওয়ার্ড-${toBnNumber(g.wardNo)}</td><td>${act.badge}</td><td>${act.actions}</td></tr>`;
+  function copyWarRow(gIdx, mIdx) {
+    var target = currentWarTreeData[gIdx].members[mIdx];
+    currentWarTreeData[gIdx].members.splice(mIdx + 1, 0, Object.assign({}, target));
+    renderWarishanTreeEditor();
+    Swal.fire({ icon: 'success', title: 'সারি কপি হয়েছে!', timer: 800, showConfirmButton: false });
+  }
+
+  function cloneWarRow(gIdx, mIdx) {
+    copyWarRow(gIdx, mIdx);
+  }
+
+  function moveWarRow(gIdx, mIdx, direction) {
+    var targetIdx = mIdx + direction;
+    var list = currentWarTreeData[gIdx].members;
+    if (targetIdx < 0 || targetIdx >= list.length) return;
+    var temp = list[mIdx];
+    list[mIdx] = list[targetIdx];
+    list[targetIdx] = temp;
+    renderWarishanTreeEditor();
+  }
+
+  function deleteWarRow(gIdx, mIdx) {
+    if (currentWarTreeData[gIdx].members.length <= 1) {
+      return Swal.fire('সতর্কতা', 'কমপক্ষে একজন সদস্য থাকতে হবে!', 'warning');
+    }
+    currentWarTreeData[gIdx].members.splice(mIdx, 1);
+    renderWarishanTreeEditor();
+  }
+
+  function copyWholeWarTable(gIdx) {
+    var grp = currentWarTreeData[gIdx];
+    var cloneMembers = JSON.parse(JSON.stringify(grp.members));
+    currentWarTreeData.push({
+      groupTitle: grp.groupTitle + ' (কপি)',
+      members: cloneMembers
     });
+    renderWarishanTreeEditor();
+    Swal.fire({ icon: 'success', title: 'পুরো টেবিল কপি হয়েছে!', timer: 1000, showConfirmButton: false });
   }
 
-  // 🟢 অ্যাকশন বাটন রেন্ডারার
+  function addWarishanSubGroup() {
+    currentWarTreeData.push({
+      groupTitle: "মৃত ব্যক্তির ওয়ারিশগণ",
+      members: [{ name: '', father: '', village: '', relation: '' }]
+    });
+    renderWarishanTreeEditor();
+  }
+
+  function removeWarGroup(gIdx) {
+    currentWarTreeData.splice(gIdx, 1);
+    renderWarishanTreeEditor();
+  }
+
+  async function saveEditedWarishanData() {
+    var appId = document.getElementById('editWarAppId').value;
+    var payload = {
+      appId: appId,
+      applicantName: document.getElementById('editWarApplicantName').value.trim(),
+      fatherSpouseName: document.getElementById('editWarFatherSpouse').value.trim(),
+      deceasedName: document.getElementById('editWarDeceasedName').value.trim(),
+      deceasedFather: document.getElementById('editWarDeceasedFather').value.trim(),
+      deceasedWardNo: document.getElementById('editWarWard').value,
+      deceasedVillage: document.getElementById('editWarVillage').value.trim(),
+      deceasedPostOffice: document.getElementById('editWarPostOffice').value.trim(),
+      mobile: document.getElementById('editWarMobile').value.trim(),
+      warishanTree: currentWarTreeData
+    };
+
+    const res = await callBackendAPI('updateWarishanData', payload);
+    if (res && res.success) {
+      bootstrap.Modal.getInstance(document.getElementById('editWarishanModal')).hide();
+      Swal.fire({ icon: 'success', title: 'সফলভাবে সংশোধন সম্পন্ন হয়েছে!', timer: 1500, showConfirmButton: false });
+      loadWarishanApps();
+    } else {
+      Swal.fire('ব্যর্থ', 'সংরক্ষণ করা সম্ভব হয়নি', 'error');
+    }
+  }
+
+  // অ্যাকশন বাটন রেন্ডারার
   function renderActionButtons(appId, status, printCallback, editCallback) {
     var badge = (status === 'Approved') ? '<span class="status-badge-approved">Approved</span>' : '<span class="status-badge-pending">Pending</span>';
-    var approveBtn = `<button class="btn-act-icon approve" onclick="changeStatus('${appId}','Approved')" title="অনুমোদন"><i class="fa fa-check"></i></button>`;
-    var editBtn = `<button class="btn-act-icon edit" onclick="${editCallback}('${appId}')" title="সংশোধন"><i class="fa fa-edit"></i></button>`;
-    var rejectBtn = `<button class="btn-act-icon reject" onclick="changeStatus('${appId}','Rejected')" title="বাতিল"><i class="fa fa-times"></i></button>`;
-    var printBtn = (status === 'Approved') ? `<button class="btn btn-sm btn-dark ms-1 fw-bold" onclick="${printCallback}('${appId}')"><i class="fa fa-print me-1"></i>প্রিন্ট</button>` : '';
+    var approveBtn = `<button class="btn-act-square btn-approve" onclick="changeStatus('${appId}','Approved')" title="অনুমোদন"><i class="fa fa-check"></i></button>`;
+    var editBtn = `<button class="btn-act-square btn-edit" onclick="${editCallback}('${appId}')" title="সংশোধন"><i class="fa fa-edit"></i></button>`;
+    var rejectBtn = `<button class="btn-act-square btn-reject" onclick="changeStatus('${appId}','Rejected')" title="বাতিল"><i class="fa fa-times"></i></button>`;
+    var printBtn = (status === 'Approved') ? `<button class="btn-act-print-dark ms-1" onclick="${printCallback}('${appId}')"><i class="fa fa-print me-1"></i>প্রিন্ট</button>` : '';
 
     return { badge: badge, actions: `<div class="d-flex align-items-center">${approveBtn}${editBtn}${rejectBtn}${printBtn}</div>` };
   }
 
-  // ড্যাশবোর্ড লোডার
-  async function loadAdminDashboard() {
-    const st = await callBackendAPI('getMasterDashboardStats');
-    if(!st) return;
-    document.getElementById('dashTotalApps').innerText = toBnNumber(st.totalApps);
-    document.getElementById('dashTotalApproved').innerText = toBnNumber(st.totalApprovedApps);
-    document.getElementById('dashTotalPending').innerText = toBnNumber(st.totalPendingApps);
-    document.getElementById('dashCitTotal').innerText = toBnNumber(st.citTotal);
-    document.getElementById('dashCitApproved').innerText = toBnNumber(st.citApproved);
-    document.getElementById('dashCitPending').innerText = toBnNumber(st.citPending);
-    document.getElementById('dashTradeTotal').innerText = toBnNumber(st.tradeTotal);
-    document.getElementById('dashTradeActive').innerText = toBnNumber(st.tradeActive);
-    document.getElementById('dashTradePending').innerText = toBnNumber(st.tradePending);
-    document.getElementById('dashWarTotal').innerText = toBnNumber(st.warTotal);
-    document.getElementById('dashWarApproved').innerText = toBnNumber(st.warApproved);
-    document.getElementById('dashWarPending').innerText = toBnNumber(st.warPending);
-    document.getElementById('dashFamTotal').innerText = toBnNumber(st.famTotal);
-    document.getElementById('dashFamApproved').innerText = toBnNumber(st.famApproved);
-    document.getElementById('dashFamPending').innerText = toBnNumber(st.famPending);
-    document.getElementById('dashGenTotal').innerText = toBnNumber(st.genTotal);
-    document.getElementById('dashGenApproved').innerText = toBnNumber(st.genApproved);
-    document.getElementById('dashGenPending').innerText = toBnNumber(st.genPending);
-  }
-
-  // ইনিশিয়ালাইজেশন
+  // অটো-ইনিশিয়ালাইজ
   document.addEventListener("DOMContentLoaded", function() {
     var s = getActiveSession();
     if (s) {
