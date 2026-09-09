@@ -27,7 +27,64 @@ try {
     exit;
 }
 
-// 🟢 ওয়ারিশান বাতিলের টেবিল
+// 🟢 টেবিলসমূহ নিশ্চিতকরণ
+$pdo->exec("CREATE TABLE IF NOT EXISTS citizenships (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    app_id VARCHAR(50) UNIQUE, cert_no VARCHAR(100), name VARCHAR(255), nid VARCHAR(50),
+    father_name VARCHAR(255), mother_name VARCHAR(255), dob VARCHAR(50), marital_status VARCHAR(50),
+    spouse_name VARCHAR(255), mobile VARCHAR(50), ward_no VARCHAR(20), village VARCHAR(255),
+    post_office VARCHAR(255), division VARCHAR(100), language VARCHAR(10) DEFAULT 'bn',
+    status VARCHAR(50) DEFAULT 'Pending', apply_date VARCHAR(50), signatory_role VARCHAR(100) DEFAULT 'চেয়ারম্যান',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)");
+
+$pdo->exec("CREATE TABLE IF NOT EXISTS trade_licenses (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    app_id VARCHAR(50) UNIQUE, license_no VARCHAR(100), receipt_no VARCHAR(50), org_name VARCHAR(255),
+    owner_name VARCHAR(255), father_name VARCHAR(255), mother_name VARCHAR(255), nid VARCHAR(50),
+    dob VARCHAR(50), mobile VARCHAR(50), owner_address TEXT, category VARCHAR(255),
+    biz_details TEXT, biz_address TEXT, biz_start_date VARCHAR(50), fiscal_year VARCHAR(50),
+    capital VARCHAR(100), license_fee DECIMAL(10,2) DEFAULT 200, vat_fee DECIMAL(10,2) DEFAULT 30,
+    comm_tax DECIMAL(10,2) DEFAULT 0, sign_tax DECIMAL(10,2) DEFAULT 0, total_fee DECIMAL(10,2) DEFAULT 230,
+    is_renewal TINYINT(1) DEFAULT 0, original_license_no VARCHAR(100), photo LONGTEXT,
+    status VARCHAR(50) DEFAULT 'Pending', apply_date VARCHAR(50), signatory_role VARCHAR(100) DEFAULT 'চেয়ারম্যান',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)");
+
+$pdo->exec("CREATE TABLE IF NOT EXISTS family_certificates (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    app_id VARCHAR(50) UNIQUE, certificate_type VARCHAR(100) DEFAULT 'পারিবারিক সনদ',
+    name VARCHAR(255), nid VARCHAR(50), father_name VARCHAR(255), mother_name VARCHAR(255),
+    mobile VARCHAR(50), ward_no VARCHAR(20), village VARCHAR(255), post_office VARCHAR(255),
+    deceased_name VARCHAR(255), deceased_father VARCHAR(255), deceased_mother VARCHAR(255),
+    deceased_date VARCHAR(50), applicant_relation VARCHAR(100), deceased_ward VARCHAR(20),
+    deceased_village VARCHAR(255), deceased_post_office VARCHAR(255), deceased_union VARCHAR(100),
+    deceased_upazila VARCHAR(100), deceased_district VARCHAR(100), members_json LONGTEXT,
+    status VARCHAR(50) DEFAULT 'Pending', apply_date VARCHAR(50), signatory_role VARCHAR(100) DEFAULT 'চেয়ারম্যান',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)");
+
+$pdo->exec("CREATE TABLE IF NOT EXISTS warishans (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    app_id VARCHAR(50) UNIQUE, applicant_name VARCHAR(255), father_spouse VARCHAR(255),
+    deceased_name VARCHAR(255), deceased_father VARCHAR(255), deceased_relation VARCHAR(100),
+    deceased_ward_no VARCHAR(20), deceased_village VARCHAR(255), deceased_post_office VARCHAR(255),
+    nid VARCHAR(50), mobile VARCHAR(50), ward_no VARCHAR(20), village VARCHAR(255),
+    post_office VARCHAR(255), smarak_no VARCHAR(100), warishan_tree_json LONGTEXT,
+    status VARCHAR(50) DEFAULT 'Pending', date VARCHAR(50), signatory_role VARCHAR(100) DEFAULT 'চেয়ারম্যান',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)");
+
+$pdo->exec("CREATE TABLE IF NOT EXISTS general_applications (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    app_id VARCHAR(50) UNIQUE, type VARCHAR(100), name VARCHAR(255), nid VARCHAR(50),
+    father_name VARCHAR(255), mother_name VARCHAR(255), dob VARCHAR(50), mobile VARCHAR(50),
+    ward_no VARCHAR(20), village VARCHAR(255), post_office VARCHAR(255), division VARCHAR(100),
+    status VARCHAR(50) DEFAULT 'Pending', apply_date VARCHAR(50), signatory_role VARCHAR(100) DEFAULT 'চেয়ারম্যান',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)");
+
+// 🟢 ওয়ারিশান বাতিলের টেবিল (আবেদনকারীর ঠিকানাসহ)
 $pdo->exec("CREATE TABLE IF NOT EXISTS warishan_cancellations (
     id INT AUTO_INCREMENT PRIMARY KEY,
     cancel_app_id VARCHAR(50) UNIQUE,
@@ -37,6 +94,9 @@ $pdo->exec("CREATE TABLE IF NOT EXISTS warishan_cancellations (
     applicant_father VARCHAR(255),
     applicant_nid VARCHAR(50),
     applicant_mobile VARCHAR(50),
+    applicant_ward VARCHAR(50),
+    applicant_village VARCHAR(255),
+    applicant_post VARCHAR(255),
     deceased_name VARCHAR(255),
     deceased_father VARCHAR(255),
     deceased_address TEXT,
@@ -45,6 +105,11 @@ $pdo->exec("CREATE TABLE IF NOT EXISTS warishan_cancellations (
     apply_date VARCHAR(50),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )");
+
+// কলাম নিরাপদে সংযোজন (যদি আগে তৈরি হয়ে থাকে)
+try { $pdo->exec("ALTER TABLE warishan_cancellations ADD COLUMN applicant_ward VARCHAR(50)"); } catch (Exception $e) {}
+try { $pdo->exec("ALTER TABLE warishan_cancellations ADD COLUMN applicant_village VARCHAR(255)"); } catch (Exception $e) {}
+try { $pdo->exec("ALTER TABLE warishan_cancellations ADD COLUMN applicant_post VARCHAR(255)"); } catch (Exception $e) {}
 
 function extractDobYear($dob) {
     if (empty($dob)) return date('Y');
@@ -62,7 +127,7 @@ $request = json_decode($rawInput, true) ?: [];
 $action = $request['action'] ?? $_GET['action'] ?? '';
 $data = $request['data'] ?? [];
 
-// 🟢 ১. দ্বিমুখী বাংলা ও ইংরেজি স্মার্ট সার্চ ইঞ্জিন (100% Guaranteed Match)
+// 🟢 ১. দ্বিমুখী বাংলা ও ইংরেজি স্মার্ট সার্চ ইঞ্জিন
 if ($action === 'trackApplication') {
     $q = trim(is_array($data) ? ($data['query'] ?? $data['appId'] ?? '') : $data);
     if (empty($q)) {
@@ -72,8 +137,8 @@ if ($action === 'trackApplication') {
 
     $bn = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
     $en = ['0','1','2','3','4','5','6','7','8','9'];
-    $enQ = str_replace($bn, $en, $q); // ইংরেজি সংখ্যা
-    $bnQ = str_replace($en, $bn, $q); // বাংলা সংখ্যা
+    $enQ = str_replace($bn, $en, $q);
+    $bnQ = str_replace($en, $bn, $q);
 
     $results = [];
 
@@ -86,13 +151,7 @@ if ($action === 'trackApplication') {
                OR mobile LIKE ? OR mobile LIKE ? 
                OR nid LIKE ? OR nid LIKE ? 
                OR name LIKE ?");
-        $stmt->execute([
-            "%$enQ%", "%$bnQ%",
-            "%$enQ%", "%$bnQ%",
-            "%$enQ%", "%$bnQ%",
-            "%$enQ%", "%$bnQ%",
-            "%$q%"
-        ]);
+        $stmt->execute(["%$enQ%", "%$bnQ%", "%$enQ%", "%$bnQ%", "%$enQ%", "%$bnQ%", "%$enQ%", "%$bnQ%", "%$q%"]);
         $results = array_merge($results, $stmt->fetchAll());
     } catch (Exception $e) {}
 
@@ -105,13 +164,7 @@ if ($action === 'trackApplication') {
                OR mobile LIKE ? OR mobile LIKE ? 
                OR nid LIKE ? OR nid LIKE ? 
                OR owner_name LIKE ? OR org_name LIKE ?");
-        $stmt->execute([
-            "%$enQ%", "%$bnQ%",
-            "%$enQ%", "%$bnQ%",
-            "%$enQ%", "%$bnQ%",
-            "%$enQ%", "%$bnQ%",
-            "%$q%", "%$q%"
-        ]);
+        $stmt->execute(["%$enQ%", "%$bnQ%", "%$enQ%", "%$bnQ%", "%$enQ%", "%$bnQ%", "%$enQ%", "%$bnQ%", "%$q%", "%$q%"]);
         $results = array_merge($results, $stmt->fetchAll());
     } catch (Exception $e) {}
 
@@ -123,12 +176,7 @@ if ($action === 'trackApplication') {
                OR mobile LIKE ? OR mobile LIKE ? 
                OR nid LIKE ? OR nid LIKE ? 
                OR name LIKE ? OR deceased_name LIKE ?");
-        $stmt->execute([
-            "%$enQ%", "%$bnQ%",
-            "%$enQ%", "%$bnQ%",
-            "%$enQ%", "%$bnQ%",
-            "%$q%", "%$q%"
-        ]);
+        $stmt->execute(["%$enQ%", "%$bnQ%", "%$enQ%", "%$bnQ%", "%$enQ%", "%$bnQ%", "%$q%", "%$q%"]);
         $results = array_merge($results, $stmt->fetchAll());
     } catch (Exception $e) {}
 
@@ -141,13 +189,7 @@ if ($action === 'trackApplication') {
                OR mobile LIKE ? OR mobile LIKE ? 
                OR nid LIKE ? OR nid LIKE ? 
                OR applicant_name LIKE ? OR deceased_name LIKE ?");
-        $stmt->execute([
-            "%$enQ%", "%$bnQ%",
-            "%$enQ%", "%$bnQ%",
-            "%$enQ%", "%$bnQ%",
-            "%$enQ%", "%$bnQ%",
-            "%$q%", "%$q%"
-        ]);
+        $stmt->execute(["%$enQ%", "%$bnQ%", "%$enQ%", "%$bnQ%", "%$enQ%", "%$bnQ%", "%$enQ%", "%$bnQ%", "%$q%", "%$q%"]);
         $warRows = $stmt->fetchAll();
 
         foreach ($warRows as &$wRow) {
@@ -172,31 +214,20 @@ if ($action === 'trackApplication') {
                OR mobile LIKE ? OR mobile LIKE ? 
                OR nid LIKE ? OR nid LIKE ? 
                OR name LIKE ?");
-        $stmt->execute([
-            "%$enQ%", "%$bnQ%",
-            "%$enQ%", "%$bnQ%",
-            "%$enQ%", "%$bnQ%",
-            "%$q%"
-        ]);
+        $stmt->execute(["%$enQ%", "%$bnQ%", "%$enQ%", "%$bnQ%", "%$enQ%", "%$bnQ%", "%$q%"]);
         $results = array_merge($results, $stmt->fetchAll());
     } catch (Exception $e) {}
 
     // ৬. ওয়ারিশ সনদ বাতিলের আবেদনসমূহ
     try {
-        $stmt = $pdo->prepare("SELECT cancel_app_id as appId, target_smarak_no as certNo, target_smarak_no as smarakNo, 'ওয়ারিশ সনদ বাতিলের আবেদন' as type, 'ওয়ারিশ সনদ বাতিলের আবেদন' as serviceType, applicant_name as applicantName, applicant_name as name, applicant_father as fatherName, '' as motherName, deceased_name as deceasedName, applicant_mobile as mobile, applicant_nid as nid, status, apply_date as applyDate, '' as wardNo, deceased_address as village, '' as postOffice 
+        $stmt = $pdo->prepare("SELECT cancel_app_id as appId, target_smarak_no as certNo, target_smarak_no as smarakNo, 'ওয়ারিশ সনদ বাতিলের আবেদন' as type, 'ওয়ারিশ সনদ বাতিলের আবেদন' as serviceType, applicant_name as applicantName, applicant_name as name, applicant_father as fatherName, '' as motherName, deceased_name as deceasedName, applicant_mobile as mobile, applicant_nid as nid, status, apply_date as applyDate, applicant_ward as wardNo, applicant_village as village, applicant_post as postOffice 
             FROM warishan_cancellations 
             WHERE cancel_app_id LIKE ? OR cancel_app_id LIKE ? 
                OR target_smarak_no LIKE ? OR target_smarak_no LIKE ? 
                OR applicant_mobile LIKE ? OR applicant_mobile LIKE ? 
                OR applicant_nid LIKE ? OR applicant_nid LIKE ? 
                OR applicant_name LIKE ?");
-        $stmt->execute([
-            "%$enQ%", "%$bnQ%",
-            "%$enQ%", "%$bnQ%",
-            "%$enQ%", "%$bnQ%",
-            "%$enQ%", "%$bnQ%",
-            "%$q%"
-        ]);
+        $stmt->execute(["%$enQ%", "%$bnQ%", "%$enQ%", "%$bnQ%", "%$enQ%", "%$bnQ%", "%$enQ%", "%$bnQ%", "%$q%"]);
         $results = array_merge($results, $stmt->fetchAll());
     } catch (Exception $e) {}
 
@@ -212,7 +243,7 @@ if ($action === 'trackApplication') {
     exit;
 }
 
-// 🟢 ২. ওয়ারিশান সনদ বাতিল অনুমোদন (Approve Cancellation)
+// 🟢 ২. ওয়ারিশান সনদ বাতিল অনুমোদন (শতভাগ নিশ্চিত বাতিলকরণ)
 if ($action === 'approveWarishanCancellation') {
     $cancelAppId = trim($data['cancelAppId'] ?? '');
     $targetSmarak = trim($data['targetSmarakNo'] ?? '');
@@ -227,13 +258,13 @@ if ($action === 'approveWarishanCancellation') {
     exit;
 }
 
-// 🟢 ৩. ওয়ারিশান বাতিলের আবেদন সাবমিট
+// 🟢 ৩. ওয়ারিশান বাতিলের আবেদন সাবমিট (আবেদনকারীর পূর্ণাঙ্গ ঠিকানাসহ)
 if ($action === 'submitWarishanCancellation') {
     $rand6 = rand(100000, 999999);
     $cancelAppId = 'AUL-WCN-' . $rand6;
     $date = date('d/m/Y');
 
-    $stmt = $pdo->prepare("INSERT INTO warishan_cancellations (cancel_app_id, target_app_id, target_smarak_no, applicant_name, applicant_father, applicant_nid, applicant_mobile, deceased_name, deceased_father, deceased_address, cancellation_reason, status, apply_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+    $stmt = $pdo->prepare("INSERT INTO warishan_cancellations (cancel_app_id, target_app_id, target_smarak_no, applicant_name, applicant_father, applicant_nid, applicant_mobile, applicant_ward, applicant_village, applicant_post, deceased_name, deceased_father, deceased_address, cancellation_reason, status, apply_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
     $stmt->execute([
         $cancelAppId,
         $data['targetAppId'] ?? '',
@@ -242,6 +273,9 @@ if ($action === 'submitWarishanCancellation') {
         $data['applicantFather'] ?? '',
         $data['applicantNid'] ?? '',
         $data['applicantMobile'] ?? '',
+        $data['applicantWard'] ?? '০১',
+        $data['applicantVillage'] ?? '',
+        $data['applicantPost'] ?? 'আউলিয়াপুর ময়দান',
         $data['deceasedName'] ?? '',
         $data['deceasedFather'] ?? '',
         $data['deceasedAddress'] ?? '',
@@ -268,6 +302,7 @@ if ($action === 'rejectWarishanCancellation') {
     exit;
 }
 
+// 🟢 ৫. বাতিল আবেদন ও বাতিল আদেশপত্রের বিস্তারিত তথ্য
 if ($action === 'getWarishanCancellationDetails') {
     $q = trim(is_array($data) ? ($data['appId'] ?? '') : $data);
     $stmt = $pdo->prepare("SELECT * FROM warishan_cancellations WHERE cancel_app_id = ?");
@@ -275,6 +310,13 @@ if ($action === 'getWarishanCancellationDetails') {
     $row = $stmt->fetch();
     if ($row) {
         $row['found'] = true;
+        // মূল ওয়ারিশ সনদের ইস্যু তারিখ নিয়ে আসা
+        $targetSm = $row['target_smarak_no'];
+        $origStmt = $pdo->prepare("SELECT date as original_issue_date FROM warishans WHERE smarak_no = ? OR app_id = ?");
+        $origStmt->execute([$targetSm, $row['target_app_id']]);
+        $origRow = $origStmt->fetch();
+        $row['original_issue_date'] = $origRow['original_issue_date'] ?? $row['apply_date'];
+
         echo json_encode($row);
     } else {
         echo json_encode(['found' => false]);
@@ -282,7 +324,7 @@ if ($action === 'getWarishanCancellationDetails') {
     exit;
 }
 
-// 🟢 ৫. নাগরিকত্ব আবেদন সাবমিট
+// 🟢 ৬. নাগরিকত্ব আবেদন সাবমিট
 if ($action === 'submitCitizenshipDirect') {
     $rand6 = rand(100000, 999999);
     $appId = 'AUL-' . $rand6;
@@ -302,7 +344,7 @@ if ($action === 'submitCitizenshipDirect') {
     exit;
 }
 
-// 🟢 ৬. নাগরিকত্ব বিবরণ (Print)
+// 🟢 ৭. নাগরিকত্ব বিবরণ (Print)
 if ($action === 'getCitizenshipDetails') {
     $q = trim(is_array($data) ? ($data['appId'] ?? '') : $data);
     $stmt = $pdo->prepare("SELECT * FROM citizenships WHERE app_id = ? OR cert_no = ?");
@@ -344,7 +386,7 @@ if ($action === 'getCitizenshipDetails') {
     exit;
 }
 
-// 🟢 ৭. পারিবারিক বিবরণ
+// 🟢 ৮. পারিবারিক বিবরণ
 if ($action === 'getFamilyDetails') {
     $q = trim(is_array($data) ? ($data['appId'] ?? '') : $data);
     $stmt = $pdo->prepare("SELECT * FROM family_certificates WHERE app_id = ?");
@@ -387,7 +429,7 @@ if ($action === 'getFamilyDetails') {
     exit;
 }
 
-// 🟢 ৮. ট্রেড লাইসেন্স বিবরণ
+// 🟢 ৯. ট্রেড লাইসেন্স বিবরণ
 if ($action === 'getTradeLicenseDetails') {
     $q = trim(is_array($data) ? ($data['appId'] ?? $data['licNo'] ?? '') : $data);
     $stmt = $pdo->prepare("SELECT * FROM trade_licenses WHERE app_id = ? OR license_no = ?");
@@ -431,7 +473,7 @@ if ($action === 'getTradeLicenseDetails') {
     exit;
 }
 
-// 🟢 ৯. ওয়ারিশান বিবরণ
+// 🟢 ১০. ওয়ারিশান বিবরণ
 if ($action === 'getWarishanDetails') {
     $q = trim(is_array($data) ? ($data['appId'] ?? '') : $data);
     $stmt = $pdo->prepare("SELECT * FROM warishans WHERE app_id = ? OR smarak_no = ?");
@@ -472,7 +514,7 @@ if ($action === 'getWarishanDetails') {
     exit;
 }
 
-// 🟢 ১০. সংশোধিত সকল তথ্য ডাটাবেসে সেভ করা
+// 🟢 ১১. সংশোধিত সকল তথ্য ডাটাবেসে সেভ করা
 if ($action === 'saveEditedApplication' || $action === 'updateApplicationData') {
     $appId = trim($data['appId'] ?? '');
 
@@ -504,7 +546,7 @@ if ($action === 'saveEditedApplication' || $action === 'updateApplicationData') 
     exit;
 }
 
-// 🟢 ১১. ট্রেড লাইসেন্স সাবমিট ও আপডেট
+// 🟢 ১২. ট্রেড লাইসেন্স সাবমিট ও আপডেট
 if ($action === 'submitTradeLicenseApplication') {
     $rand = rand(100000, 999999);
     $appId = 'AUL-TR-' . $rand;
@@ -537,7 +579,7 @@ if ($action === 'updateTradeLicenseData') {
     exit;
 }
 
-// 🟢 ১২. পারিবারিক সাবমিট
+// 🟢 ১৩. পারিবারিক সাবমিট
 if ($action === 'submitFamilyDirect') {
     $isSuccession = ($data['type'] === 'উত্তরাধিকারী সনদ');
     $prefix = $isSuccession ? 'AUL-UW-' : 'AUL-FW-';
@@ -558,7 +600,7 @@ if ($action === 'submitFamilyDirect') {
     exit;
 }
 
-// 🟢 ১৩. ওয়ারিশান সাবমিট ও আপডেট
+// 🟢 ১৪. ওয়ারিশান সাবমিট ও আপডেট
 if ($action === 'submitWarishanApplication') {
     $rand = rand(1000, 9999);
     $appId = 'AUL-WAR-' . $rand;
@@ -595,7 +637,7 @@ if ($action === 'updateWarishanData') {
     exit;
 }
 
-// 🟢 ১৪. সাধারণ প্রত্যয়ন সাবমিট
+// 🟢 ১৫. সাধারণ প্রত্যয়ন সাবমিট
 if ($action === 'submitApplication') {
     $appId = 'AUL-' . rand(100000, 999999);
     $date = date('d/m/Y');
@@ -611,7 +653,7 @@ if ($action === 'submitApplication') {
     exit;
 }
 
-// 🟢 ১৫. ড্যাশবোর্ড পরিসংখ্যান
+// 🟢 ১৬. ড্যাশবোর্ড পরিসংখ্যান
 if ($action === 'getMasterDashboardStats') {
     $citTotal = $pdo->query("SELECT COUNT(*) FROM citizenships")->fetchColumn();
     $citApproved = $pdo->query("SELECT COUNT(*) FROM citizenships WHERE status='Approved'")->fetchColumn();
@@ -650,7 +692,7 @@ if ($action === 'getMasterDashboardStats') {
     exit;
 }
 
-// 🟢 ১৬. তালিকার API সমূহ
+// 🟢 ১৭. তালিকার API সমূহ
 if ($action === 'getCitizenshipApps') {
     echo json_encode($pdo->query("SELECT app_id as appId, cert_no as certNo, name, father_name as fatherName, mobile, status FROM citizenships ORDER BY id DESC")->fetchAll());
     exit;
@@ -672,7 +714,7 @@ if ($action === 'getAllApplications') {
     exit;
 }
 
-// 🟢 ১৭. স্ট্যাটাস পরিবর্তন ও ডিলিট
+// 🟢 ১৮. স্ট্যাটাস পরিবর্তন ও ডিলিট
 if ($action === 'updateAppStatus') {
     $appId = $data['appId'] ?? '';
     $status = $data['status'] ?? 'Approved';
@@ -698,7 +740,7 @@ if ($action === 'deleteApplication') {
     exit;
 }
 
-// 🟢 ১৮. এডমিন লগইন
+// 🟢 ১৯. এডমিন লগইন ও পারমিশন
 if ($action === 'adminLogin') {
     $u = trim($data['username'] ?? '');
     $p = trim($data['password'] ?? '');
