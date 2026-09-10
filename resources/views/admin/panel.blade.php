@@ -328,6 +328,7 @@
       body: JSON.stringify({ action: 'saveUPSettings', data: data })
     }).then(r => r.json());
     if(res && res.success) Swal.fire({ icon: 'success', title: 'সংরক্ষিত হয়েছে!', timer: 1200, showConfirmButton: false });
+    else Swal.fire({ icon: 'error', title: 'সংরক্ষণ ব্যর্থ', text: (res && (res.error || res.message)) || 'সেটিংস সংরক্ষণ করা যায়নি' });
   }
 
   function logoutAdmin() {

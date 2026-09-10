@@ -696,7 +696,7 @@
         body: JSON.stringify({ action: 'saveUPSettings', data: data })
       });
       var result = await response.json();
-      if (!result.success) throw new Error(result.message || 'সেটিংস সংরক্ষণ করা যায়নি');
+      if (!result.success) throw new Error(result.error || result.message || 'সেটিংস সংরক্ষণ করা যায়নি');
       localStorage.setItem('upOfficialSettings', JSON.stringify(data));
       if (typeof applyUPContactSettings === 'function') applyUPContactSettings();
       Swal.fire({ icon: 'success', title: 'সংরক্ষিত হয়েছে!', timer: 1200, showConfirmButton: false });

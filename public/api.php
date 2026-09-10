@@ -133,8 +133,11 @@ if ($action === 'getUPSettings' || $action === 'saveUPSettings') {
             id INT AUTO_INCREMENT PRIMARY KEY,
             `key` VARCHAR(100) UNIQUE,
             `value` TEXT NULL,
+            created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )");
+        try { $pdo->exec("ALTER TABLE up_settings ADD COLUMN created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP"); } catch (Throwable $ignored) {}
+        try { $pdo->exec("ALTER TABLE up_settings ADD COLUMN updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"); } catch (Throwable $ignored) {}
 
         if ($action === 'getUPSettings') {
             $settings = [];
@@ -147,7 +150,7 @@ if ($action === 'getUPSettings' || $action === 'saveUPSettings') {
         }
 
         $settings = is_array($data) ? $data : [];
-        $statement = $pdo->prepare("INSERT INTO up_settings (`key`, `value`) VALUES (?, ?) ON DUPLICATE KEY UPDATE `value` = ?, updated_at = CURRENT_TIMESTAMP");
+        $statement = $pdo->prepare("INSERT INTO up_settings (`key`, `value`, created_at, updated_at) VALUES (?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) ON DUPLICATE KEY UPDATE `value` = ?, updated_at = CURRENT_TIMESTAMP");
         foreach ($settings as $key => $value) {
             if ($key === '' || $key === '_token' || is_array($value)) continue;
             $stringValue = (string)$value;
