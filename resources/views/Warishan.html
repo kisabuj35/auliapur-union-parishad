@@ -722,19 +722,11 @@
 
       var decAddressText = `${toBn(decWard)} নং ওয়ার্ড, ${decVillage} গ্রাম, ডাকঘর: ${decPost}, ১১নং আউলিয়াপুর ইউনিয়ন, পটুয়াখালী সদর, পটুয়াখালী`;
 
-      var tableRows = '';
+      var heirRows = [];
       tree.forEach(function(grp, idx) {
-        if (idx > 0) tableRows += `<tr><td colspan="5" class="war-subgroup-title-row">${grp.groupTitle}</td></tr>`;
+        if (idx > 0) heirRows.push({ groupTitle: grp.groupTitle, isGroup: true });
         (grp.members || []).forEach(function(m) {
-          tableRows += `
-            <tr>
-              <td style="width: 8%; font-weight: bold;">${toBn(m.sl)}</td>
-              <td class="text-start-custom" style="width: 32%;"><strong>${m.name}</strong></td>
-              <td class="text-start-custom" style="width: 30%;">${m.relName || '-'}</td>
-              <td style="width: 18%;">${m.address || '-'}</td>
-              <td style="width: 12%;">${m.relation || '-'}</td>
-            </tr>
-          `;
+          heirRows.push({ member: m });
         });
       });
 
@@ -745,6 +737,27 @@
       var lastDigits = rawNum.slice(-3) || '1';
       var paddedSl = toBn(String(parseInt(lastDigits, 10)).padStart(3, '0'));
       var smarakFormatted = `আ/ইউ/পটুয়া/সদর/${toBn(today.getFullYear())}/${paddedSl}`;
+
+      var pageSize = 13;
+      var pageChunks = [];
+      for (var rowIndex = 0; rowIndex < heirRows.length; rowIndex += pageSize) {
+        pageChunks.push(heirRows.slice(rowIndex, rowIndex + pageSize));
+      }
+      if (!pageChunks.length) pageChunks.push([]);
+      var totalPages = pageChunks.length;
+      var pageMarkup = pageChunks.map(function(chunk, pageIndex) {
+        var isLastPage = pageIndex === totalPages - 1;
+        var rows = chunk.map(function(row) {
+          if (row.isGroup) return `<tr><td colspan="5" class="war-subgroup-title-row">${row.groupTitle}</td></tr>`;
+          var m = row.member;
+          return `<tr><td style="width:8%;font-weight:bold;">${toBn(m.sl)}</td><td class="text-start-custom" style="width:32%;"><strong>${m.name}</strong></td><td class="text-start-custom" style="width:30%;">${m.relName || '-'}</td><td style="width:18%;">${m.address || '-'}</td><td style="width:12%;">${m.relation || '-'}</td></tr>`;
+        }).join('');
+        var continuationText = isLastPage ? '' : '<div class="continuation-note">ওয়ারিশদের তালিকা পরবর্তী পৃষ্ঠায় চলমান</div>';
+        var signatures = isLastPage
+          ? '<div class="signature-row"><div><span class="war-sig-line"></span><strong>গ্রাম পুলিশ</strong><br>১১নং আউলিয়াপুর ইউনিয়ন পরিষদ</div><div><span class="war-sig-line"></span><strong>ইউপি সদস্য</strong><br>১১নং আউলিয়াপুর ইউনিয়ন পরিষদ</div><div><span class="war-sig-line"></span><strong>(অ্যাড. মোঃ হুমায়ুন কবির)</strong><br>চেয়ারম্যান<br>১১নং আউলিয়াপুর ইউনিয়ন পরিষদ</div></div>'
+          : '<div class="signature-row continuation-signatures"><div><span class="war-sig-line"></span><strong>গ্রাম পুলিশ</strong><br>১১নং আউলিয়াপুর ইউনিয়ন পরিষদ</div><div><span class="war-sig-line"></span><strong>ইউপি সদস্য</strong><br>১১নং আউলিয়াপুর ইউনিয়ন পরিষদ</div></div>';
+        return `<section class="war-page-container"><img src="https://lh3.googleusercontent.com/d/1_LMOoAtirVZeGxE4sz_CVQtQpInPPQTs" class="war-watermark-bg" alt="Watermark"><div class="war-content-body"><div><table class="war-header-table"><tr><td class="seal-cell"><img src="https://upload.wikimedia.org/wikipedia/commons/8/84/Government_Seal_of_Bangladesh.svg" width="70" height="70"></td><td class="header-center"><div class="gov-title">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার (স্থানীয় সরকার বিভাগ)</div><h1>১১নং আউলিয়াপুর ইউনিয়ন পরিষদ কার্যালয়</h1><div class="address-title">ডাকঘরঃ আউলিয়াপুর ময়দান, উপজেলা ও জেলাঃ পটুয়াখালী ।</div><div class="website-title">web site: www.aup.auliapur.com</div></td><td class="seal-cell right"><img src="https://lh3.googleusercontent.com/d/1_LMOoAtirVZeGxE4sz_CVQtQpInPPQTs" width="70" height="70"></td></tr></table><div class="green-rule"></div><div class="meta-row"><span>স্মারক নং- ${smarakFormatted}</span><span>তারিখঃ ${runningDate} ইং</span></div>${pageIndex === 0 ? '<div class="royal-ribbon-wrapper"><div class="royal-ribbon-3d"><span>ওয়ারিশ সার্টিফিকেট</span><div class="ribbon-fold-left"></div><div class="ribbon-fold-right"></div></div></div><div class="certificate-intro">এই মর্মে ওয়ারিশ সার্টিফিকেট প্রদান করা যাইতেছে যে, '+decAddressText+'-এর '+decFatherText+'<strong>'+decNameText+'</strong> এর লোকান্তরে নিম্নলিখিত ব্যক্তিগণ তাহার স্থাবর-অস্থাবর সকল সম্পত্তির ওয়ারিশ বিদ্যমান থাকেন।</div>' : '<div class="continuation-title">ওয়ারিশদের নামের তালিকা (চলমান)</div>'}<table class="war-main-table"><thead><tr><th>ক্রমিক নং</th><th>ওয়ারিশগণের নাম</th><th>পিতা/স্বামী নাম</th><th>গ্রাম</th><th>সম্পর্ক</th></tr></thead><tbody>${rows}</tbody></table>${isLastPage ? '<div class="certificate-note">সংশ্লিষ্ট গ্রাম পুলিশ ও ওয়ার্ড মেম্বারের প্রত্যয়ন মতে ইহা ছাড়া আর কোন ওয়ারিশ নাই।<br>ভবিষ্যতে তথ্যের গড়মিল পরিলক্ষিত হইলে উক্ত ওয়ারিশ সনদপত্র বাতিল বলিয়া গণ্য হইবে।</div>' : ''}</div><div>${continuationText}${signatures}<div class="war-bottom-banner"><div>নিয়মিত কর প্রদান করুন</div><div>তথ্য যাচাই: www.aup.auliapur.com</div><div>বাল্যবিবাহ রোধ করুন</div></div></div></div></section>`;
+      }).join('');
 
       var html = `
         <!DOCTYPE html>
@@ -784,6 +797,26 @@
             .war-subgroup-title-row { background: #fff; font-weight: bold; text-align: left; padding: 5px 8px; font-size: 14px; }
             .war-sig-line { border-top: 1.5px solid #000; display: block; width: 80%; margin: 0 auto 4px; }
             .war-bottom-banner { border-top: 1.5px solid #006837; padding-top: 4px; display: flex; justify-content: space-between; align-items: center; font-size: 12.5px; font-weight: bold; color: #006837; }
+            .war-header-table { width: 100%; border-collapse: collapse; margin-bottom: 2px; }
+            .seal-cell { width: 85px; vertical-align: middle; text-align: left; }
+            .seal-cell.right { text-align: right; }
+            .header-center { text-align: center; vertical-align: middle; }
+            .gov-title { font-size: 14.5px; font-weight: bold; color: #222; }
+            .header-center h1 { margin: 2px 0; font-size: 28.5px; font-weight: 800; color: #005a2b; font-family: 'Nikosh', sans-serif; }
+            .address-title { font-size: 16px; font-weight: bold; color: #000; }
+            .website-title { font-size: 12px; font-weight: bold; color: #006837; margin-top: 1px; }
+            .green-rule { border-top: 2px solid #006837; border-bottom: 1px solid #b89446; height: 4px; margin: 4px 0 8px; }
+            .meta-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 15px; font-weight: bold; }
+            .certificate-intro { margin-bottom: 8px; text-align: justify; font-size: 15.5px; line-height: 1.85; text-indent: 40px; }
+            .certificate-note { margin-top: 10px; font-size: 13.5px; line-height: 1.5; font-weight: bold; }
+            .continuation-title { text-align: center; font-weight: bold; font-size: 17px; text-decoration: underline; margin: 10px 0 14px; }
+            .continuation-note { text-align: center; font-weight: bold; font-size: 14px; margin-bottom: 10px; }
+            .signature-row { display: flex; justify-content: space-between; align-items: flex-end; text-align: center; margin-top: 28px; padding-bottom: 8px; font-size: 14.5px; }
+            .signature-row > div { width: 30%; }
+            .signature-row > div:last-child { width: 38%; }
+            .continuation-signatures { justify-content: space-around; }
+            .continuation-signatures > div { width: 30%; }
+            .continuation-signatures > div:last-child { width: 30%; }
             @media print {
               .war-page-container { margin: 0; box-shadow: none; }
               .war-content-body { min-height: 273mm; }
@@ -859,6 +892,8 @@
         </body>
         </html>
       `;
+
+      html = html.replace(/<body>[\s\S]*<\/body>/, '<body>' + pageMarkup + '</body>');
 
       executeIsolatedIframePrint(html);
     } catch(err) {
