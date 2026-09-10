@@ -1432,19 +1432,10 @@
   // 🟢 মূল ওয়ারিশ সার্টিফিকেট প্রিন্ট ফলব্যাক (directPrintWarishan)
   // =========================================================================
   async function directPrintWarishan(appId) {
-    if (typeof showWarishanPrintPreview === 'function') {
-      return showWarishanPrintPreview(appId);
-    }
     if (typeof printWarishanCertificate === 'function') {
       return printWarishanCertificate(appId);
     }
-    try {
-      const data = await callBackendAPI('getWarishanDetails', appId);
-      if (!data || !data.found) return alert('ওয়ারিশ সনদের তথ্য পাওয়া যায়নি!');
-      alert('ওয়ারিশ সনদের ট্র্যাকিং: ' + data.appId + ' (স্মারক নং: ' + (data.smarakNo || '-') + ')');
-    } catch (e) {
-      alert('ওয়ারিশ প্রিন্ট করতে সমস্যা হয়েছে');
-    }
+    alert('ওয়ারিশ সার্টিফিকেট প্রিন্ট মডিউল লোড হয়নি। পেজটি রিফ্রেশ করে আবার চেষ্টা করুন।');
   }
 
   // সাধারণ অ্যাকশনসমূহ

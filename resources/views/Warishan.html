@@ -703,7 +703,7 @@
   }
 
   // 🟢 সরাসরি ১-ক্লিকে ওয়ারিশ সনদ প্রিন্ট (মৃত ব্যক্তির ঠিকানা ও ৩ডি রিবন সহ)
-  async function directPrintWarishan(appId) {
+  async function printWarishanCertificate(appId) {
     try {
       const data = await callBackendAPI('getWarishanDetails', appId);
       if(!data || !data.found) return alert('ওয়ারিশান তথ্য পাওয়া যায়নি!');
@@ -821,7 +821,7 @@
   }
 
   function showFamilyWarishanPrintPreview(appId) {
-    directPrintWarishan(appId);
+    printWarishanCertificate(appId);
   }
 
   // 🟢 নিয়মিত ওয়ারিশান আবেদন কপি প্রিন্ট
