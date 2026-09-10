@@ -777,7 +777,11 @@
       if (typeof callBackendAPI !== 'function') return;
       try {
         const defaults = getDefaultUPOfficialSettings();
-        const serverSettings = await fetch('/admin-api/up-settings').then(response => response.json());
+        const serverSettings = await fetch('/api.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ action: 'getUPSettings' })
+        }).then(response => response.json());
         if (serverSettings && typeof serverSettings === 'object' && !Array.isArray(serverSettings)) {
           const merged = Object.assign({}, defaults, serverSettings);
           localStorage.setItem('upOfficialSettings', JSON.stringify(merged));

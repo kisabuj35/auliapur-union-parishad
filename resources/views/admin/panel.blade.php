@@ -296,7 +296,11 @@
 
   // ইউপি সেটিংস লোড ও সেভ
   async function loadUPSettings() {
-    const s = await fetch('/admin-api/up-settings').then(r => r.json());
+    const s = await fetch('/api.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ action: 'getUPSettings' })
+    }).then(r => r.json());
     if(s) {
       document.getElementById('setChairman').value = s.chairman || 'অ্যাড. মোঃ হুমায়ুন কবির';
       document.getElementById('setChairmanEn').value = s.chairmanEn || 'Adv. Md. Humayun Kabir';
@@ -318,7 +322,11 @@
       secretaryEn: document.getElementById('setSecretaryEn').value,
       chairmanHelpline: document.getElementById('setChairmanHelpline').value
     };
-    const res = await apiRequest('/admin-api/save-up-settings', data);
+    const res = await fetch('/api.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ action: 'saveUPSettings', data: data })
+    }).then(r => r.json());
     if(res && res.success) Swal.fire({ icon: 'success', title: 'সংরক্ষিত হয়েছে!', timer: 1200, showConfirmButton: false });
   }
 

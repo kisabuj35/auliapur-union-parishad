@@ -661,7 +661,11 @@
 
   async function loadUPSettings() {
     try {
-      var response = await fetch('/admin-api/up-settings');
+      var response = await fetch('/api.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ action: 'getUPSettings' })
+      });
       var settings = await response.json();
       document.getElementById('setChairName').value = settings.chairman || 'অ্যাড. মোঃ হুমায়ুন কবির';
       document.getElementById('setChairNameEn').value = settings.chairmanEn || 'Adv. Md. Humayun Kabir';
@@ -686,10 +690,10 @@
       chairmanHelpline: document.getElementById('setChairmanHelpline').value.trim()
     };
     try {
-      var response = await fetch('/admin-api/save-up-settings', {
+      var response = await fetch('/api.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(data)
+        body: JSON.stringify({ action: 'saveUPSettings', data: data })
       });
       var result = await response.json();
       if (!result.success) throw new Error(result.message || 'সেটিংস সংরক্ষণ করা যায়নি');
