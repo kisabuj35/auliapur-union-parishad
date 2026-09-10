@@ -574,8 +574,11 @@
             <div class="row g-3">
               <div class="col-md-6"><label class="form-label fw-bold">চেয়ারম্যানের নাম (বাংলা) *</label><input type="text" id="setChairName" class="form-control" value="অ্যাড. মোঃ হুমায়ুন কবির" required></div>
               <div class="col-md-6"><label class="form-label fw-bold">চেয়ারম্যানের ইংরেজি নাম</label><input type="text" id="setChairNameEn" class="form-control" value="Adv. Md. Humayun Kabir"></div>
+              <div class="col-md-6"><label class="form-label fw-bold">প্যানেল চেয়ারম্যানের নাম (বাংলা)</label><input type="text" id="setPanelChairName" class="form-control" value="মোঃ আবদুস সালাম মৃধা"></div>
+              <div class="col-md-6"><label class="form-label fw-bold">প্যানেল চেয়ারম্যানের ইংরেজি নাম</label><input type="text" id="setPanelChairNameEn" class="form-control" value="Md. Abdus Salam Mridha"></div>
               <div class="col-md-6"><label class="form-label fw-bold">ইউপি সচিবের নাম (বাংলা) *</label><input type="text" id="setSecName" class="form-control" value="মোঃ মোতাহার উদ্দিন" required></div>
               <div class="col-md-6"><label class="form-label fw-bold">ইউপি সচিবের ইংরেজি নাম</label><input type="text" id="setSecNameEn" class="form-control" value="Md. Motahar Uddin"></div>
+              <div class="col-md-6"><label class="form-label fw-bold">চেয়ারম্যান হেল্পলাইন মোবাইল</label><input type="tel" id="setChairmanHelpline" class="form-control" value="০১৭১০-১৮১০৫৯"></div>
             </div>
             <div class="text-end mt-4"><button type="submit" class="btn btn-success fw-bold px-4 rounded-pill" id="saveUpSettingsBtn"><i class="fa fa-save me-1"></i> সেটিংস সংরক্ষণ করুন</button></div>
           </form>
@@ -652,7 +655,50 @@
     else if (tabId === 'appsTab') loadAdminApps();
     else if (tabId === 'taxTab') loadTaxPayers();
     else if (tabId === 'dashTab') loadAdminDashboard();
+    else if (tabId === 'upSettingsTab') loadUPSettings();
     else if (tabId === 'settingsTab') loadAdminUsers();
+  }
+
+  async function loadUPSettings() {
+    try {
+      var response = await fetch('/admin-api/up-settings');
+      var settings = await response.json();
+      document.getElementById('setChairName').value = settings.chairman || 'অ্যাড. মোঃ হুমায়ুন কবির';
+      document.getElementById('setChairNameEn').value = settings.chairmanEn || 'Adv. Md. Humayun Kabir';
+      document.getElementById('setPanelChairName').value = settings.panelChairman || 'মোঃ আবদুস সালাম মৃধা';
+      document.getElementById('setPanelChairNameEn').value = settings.panelChairmanEn || 'Md. Abdus Salam Mridha';
+      document.getElementById('setSecName').value = settings.secretary || 'মোঃ মোতাহার উদ্দিন';
+      document.getElementById('setSecNameEn').value = settings.secretaryEn || 'Md. Motahar Uddin';
+      document.getElementById('setChairmanHelpline').value = settings.chairmanHelpline || '০১৭১০-১৮১০৫৯';
+    } catch (error) {
+      console.error('UP settings load failed:', error);
+    }
+  }
+
+  async function saveUPSettings() {
+    var data = {
+      chairman: document.getElementById('setChairName').value.trim(),
+      chairmanEn: document.getElementById('setChairNameEn').value.trim(),
+      panelChairman: document.getElementById('setPanelChairName').value.trim(),
+      panelChairmanEn: document.getElementById('setPanelChairNameEn').value.trim(),
+      secretary: document.getElementById('setSecName').value.trim(),
+      secretaryEn: document.getElementById('setSecNameEn').value.trim(),
+      chairmanHelpline: document.getElementById('setChairmanHelpline').value.trim()
+    };
+    try {
+      var response = await fetch('/admin-api/save-up-settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      var result = await response.json();
+      if (!result.success) throw new Error(result.message || 'সেটিংস সংরক্ষণ করা যায়নি');
+      localStorage.setItem('upOfficialSettings', JSON.stringify(data));
+      if (typeof applyUPContactSettings === 'function') applyUPContactSettings();
+      Swal.fire({ icon: 'success', title: 'সংরক্ষিত হয়েছে!', timer: 1200, showConfirmButton: false });
+    } catch (error) {
+      Swal.fire({ icon: 'error', title: 'সংরক্ষণ ব্যর্থ', text: error.message });
+    }
   }
 
   // 🟢 ১. নাগরিকত্ব সনদ সাব-ট্যাব ও ফিল্টার

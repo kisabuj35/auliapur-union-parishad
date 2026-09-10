@@ -141,8 +141,11 @@
             <div class="row g-3">
               <div class="col-md-6"><label class="form-label fw-bold">চেয়ারম্যানের নাম (বাংলা) *</label><input type="text" id="setChairman" class="form-control" required></div>
               <div class="col-md-6"><label class="form-label fw-bold">চেয়ারম্যানের ইংরেজি নাম</label><input type="text" id="setChairmanEn" class="form-control"></div>
+              <div class="col-md-6"><label class="form-label fw-bold">প্যানেল চেয়ারম্যানের নাম (বাংলা)</label><input type="text" id="setPanelChairman" class="form-control"></div>
+              <div class="col-md-6"><label class="form-label fw-bold">প্যানেল চেয়ারম্যানের ইংরেজি নাম</label><input type="text" id="setPanelChairmanEn" class="form-control"></div>
               <div class="col-md-6"><label class="form-label fw-bold">ইউপি সচিবের নাম (বাংলা) *</label><input type="text" id="setSecretary" class="form-control" required></div>
               <div class="col-md-6"><label class="form-label fw-bold">ইউপি সচিবের ইংরেজি নাম</label><input type="text" id="setSecretaryEn" class="form-control"></div>
+              <div class="col-md-6"><label class="form-label fw-bold">চেয়ারম্যান হেল্পলাইন মোবাইল</label><input type="tel" id="setChairmanHelpline" class="form-control"></div>
             </div>
             <div class="text-end mt-4">
               <button type="submit" class="btn btn-success fw-bold px-4"><i class="fa fa-save me-1"></i> সেটিংস সংরক্ষণ করুন</button>
@@ -297,8 +300,11 @@
     if(s) {
       document.getElementById('setChairman').value = s.chairman || 'অ্যাড. মোঃ হুমায়ুন কবির';
       document.getElementById('setChairmanEn').value = s.chairmanEn || 'Adv. Md. Humayun Kabir';
+      document.getElementById('setPanelChairman').value = s.panelChairman || 'মোঃ আবদুস সালাম মৃধা';
+      document.getElementById('setPanelChairmanEn').value = s.panelChairmanEn || 'Md. Abdus Salam Mridha';
       document.getElementById('setSecretary').value = s.secretary || 'মোঃ মোতাহার উদ্দিন';
       document.getElementById('setSecretaryEn').value = s.secretaryEn || 'Md. Motahar Uddin';
+      document.getElementById('setChairmanHelpline').value = s.chairmanHelpline || '০১৭১০-১৮১০৫৯';
     }
   }
 
@@ -306,8 +312,11 @@
     const data = {
       chairman: document.getElementById('setChairman').value,
       chairmanEn: document.getElementById('setChairmanEn').value,
+      panelChairman: document.getElementById('setPanelChairman').value,
+      panelChairmanEn: document.getElementById('setPanelChairmanEn').value,
       secretary: document.getElementById('setSecretary').value,
-      secretaryEn: document.getElementById('setSecretaryEn').value
+      secretaryEn: document.getElementById('setSecretaryEn').value,
+      chairmanHelpline: document.getElementById('setChairmanHelpline').value
     };
     const res = await apiRequest('/admin-api/save-up-settings', data);
     if(res && res.success) Swal.fire({ icon: 'success', title: 'সংরক্ষিত হয়েছে!', timer: 1200, showConfirmButton: false });

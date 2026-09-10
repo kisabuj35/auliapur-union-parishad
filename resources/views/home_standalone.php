@@ -507,10 +507,10 @@
             <i class="fa-solid fa-phone-volume"></i>
           </div>
           <h5 class="fw-bold mb-2">সরাসরি ফোন ও মোবাইল</h5>
-          <p class="text-muted mb-1">চেয়ারম্যান হেল্পলাইন: <strong>০১৭১০-১৮১০৫৯</strong></p>
+          <p class="text-muted mb-1">চেয়ারম্যান হেল্পলাইন: <strong id="chairmanHelplineDisplay">০১৭১০-১৮১০৫৯</strong></p>
           <p class="text-muted mb-1">ইউপি সচিব: <strong>০১৭১০-১৮১০৫৯</strong></p>
           <p class="text-muted mb-0">ডিজিটাল উদ্যোক্তা: <strong>০১৭১০-১৮১০৫৯</strong></p>
-          <a href="tel:01710181059" class="btn btn-sm btn-outline-success fw-bold mt-3 rounded-pill px-3"><i class="fa-solid fa-phone me-1"></i> কল করুন</a>
+          <a href="tel:01710181059" id="chairmanHelplineCall" class="btn btn-sm btn-outline-success fw-bold mt-3 rounded-pill px-3"><i class="fa-solid fa-phone me-1"></i> কল করুন</a>
         </div>
       </div>
 
@@ -717,7 +717,8 @@
         secretary: 'মোঃ মোতাহার উদ্দিন',
         chairmanEn: 'Adv. Md. Humayun Kabir',
         panelChairmanEn: 'Md. Abdus Salam Mridha',
-        secretaryEn: 'Md. Motahar Uddin'
+        secretaryEn: 'Md. Motahar Uddin',
+        chairmanHelpline: '০১৭১০-১৮১০৫৯'
       };
     }
 
@@ -757,6 +758,14 @@
       return getUPOfficialSettings().secretaryEn || getDefaultUPOfficialSettings().secretaryEn;
     }
 
+    function applyUPContactSettings() {
+      var helpline = getUPOfficialSettings().chairmanHelpline || getDefaultUPOfficialSettings().chairmanHelpline;
+      var display = document.getElementById('chairmanHelplineDisplay');
+      var callLink = document.getElementById('chairmanHelplineCall');
+      if (display) display.textContent = helpline;
+      if (callLink) callLink.href = 'tel:' + helpline.replace(/[^0-9+]/g, '');
+    }
+
     window.getUPChairmanName = getUPChairmanName;
     window.getUPChairmanNameEn = getUPChairmanNameEn;
     window.getUPPanelChairmanName = getUPPanelChairmanName;
@@ -767,21 +776,16 @@
     async function refreshUPOfficialSettingsFromServer() {
       if (typeof callBackendAPI !== 'function') return;
       try {
-        const localSettings = getUPOfficialSettings();
         const defaults = getDefaultUPOfficialSettings();
-        const hasLocalCustomValues = JSON.stringify(localSettings) !== JSON.stringify(defaults);
-        if (hasLocalCustomValues) return;
-
-        const serverSettings = await callBackendAPI('getUPSettings');
+        const serverSettings = await fetch('/admin-api/up-settings').then(response => response.json());
         if (serverSettings && typeof serverSettings === 'object' && !Array.isArray(serverSettings)) {
           const merged = Object.assign({}, defaults, serverSettings);
-          const serverLooksCustom = JSON.stringify(merged) !== JSON.stringify(defaults);
-          if (serverLooksCustom) {
-            localStorage.setItem('upOfficialSettings', JSON.stringify(merged));
-          }
+          localStorage.setItem('upOfficialSettings', JSON.stringify(merged));
         }
+        applyUPContactSettings();
       } catch (e) {
         console.warn('UP settings sync failed:', e);
+        applyUPContactSettings();
       }
     }
 
