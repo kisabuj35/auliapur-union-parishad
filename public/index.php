@@ -2,6 +2,12 @@
 
 define('LARAVEL_START', microtime(true));
 
+// Laravel configuration is not included in this lightweight deployment.
+if (!file_exists(__DIR__.'/../config/app.php')) {
+    require_once __DIR__.'/../routes/web_direct.php';
+    exit;
+}
+
 // অটোলোডার চেক
 if (file_exists(__DIR__.'/../vendor/autoload.php')) {
     require __DIR__.'/../vendor/autoload.php';

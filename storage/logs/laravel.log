@@ -1,0 +1,24 @@
+[2026-09-10 07:30:18] laravel.EMERGENCY: Unable to create configured logger. Using emergency logger. {"exception":"[object] (InvalidArgumentException(code: 0): Log [] is not defined. at /workspaces/auliapur-union-parishad/vendor/laravel/framework/src/Illuminate/Log/LogManager.php:212)
+[stacktrace]
+#0 /workspaces/auliapur-union-parishad/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(137): Illuminate\\Log\\LogManager->resolve()
+#1 /workspaces/auliapur-union-parishad/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\\Log\\LogManager->get()
+#2 /workspaces/auliapur-union-parishad/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\\Log\\LogManager->driver()
+#3 /workspaces/auliapur-union-parishad/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\\Log\\LogManager->error()
+#4 /workspaces/auliapur-union-parishad/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\\Foundation\\Exceptions\\Handler->reportThrowable()
+#5 /workspaces/auliapur-union-parishad/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\\Foundation\\Exceptions\\Handler->report()
+#6 /workspaces/auliapur-union-parishad/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\\Foundation\\Http\\Kernel->reportException()
+#7 /workspaces/auliapur-union-parishad/public/index.php(17): Illuminate\\Foundation\\Http\\Kernel->handle()
+#8 {main}
+"} 
+[2026-09-10 07:30:18] laravel.ERROR: The "" directory does not exist. {"exception":"[object] (Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException(code: 0): The \"\" directory does not exist. at /workspaces/auliapur-union-parishad/vendor/symfony/finder/Finder.php:651)
+[stacktrace]
+#0 /workspaces/auliapur-union-parishad/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/LoadConfiguration.php(86): Symfony\\Component\\Finder\\Finder->in()
+#1 /workspaces/auliapur-union-parishad/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/LoadConfiguration.php(63): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->getConfigurationFiles()
+#2 /workspaces/auliapur-union-parishad/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/LoadConfiguration.php(39): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->loadConfigurationFiles()
+#3 /workspaces/auliapur-union-parishad/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(286): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->bootstrap()
+#4 /workspaces/auliapur-union-parishad/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(186): Illuminate\\Foundation\\Application->bootstrapWith()
+#5 /workspaces/auliapur-union-parishad/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(170): Illuminate\\Foundation\\Http\\Kernel->bootstrap()
+#6 /workspaces/auliapur-union-parishad/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter()
+#7 /workspaces/auliapur-union-parishad/public/index.php(17): Illuminate\\Foundation\\Http\\Kernel->handle()
+#8 {main}
+"} 
