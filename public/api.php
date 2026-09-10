@@ -808,9 +808,16 @@ if ($action === 'getAdminUsers') {
     exit;
 }
 if ($action === 'saveAdminUser' || $action === 'updateUser') {
-    $stmt = $pdo->prepare("INSERT INTO users (username, password, role, name, permissions, photo) VALUES (?,?,?,?,?,?) ON DUPLICATE KEY UPDATE name=VALUES(name), role=VALUES(role), permissions=VALUES(permissions), photo=VALUES(photo)");
-    $stmt->execute([$data['username'], $data['password'] ?? '123456', $data['role'] ?? 'Admin', $data['name'] ?? $data['username'], json_encode($data['permissions'] ?? []), $data['photo'] ?? '']);
-    echo json_encode(['success' => true]);
+    $username = trim($data['username'] ?? '');
+    if ($username === '') { echo json_encode(['success' => false, 'message' => 'ইউজারনেম আবশ্যক']); exit; }
+    $existing = $pdo->prepare("SELECT password FROM users WHERE username=?");
+    $existing->execute([$username]);
+    $oldUser = $existing->fetch();
+    $password = trim($data['password'] ?? '');
+    if ($password === '') $password = $oldUser['password'] ?? '123456';
+    $stmt = $pdo->prepare("INSERT INTO users (username, password, role, name, permissions, photo, created_at, updated_at) VALUES (?,?,?,?,?,?,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP) ON DUPLICATE KEY UPDATE password=VALUES(password), name=VALUES(name), role=VALUES(role), permissions=VALUES(permissions), photo=VALUES(photo), updated_at=CURRENT_TIMESTAMP");
+    $stmt->execute([$username, $password, $data['role'] ?? 'Admin', $data['name'] ?? $username, json_encode($data['permissions'] ?? [], JSON_UNESCAPED_UNICODE), $data['photo'] ?? '']);
+    echo json_encode(['success' => true], JSON_UNESCAPED_UNICODE);
     exit;
 }
 if ($action === 'deleteAdminUser') {

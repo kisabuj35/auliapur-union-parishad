@@ -606,6 +606,40 @@
   </div>
 </div>
 
+<div class="modal fade" id="adminUserModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content border-0 shadow-lg">
+      <div class="modal-header bg-dark text-white">
+        <h5 class="modal-title"><i class="fa fa-user-shield me-2 text-warning"></i><span id="adminUserModalTitle">নতুন এডমিন যোগ</span></h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <form id="adminUserForm" onsubmit="event.preventDefault(); saveAdminUser();">
+        <div class="modal-body">
+          <input type="hidden" id="editingAdminUsername">
+          <div class="row g-3">
+            <div class="col-md-6"><label class="form-label fw-bold">ইউজারনেম *</label><input type="text" id="newAdminUsername" class="form-control" required></div>
+            <div class="col-md-6"><label class="form-label fw-bold">নাম *</label><input type="text" id="newAdminName" class="form-control" required></div>
+            <div class="col-md-6"><label class="form-label fw-bold">পাসওয়ার্ড *</label><input type="password" id="newAdminPassword" class="form-control" minlength="4" placeholder="এডিটের সময় খালি রাখলে অপরিবর্তিত থাকবে"></div>
+            <div class="col-md-6"><label class="form-label fw-bold">রোল</label><select id="newAdminRole" class="form-select"><option value="Admin">Admin</option><option value="SuperAdmin">SuperAdmin</option></select></div>
+            <div class="col-12"><label class="form-label fw-bold">প্রোফাইল ছবি</label><input type="file" id="newAdminPhotoFile" class="form-control" accept="image/*" onchange="previewAdminPhoto(event)"><img id="newAdminPhotoPreview" class="rounded-circle border mt-2 d-none" width="72" height="72" style="object-fit:cover" alt="প্রোফাইল ছবি"></div>
+          </div>
+          <hr>
+          <h6 class="fw-bold text-success">সাইড মেনু এক্সেস</h6>
+          <div class="row g-2" id="adminMenuPermissions"></div>
+          <h6 class="fw-bold text-success mt-3">কাজের অনুমতি</h6>
+          <div class="d-flex flex-wrap gap-3">
+            <label><input type="checkbox" class="admin-action-permission" value="canApprove"> অনুমোদন</label>
+            <label><input type="checkbox" class="admin-action-permission" value="canReject"> বাতিল</label>
+            <label><input type="checkbox" class="admin-action-permission" value="canEdit"> সংশোধন</label>
+            <label><input type="checkbox" class="admin-action-permission" value="canDelete"> মুছে ফেলা</label>
+          </div>
+        </div>
+        <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">বন্ধ</button><button type="submit" class="btn btn-success"><i class="fa fa-save me-1"></i> সংরক্ষণ করুন</button></div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <!-- ========================================================== -->
 <!-- 🟢 JAVASCRIPT MASTER ENGINE (ZERO ERRORS, ALL BUTTONS OK) -->
 <!-- ========================================================== -->
@@ -627,6 +661,90 @@
     } catch(e) { return null; }
   }
 
+  var adminMenuPermissionOptions = [
+    ['dashTab', 'ড্যাশবোর্ড'], ['citTab', 'নাগরিকত্ব সনদ'], ['tradeTab', 'ট্রেড লাইসেন্স'], ['famTab', 'পারিবারিক সনদ'],
+    ['warTab', 'ওয়ারিশ সার্টিফিকেট'], ['appsTab', 'সাধারণ প্রত্যয়নপত্র'], ['taxTab', 'কর আদায়'], ['accountsTab', 'আয়-ব্যয়ের হিসাব'],
+    ['bankTab', 'ব্যাংক হিসাব'], ['beneficiaryTab', 'উপকারভোগী'], ['projectTab', 'উন্নয়ন প্রকল্প'], ['reportTab', 'রিপোর্ট'], ['upSettingsTab', 'ইউপি সেটিংস'], ['settingsTab', 'এডমিন পারমিশন']
+  ];
+
+  function renderAdminPermissionOptions() {
+    var box = document.getElementById('adminMenuPermissions');
+    if (!box) return;
+    box.innerHTML = adminMenuPermissionOptions.map(function(option) {
+      return '<div class="col-6 col-md-4"><label class="border rounded p-2 d-block"><input type="checkbox" class="admin-menu-permission me-1" value="' + option[0] + '"> ' + option[1] + '</label></div>';
+    }).join('');
+  }
+
+  function openAddUserModal(username) {
+    renderAdminPermissionOptions();
+    var users = window.adminUsersStore || [];
+    var user = username ? users.find(function(item) { return item.username === username; }) : null;
+    document.getElementById('adminUserForm').reset();
+    document.getElementById('editingAdminUsername').value = user ? user.username : '';
+    document.getElementById('newAdminUsername').value = user ? user.username : '';
+    document.getElementById('newAdminUsername').readOnly = !!user;
+    document.getElementById('newAdminName').value = user ? user.name || '' : '';
+    document.getElementById('newAdminRole').value = user ? user.role || 'Admin' : 'Admin';
+    document.getElementById('newAdminPassword').required = !user;
+    document.getElementById('adminUserModalTitle').textContent = user ? 'এডমিন তথ্য সংশোধন' : 'নতুন এডমিন যোগ';
+    document.getElementById('newAdminPhotoPreview').classList.toggle('d-none', !(user && user.photoUrl));
+    if (user && user.photoUrl) document.getElementById('newAdminPhotoPreview').src = user.photoUrl;
+    var permissions = user && user.permissions ? user.permissions : {};
+    if (typeof permissions === 'string') { try { permissions = JSON.parse(permissions); } catch (e) { permissions = {}; } }
+    document.querySelectorAll('.admin-menu-permission').forEach(function(input) { input.checked = (permissions.allowedMenus || []).includes(input.value); });
+    document.querySelectorAll('.admin-action-permission').forEach(function(input) { input.checked = permissions[input.value] === true; });
+    bootstrap.Modal.getOrCreateInstance(document.getElementById('adminUserModal')).show();
+  }
+
+  function previewAdminPhoto(event) {
+    var file = event.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function() {
+      var preview = document.getElementById('newAdminPhotoPreview');
+      preview.src = reader.result;
+      preview.classList.remove('d-none');
+    };
+    reader.readAsDataURL(file);
+  }
+
+  async function saveAdminUser() {
+    if ((getActiveSession() || {}).role !== 'SuperAdmin') return Swal.fire({ icon: 'warning', title: 'অনুমতি নেই', text: 'শুধু SuperAdmin এডমিন তথ্য পরিবর্তন করতে পারবেন' });
+    var username = document.getElementById('newAdminUsername').value.trim();
+    var name = document.getElementById('newAdminName').value.trim();
+    var password = document.getElementById('newAdminPassword').value;
+    var existing = (window.adminUsersStore || []).find(function(item) { return item.username === username; });
+    if (!username || !name || (!existing && !password)) return Swal.fire({ icon: 'warning', title: 'তথ্য অসম্পূর্ণ', text: 'ইউজারনেম, নাম ও পাসওয়ার্ড দিন' });
+    var permissions = { allowedMenus: Array.from(document.querySelectorAll('.admin-menu-permission:checked')).map(function(input) { return input.value; }) };
+    document.querySelectorAll('.admin-action-permission').forEach(function(input) { permissions[input.value] = input.checked; });
+    var photo = document.getElementById('newAdminPhotoPreview').src || '';
+    var payload = { username: username, name: name, role: document.getElementById('newAdminRole').value, password: password, permissions: permissions, photo: photo.indexOf('data:image') === 0 ? photo : (existing ? existing.photoUrl : '') };
+    var result = await callBackendAPI('saveAdminUser', payload);
+    if (result && result.success) {
+      bootstrap.Modal.getInstance(document.getElementById('adminUserModal')).hide();
+      Swal.fire({ icon: 'success', title: existing ? 'এডমিন আপডেট হয়েছে' : 'এডমিন যোগ হয়েছে', timer: 1300, showConfirmButton: false });
+      loadAdminUsers();
+    } else Swal.fire({ icon: 'error', title: 'সংরক্ষণ ব্যর্থ', text: result && (result.message || result.error) || 'এডমিন সংরক্ষণ করা যায়নি' });
+  }
+
+  async function deleteUser(username) {
+    if ((getActiveSession() || {}).role !== 'SuperAdmin') return Swal.fire({ icon: 'warning', title: 'অনুমতি নেই', text: 'শুধু SuperAdmin এডমিন মুছতে পারবেন' });
+    if (!confirm('এই এডমিনকে মুছে ফেলতে চান?')) return;
+    var result = await callBackendAPI('deleteAdminUser', { username: username });
+    if (result && result.success) { Swal.fire({ icon: 'success', title: 'এডমিন মুছে ফেলা হয়েছে', timer: 1000, showConfirmButton: false }); loadAdminUsers(); }
+    else Swal.fire({ icon: 'error', title: 'মুছে ফেলা যায়নি', text: result && (result.message || result.error) || 'অনুরোধ ব্যর্থ হয়েছে' });
+  }
+
+  function applyAdminPermissions() {
+    var session = getActiveSession() || {};
+    var permissions = session.permissions || {};
+    var isSuperAdmin = session.role === 'SuperAdmin';
+    var allowedMenus = isSuperAdmin ? adminMenuPermissionOptions.map(function(item) { return item[0]; }) : (permissions.allowedMenus || ['dashTab']);
+    document.querySelectorAll('.admin-menu-link[data-menu]').forEach(function(link) { link.classList.toggle('d-none', !allowedMenus.includes(link.dataset.menu)); });
+    var settingsButton = document.getElementById('superAdminSettingsBtn');
+    if (settingsButton) settingsButton.classList.toggle('d-none', !isSuperAdmin && !allowedMenus.includes('settingsTab'));
+  }
+
   function toggleAdminSidebar(force) {
     var sb = document.getElementById('adminSidebar');
     var bd = document.getElementById('adminSidebarBackdrop');
@@ -637,6 +755,9 @@
   }
 
   function switchAdminTab(tabId) {
+    var session = getActiveSession() || {};
+    var permissions = session.permissions || {};
+    if (session.role !== 'SuperAdmin' && !(permissions.allowedMenus || ['dashTab']).includes(tabId)) return;
     sessionStorage.setItem('adminActiveTab', tabId);
     document.querySelectorAll('.admin-tab').forEach(el => el.classList.add('d-none'));
     var target = document.getElementById(tabId);
@@ -998,10 +1119,16 @@
 
   // 🟢 অ্যাকশন বাটন রেন্ডারার
   function renderActionButtons(appId, status, printCallback, editCallback) {
+    var session = getActiveSession() || {};
+    var permissions = session.permissions || {};
+    var isSuperAdmin = session.role === 'SuperAdmin';
+    var canApprove = isSuperAdmin || permissions.canApprove;
+    var canReject = isSuperAdmin || permissions.canReject;
+    var canEdit = isSuperAdmin || permissions.canEdit;
     var badge = (status === 'Approved') ? '<span class="status-badge-approved">Approved</span>' : '<span class="status-badge-pending">Pending</span>';
-    var approveBtn = `<button class="btn-act-icon approve" onclick="changeStatus('${appId}','Approved')" title="অনুমোদন"><i class="fa fa-check"></i></button>`;
-    var editBtn = `<button class="btn-act-icon edit" onclick="${editCallback}('${appId}')" title="সংশোধন"><i class="fa fa-edit"></i></button>`;
-    var rejectBtn = `<button class="btn-act-icon reject" onclick="changeStatus('${appId}','Rejected')" title="বাতিল"><i class="fa fa-times"></i></button>`;
+    var approveBtn = canApprove ? `<button class="btn-act-icon approve" onclick="changeStatus('${appId}','Approved')" title="অনুমোদন"><i class="fa fa-check"></i></button>` : '';
+    var editBtn = canEdit ? `<button class="btn-act-icon edit" onclick="${editCallback}('${appId}')" title="সংশোধন"><i class="fa fa-edit"></i></button>` : '';
+    var rejectBtn = canReject ? `<button class="btn-act-icon reject" onclick="changeStatus('${appId}','Rejected')" title="বাতিল"><i class="fa fa-times"></i></button>` : '';
     var printBtn = (status === 'Approved') ? `<button class="btn btn-sm btn-dark ms-1 fw-bold" onclick="${printCallback}('${appId}')"><i class="fa fa-print me-1"></i>প্রিন্ট</button>` : '';
 
     return { badge: badge, actions: `<div class="d-flex align-items-center">${approveBtn}${editBtn}${rejectBtn}${printBtn}</div>` };
@@ -1291,6 +1418,9 @@
 
   // সাধারণ অ্যাকশনসমূহ
   async function changeStatus(appId, status) {
+    var statusPermissions = (getActiveSession() || {}).permissions || {};
+    var statusSession = getActiveSession() || {};
+    if (statusSession.role !== 'SuperAdmin' && !(status === 'Approved' ? statusPermissions.canApprove : statusPermissions.canReject)) return Swal.fire({ icon: 'warning', title: 'অনুমতি নেই', text: 'এই কাজের অনুমতি আপনার নেই' });
     const res = await callBackendAPI('updateAppStatus', { appId: appId, status: status });
     if(res && res.success) {
       Swal.fire({ icon: 'success', title: 'স্ট্যাটাস আপডেট!', timer: 1200, showConfirmButton: false });
@@ -1304,6 +1434,8 @@
   }
 
   async function removeApp(appId) {
+    var deleteSession = getActiveSession() || {};
+    if (deleteSession.role !== 'SuperAdmin' && !((deleteSession.permissions || {}).canDelete)) return Swal.fire({ icon: 'warning', title: 'অনুমতি নেই', text: 'মুছে ফেলার অনুমতি আপনার নেই' });
     if (confirm("আবেদনটি ডাটাবেস থেকে মুছে ফেলতে চান?")) {
       const res = await callBackendAPI('deleteApplication', appId);
       if(res && res.success) {
@@ -1315,19 +1447,23 @@
 
   async function loadAdminUsers() {
     const users = await callBackendAPI('getAdminUsers');
+    window.adminUsersStore = Array.isArray(users) ? users : [];
     var tbody = document.getElementById('userTableBody');
     if (!tbody) return;
     tbody.innerHTML = '';
-    (Array.isArray(users) ? users : []).forEach(u => {
+    window.adminUsersStore.forEach(u => {
       var photo = u.photoUrl && u.photoUrl.length > 20 ? u.photoUrl : 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png';
+      var permissions = u.permissions || {};
+      if (typeof permissions === 'string') { try { permissions = JSON.parse(permissions); } catch (e) { permissions = {}; } }
+      var permissionCount = (permissions.allowedMenus || []).length + ['canApprove', 'canReject', 'canEdit', 'canDelete'].filter(function(key) { return permissions[key] === true; }).length;
       tbody.innerHTML += `
         <tr>
           <td><img src="${photo}" width="40" height="40" class="rounded-circle border" style="object-fit:cover;"></td>
           <td><strong>${u.username}</strong></td>
           <td>${u.name}</td>
           <td><span class="badge ${u.role==='SuperAdmin'?'bg-warning text-dark':'bg-primary'}">${u.role}</span></td>
-          <td><span class="badge bg-success">সক্রিয়</span></td>
-          <td><button class="btn btn-sm btn-outline-danger" onclick="deleteUser('${u.username}')"><i class="fa fa-trash"></i></button></td>
+          <td><span class="badge bg-success">${permissionCount} অনুমতি</span></td>
+          <td><button class="btn btn-sm btn-outline-primary me-1" onclick="openAddUserModal('${u.username}')" title="সংশোধন"><i class="fa fa-edit"></i></button><button class="btn btn-sm btn-outline-danger" onclick="deleteUser('${u.username}')" title="মুছুন"><i class="fa fa-trash"></i></button></td>
         </tr>
       `;
     });
@@ -1345,6 +1481,7 @@
       document.getElementById('adminActiveName').innerText = s.name || s.username;
       document.getElementById('adminActiveRoleBadge').innerText = s.role || 'Admin';
       if (s.photoUrl) document.getElementById('adminActivePhoto').src = s.photoUrl;
+      applyAdminPermissions();
       switchAdminTab('dashTab');
     }
   });
