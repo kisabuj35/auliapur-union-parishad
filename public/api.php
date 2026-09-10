@@ -84,13 +84,6 @@ $pdo->exec("CREATE TABLE IF NOT EXISTS general_applications (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )");
 
-$pdo->exec("CREATE TABLE IF NOT EXISTS up_settings (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    `key` VARCHAR(100) UNIQUE,
-    `value` TEXT NULL,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-)");
-
 // 🟢 ওয়ারিশান বাতিলের টেবিল (আবেদনকারীর ঠিকানাসহ)
 $pdo->exec("CREATE TABLE IF NOT EXISTS warishan_cancellations (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -134,24 +127,37 @@ $request = json_decode($rawInput, true) ?: [];
 $action = $request['action'] ?? $_GET['action'] ?? '';
 $data = $request['data'] ?? [];
 
-if ($action === 'getUPSettings') {
-    $settings = [];
-    $rows = $pdo->query("SELECT `key`, `value` FROM up_settings")->fetchAll();
-    foreach ($rows as $row) {
-        $settings[$row['key']] = $row['value'];
-    }
-    echo json_encode($settings, JSON_UNESCAPED_UNICODE);
-    exit;
-}
+if ($action === 'getUPSettings' || $action === 'saveUPSettings') {
+    try {
+        $pdo->exec("CREATE TABLE IF NOT EXISTS up_settings (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            `key` VARCHAR(100) UNIQUE,
+            `value` TEXT NULL,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        )");
 
-if ($action === 'saveUPSettings') {
-    $settings = is_array($data) ? $data : [];
-    $statement = $pdo->prepare("INSERT INTO up_settings (`key`, `value`) VALUES (?, ?) ON DUPLICATE KEY UPDATE `value` = VALUES(`value`), updated_at = CURRENT_TIMESTAMP");
-    foreach ($settings as $key => $value) {
-        if ($key === '' || $key === '_token' || is_array($value)) continue;
-        $statement->execute([$key, (string)$value]);
+        if ($action === 'getUPSettings') {
+            $settings = [];
+            $rows = $pdo->query("SELECT `key`, `value` FROM up_settings")->fetchAll();
+            foreach ($rows as $row) {
+                $settings[$row['key']] = $row['value'];
+            }
+            echo json_encode($settings, JSON_UNESCAPED_UNICODE);
+            exit;
+        }
+
+        $settings = is_array($data) ? $data : [];
+        $statement = $pdo->prepare("INSERT INTO up_settings (`key`, `value`) VALUES (?, ?) ON DUPLICATE KEY UPDATE `value` = ?, updated_at = CURRENT_TIMESTAMP");
+        foreach ($settings as $key => $value) {
+            if ($key === '' || $key === '_token' || is_array($value)) continue;
+            $stringValue = (string)$value;
+            $statement->execute([$key, $stringValue, $stringValue]);
+        }
+        echo json_encode(['success' => true], JSON_UNESCAPED_UNICODE);
+    } catch (Throwable $exception) {
+        http_response_code(500);
+        echo json_encode(['success' => false, 'error' => 'Settings database error'], JSON_UNESCAPED_UNICODE);
     }
-    echo json_encode(['success' => true], JSON_UNESCAPED_UNICODE);
     exit;
 }
 
