@@ -153,16 +153,30 @@
         <button class="btn btn-sm btn-outline-secondary" onclick="navToSection('publicHome')"><i class="fa fa-arrow-left me-1"></i> হোম পেজ</button>
       </div>
       <form onsubmit="event.preventDefault(); submitTradeForm();">
-        <div class="row g-3">
-          <div class="col-md-6"><label class="form-label fw-bold">প্রতিষ্ঠানের নাম *</label><input type="text" id="trOrg" class="form-control" required></div>
+        <p class="text-muted mb-3"><strong>বরাবর, চেয়ারম্যান মহোদয়,</strong> ১১নং আউলিয়াপুর ইউনিয়ন পরিষদ। বিষয়: ব্যবসা প্রতিষ্ঠানের অনুকূলে ট্রেড লাইসেন্স ইস্যুর আবেদন।</p>
+        <h6 class="fw-bold text-primary border-bottom pb-2">আবেদনকারী/লাইসেন্সধারীর তথ্য</h6>
+        <div class="row g-3 mb-4">
           <div class="col-md-6"><label class="form-label fw-bold">মালিকের নাম *</label><input type="text" id="trOwner" class="form-control" required></div>
+          <div class="col-md-6"><label class="form-label fw-bold">প্রতিষ্ঠানের নাম *</label><input type="text" id="trOrg" class="form-control" required></div>
           <div class="col-md-6"><label class="form-label fw-bold">পিতার নাম *</label><input type="text" id="trFather" class="form-control" required></div>
           <div class="col-md-6"><label class="form-label fw-bold">মাতার নাম *</label><input type="text" id="trMother" class="form-control" required></div>
           <div class="col-md-4"><label class="form-label fw-bold">এনআইডি নম্বর *</label><input type="text" id="trNid" class="form-control" required></div>
           <div class="col-md-4"><label class="form-label fw-bold">মোবাইল নম্বর *</label><input type="tel" id="trMobile" class="form-control" required></div>
-          <div class="col-md-4"><label class="form-label fw-bold">ব্যবসার ধরন *</label><input type="text" id="trCategory" class="form-control" placeholder="যেমন: মুদি দোকান" required></div>
-          <div class="col-md-6"><label class="form-label fw-bold">ব্যবসা প্রতিষ্ঠানের প্রধান ঠিকানা *</label><input type="text" id="trBizAddress" class="form-control" required></div>
-          <div class="col-md-6"><label class="form-label fw-bold">মালিকের স্থায়ী ঠিকানা *</label><input type="text" id="trOwnerAddress" class="form-control" required></div>
+          <div class="col-md-4"><label class="form-label fw-bold">ই-মেইল (ঐচ্ছিক)</label><input type="email" id="trOwnerEmail" class="form-control"></div>
+          <div class="col-md-6"><label class="form-label fw-bold">মালিকের স্থায়ী ঠিকানা *</label><textarea id="trOwnerAddress" class="form-control" required></textarea></div>
+          <div class="col-md-3"><label class="form-label fw-bold">TIN (ঐচ্ছিক)</label><input type="text" id="trTinNo" class="form-control"></div>
+          <div class="col-md-3"><label class="form-label fw-bold">BIN (ঐচ্ছিক)</label><input type="text" id="trBinNo" class="form-control"></div>
+        </div>
+        <h6 class="fw-bold text-success border-bottom pb-2">ব্যবসা প্রতিষ্ঠানের তথ্য</h6>
+        <div class="row g-3 mb-4">
+          <div class="col-md-6"><label class="form-label fw-bold">ব্যবসার ধরন *</label><input type="text" id="trCategory" class="form-control" placeholder="যেমন: মুদি দোকান" required></div>
+          <div class="col-md-6"><label class="form-label fw-bold">ব্যবসা শুরুর তারিখ</label><input type="date" id="trBizStartDate" class="form-control"></div>
+          <div class="col-md-6"><label class="form-label fw-bold">স্থায়ী ব্যবসার ঠিকানা *</label><textarea id="trBizPermanentAddress" class="form-control" required></textarea></div>
+          <div class="col-md-6"><label class="form-label fw-bold">অস্থায়ী/চলতি ব্যবসার ঠিকানা *</label><textarea id="trBizPresentAddress" class="form-control" required></textarea></div>
+          <div class="col-md-12"><label class="form-label fw-bold">ব্যবসার প্রকৃতি ও পণ্য/সেবার বিবরণ *</label><textarea id="trBizDetails" class="form-control" required></textarea></div>
+          <div class="col-md-4"><label class="form-label fw-bold">আনুমানিক মূলধন</label><input type="number" id="trCapital" class="form-control"></div>
+          <div class="col-md-4"><label class="form-label fw-bold">কর্মচারী সংখ্যা</label><input type="number" id="trEmployeeCount" class="form-control"></div>
+          <div class="col-md-4"><label class="form-label fw-bold">সাইনবোর্ডের মাপ</label><input type="text" id="trSignboardSize" class="form-control" placeholder="যেমন: ৬ × ৩ ফুট"></div>
         </div>
         <div class="text-end mt-4">
           <button type="submit" class="btn btn-success fw-bold px-4"><i class="fa fa-paper-plane me-1"></i> ট্রেড লাইসেন্স আবেদন জমা দিন</button>
@@ -406,8 +420,18 @@
       orgName: document.getElementById('trOrg').value, ownerName: document.getElementById('trOwner').value,
       fatherName: document.getElementById('trFather').value, motherName: document.getElementById('trMother').value,
       nid: document.getElementById('trNid').value, mobile: document.getElementById('trMobile').value,
-      category: document.getElementById('trCategory').value, bizAddress: document.getElementById('trBizAddress').value,
-      ownerAddress: document.getElementById('trOwnerAddress').value
+      category: document.getElementById('trCategory').value, bizAddress: document.getElementById('trBizPresentAddress').value,
+      ownerAddress: document.getElementById('trOwnerAddress').value,
+      ownerEmail: document.getElementById('trOwnerEmail').value,
+      tinNo: document.getElementById('trTinNo').value,
+      binNo: document.getElementById('trBinNo').value,
+      bizPermanentAddress: document.getElementById('trBizPermanentAddress').value,
+      bizPresentAddress: document.getElementById('trBizPresentAddress').value,
+      bizDetails: document.getElementById('trBizDetails').value,
+      bizStartDate: document.getElementById('trBizStartDate').value,
+      capital: document.getElementById('trCapital').value,
+      employeeCount: document.getElementById('trEmployeeCount').value,
+      signboardSize: document.getElementById('trSignboardSize').value
     };
     const res = await apiRequest("{{ route('apply.trade') }}", data);
     if(res && res.success) { document.getElementById('successAppId').innerText = res.appId; bootstrap.Modal.getOrCreateInstance(document.getElementById('successModal')).show(); }
