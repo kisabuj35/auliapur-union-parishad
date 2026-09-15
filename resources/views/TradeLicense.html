@@ -293,6 +293,8 @@
             <div class="col-md-12"><label class="form-label fw-bold">ব্যবসা প্রতিষ্ঠানের ঠিকানা *</label><input type="text" id="edTrBizAddress" class="form-control" required></div>
             <div class="col-md-4"><label class="form-label fw-bold">বাণিজ্যিক কর (৳)</label><input type="number" id="edTrCommTax" class="form-control" onchange="calcEditTotalFee()" required></div>
             <div class="col-md-4"><label class="form-label fw-bold">সাইনবোর্ড কর (৳)</label><input type="number" id="edTrSignTax" class="form-control" onchange="calcEditTotalFee()" required></div>
+            <div class="col-md-4"><label class="form-label fw-bold">ডিসকাউন্ট (৳)</label><input type="number" min="0" id="edTrDiscountAmount" class="form-control" onchange="calcEditTotalFee()" value="0"></div>
+            <div class="col-md-8"><label class="form-label fw-bold">ডিসকাউন্টের কারণ</label><input type="text" id="edTrDiscountReason" class="form-control" placeholder="যেমন: আর্থিক অসচ্ছলতার কারণে"></div>
             <div class="col-md-4"><label class="form-label fw-bold">সর্বমোট ফি (৳)</label><input type="number" id="edTrTotalFee" class="form-control" readonly></div>
           </div>
           <div class="text-end mt-4">
@@ -454,6 +456,7 @@
               <tr><td style="font-weight:bold;">ই-মেইল / TIN / BIN</td><td>:</td><td>${data.ownerEmail || '-'} / ${data.tinNo || '-'} / ${data.binNo || '-'}</td></tr>
               <tr><td style="font-weight:bold; color:#006837;">প্রতিষ্ঠানের নাম</td><td>:</td><td><strong style="color:#006837; font-size:16px;">“${data.orgName}”</strong></td></tr>
               <tr><td style="font-weight:bold;">ব্যবসার ধরন</td><td>:</td><td>${data.bizDetails || data.category}</td></tr>
+              <tr><td style="font-weight:bold;">ব্যবসা শুরুর তারিখ</td><td>:</td><td>${data.bizStartDate || '-'}</td></tr>
               <tr><td style="font-weight:bold;">ব্যবসা প্রতিষ্ঠানের স্থায়ী ঠিকানা</td><td>:</td><td>${data.bizPermanentAddress || data.bizAddress || '-'}</td></tr>
               <tr><td style="font-weight:bold;">ব্যবসা প্রতিষ্ঠানের অস্থায়ী ঠিকানা</td><td>:</td><td>${data.bizPresentAddress || data.bizAddress || '-'}</td></tr>
               <tr><td style="font-weight:bold;">মূলধন / কর্মচারী / সাইনবোর্ড</td><td>:</td><td>${data.capital || '-'} / ${data.employeeCount || '-'} / ${data.signboardSize || '-'}</td></tr>
@@ -468,6 +471,7 @@
                     <tr><td>ভ্যাট (১৫%)</td><td style="text-align:right;">৳ ৩০</td></tr>
                     <tr><td>বাণিজ্যিক কর (বার্ষিক)</td><td style="text-align:right;">৳ ${data.commTax || '০'}</td></tr>
                     <tr><td>সাইনবোর্ড কর (বার্ষিক)</td><td style="text-align:right;">৳ ${data.signTax || '০'}</td></tr>
+                    ${Number(data.discountAmount || 0) > 0 ? `<tr><td>ডিসকাউন্ট${data.discountReason ? ` (${data.discountReason})` : ''}</td><td style="text-align:right;">- ৳ ${data.discountAmount}</td></tr>` : ''}
                     <tr style="font-weight:bold; background:#fff2f2;"><td>সর্বমোট</td><td style="text-align:right; color:#8B0000; font-size:14px;">৳ ${data.totalFee || '২৩০'}</td></tr>
                   </table>
                 </td>
@@ -561,6 +565,8 @@
     document.getElementById('edTrBizAddress').value = data.bizAddress || '';
     document.getElementById('edTrCommTax').value = data.commTax || 0;
     document.getElementById('edTrSignTax').value = data.signTax || 0;
+    document.getElementById('edTrDiscountAmount').value = data.discountAmount || 0;
+    document.getElementById('edTrDiscountReason').value = data.discountReason || '';
     calcEditTotalFee();
 
     bootstrap.Modal.getOrCreateInstance(document.getElementById('editTradeModal')).show();
@@ -569,7 +575,8 @@
   function calcEditTotalFee() {
     var c = parseInt(document.getElementById('edTrCommTax').value) || 0;
     var s = parseInt(document.getElementById('edTrSignTax').value) || 0;
-    document.getElementById('edTrTotalFee').value = 200 + 30 + c + s;
+    var discount = parseInt(document.getElementById('edTrDiscountAmount').value) || 0;
+    document.getElementById('edTrTotalFee').value = Math.max(0, 200 + 30 + c + s - discount);
   }
 
   // 🟢 সংশোধিত তথ্য সংরক্ষণ
@@ -591,6 +598,8 @@
       bizAddress: document.getElementById('edTrBizAddress').value.trim(),
       commTax: document.getElementById('edTrCommTax').value,
       signTax: document.getElementById('edTrSignTax').value,
+      discountAmount: document.getElementById('edTrDiscountAmount').value,
+      discountReason: document.getElementById('edTrDiscountReason').value.trim(),
       totalFee: document.getElementById('edTrTotalFee').value
     };
 
