@@ -201,6 +201,7 @@
             <div class="col-md-6"><label class="form-label fw-bold">মোবাইল নম্বর *</label><input type="tel" id="trMobile" class="form-control" placeholder="017XXXXXXXX" required></div>
             <div class="col-md-6"><label class="form-label fw-bold">লিঙ্গ *</label><select id="trGender" class="form-select"><option value="পুরুষ">পুরুষ</option><option value="মহিলা">মহিলা</option></select></div>
           </div>
+          <div class="mb-3"><label class="form-label fw-bold">স্বামী/স্ত্রীর নাম</label><input type="text" id="trSpouseName" class="form-control"></div>
           <div class="mb-3"><label class="form-label fw-bold">মালিকের স্থায়ী ঠিকানা *</label><textarea id="trOwnerAddress" class="form-control" rows="2" placeholder="বাড়ি/হোল্ডিং, ওয়ার্ড, গ্রাম, ডাকঘর, উপজেলা, জেলা" required></textarea></div>
           <div class="row g-2 mb-3">
             <div class="col-md-6"><label class="form-label fw-bold">ই-মেইল (ঐচ্ছিক)</label><input type="email" id="trOwnerEmail" class="form-control" placeholder="name@example.com"></div>
@@ -284,13 +285,26 @@
             <div class="col-md-6"><label class="form-label fw-bold">পিতার নাম *</label><input type="text" id="edTrFatherName" class="form-control" required></div>
             <div class="col-md-6"><label class="form-label fw-bold">মাতার নাম *</label><input type="text" id="edTrMotherName" class="form-control" required></div>
             <div class="col-md-6"><label class="form-label fw-bold">এনআইডি নম্বর *</label><input type="text" id="edTrNid" class="form-control" required></div>
-            <div class="col-md-6"><label class="form-label fw-bold">মোবাইল নম্বর *</label><input type="tel" id="edTrMobile" class="form-control" required></div>
+            <div class="col-md-6"><label class="form-label fw-bold">জন্ম তারিখ *</label><input type="date" id="edTrDob" class="form-control" required></div>
+            <div class="col-md-4"><label class="form-label fw-bold">মোবাইল নম্বর *</label><input type="tel" id="edTrMobile" class="form-control" required></div>
+            <div class="col-md-4"><label class="form-label fw-bold">লিঙ্গ *</label><select id="edTrGender" class="form-select"><option value="পুরুষ">পুরুষ</option><option value="মহিলা">মহিলা</option></select></div>
+            <div class="col-md-4"><label class="form-label fw-bold">স্বামী/স্ত্রীর নাম</label><input type="text" id="edTrSpouseName" class="form-control"></div>
+            <div class="col-md-6"><label class="form-label fw-bold">ই-মেইল</label><input type="email" id="edTrOwnerEmail" class="form-control"></div>
+            <div class="col-md-3"><label class="form-label fw-bold">TIN নম্বর</label><input type="text" id="edTrTinNo" class="form-control"></div>
+            <div class="col-md-3"><label class="form-label fw-bold">BIN নম্বর</label><input type="text" id="edTrBinNo" class="form-control"></div>
+            <div class="col-md-12"><label class="form-label fw-bold">মালিকের ঠিকানা *</label><textarea id="edTrOwnerAddress" class="form-control" rows="2" required></textarea></div>
+            <div class="col-md-6"><label class="form-label fw-bold">মালিকের ছবি</label><input type="file" id="edTrPhotoInput" class="form-control" accept="image/*" onchange="previewTradePhoto(event, 'edTrPhotoPreview', 'edTrPhotoBase64')"><input type="hidden" id="edTrPhotoBase64"><img id="edTrPhotoPreview" class="mt-2" src="https://via.placeholder.com/100x120?text=Photo" style="width:100px;height:120px;object-fit:cover;border:1px solid #ddd;border-radius:4px;"></div>
             <div class="col-md-6"><label class="form-label fw-bold">ব্যবসার ধরন</label><input type="text" id="edTrCategory" class="form-control" required></div>
+            <div class="col-md-12"><label class="form-label fw-bold">ব্যবসার প্রকৃতি ও পণ্য/সেবার বিবরণ *</label><textarea id="edTrBizDetails" class="form-control" rows="2" required></textarea></div>
             <div class="col-md-6"><label class="form-label fw-bold">অর্থ বছর</label>
               <select id="edTrFiscalYear" class="form-select"><option value="২০২৫-২০২৬">২০২৫-২০২৬</option><option value="২০২৬-২০২৭">২০২৬-২০২৭</option></select>
             </div>
-            <div class="col-md-12"><label class="form-label fw-bold">মালিকের ঠিকানা *</label><input type="text" id="edTrOwnerAddress" class="form-control" required></div>
-            <div class="col-md-12"><label class="form-label fw-bold">ব্যবসা প্রতিষ্ঠানের ঠিকানা *</label><input type="text" id="edTrBizAddress" class="form-control" required></div>
+            <div class="col-md-6"><label class="form-label fw-bold">ব্যবসা শুরুর তারিখ *</label><input type="date" id="edTrBizStartDate" class="form-control" required></div>
+            <div class="col-md-6"><label class="form-label fw-bold">ব্যবসা প্রতিষ্ঠানের স্থায়ী ঠিকানা *</label><textarea id="edTrBizPermanentAddress" class="form-control" rows="2" required></textarea></div>
+            <div class="col-md-6"><label class="form-label fw-bold">ব্যবসা প্রতিষ্ঠানের অস্থায়ী/চলতি ঠিকানা *</label><textarea id="edTrBizPresentAddress" class="form-control" rows="2" required></textarea></div>
+            <div class="col-md-4"><label class="form-label fw-bold">আনুমানিক মূলধন</label><input type="number" min="0" id="edTrCapital" class="form-control"></div>
+            <div class="col-md-4"><label class="form-label fw-bold">কর্মচারী সংখ্যা</label><input type="number" min="0" id="edTrEmployeeCount" class="form-control"></div>
+            <div class="col-md-4"><label class="form-label fw-bold">সাইনবোর্ডের মাপ</label><input type="text" id="edTrSignboardSize" class="form-control"></div>
             <div class="col-md-4"><label class="form-label fw-bold">বাণিজ্যিক কর (৳)</label><input type="number" id="edTrCommTax" class="form-control" onchange="calcEditTotalFee()" required></div>
             <div class="col-md-4"><label class="form-label fw-bold">সাইনবোর্ড কর (৳)</label><input type="number" id="edTrSignTax" class="form-control" onchange="calcEditTotalFee()" required></div>
             <div class="col-md-4"><label class="form-label fw-bold">ডিসকাউন্ট (৳)</label><input type="number" min="0" id="edTrDiscountAmount" class="form-control" onchange="calcEditTotalFee()" value="0"></div>
@@ -372,6 +386,8 @@
       nid: document.getElementById('trNid').value.trim(),
       dob: document.getElementById('trDob').value,
       mobile: document.getElementById('trMobile').value.trim(),
+      gender: document.getElementById('trGender').value,
+      spouseName: document.getElementById('trSpouseName').value.trim(),
       ownerEmail: document.getElementById('trOwnerEmail').value.trim(),
       tinNo: document.getElementById('trTinNo').value.trim(),
       binNo: document.getElementById('trBinNo').value.trim(),
@@ -558,11 +574,25 @@
     document.getElementById('edTrFatherName').value = data.fatherName || '';
     document.getElementById('edTrMotherName').value = data.motherName || '';
     document.getElementById('edTrNid').value = data.nid || '';
+    document.getElementById('edTrDob').value = data.dob || '';
     document.getElementById('edTrMobile').value = data.mobile || '';
+    document.getElementById('edTrGender').value = data.gender || 'পুরুষ';
+    document.getElementById('edTrSpouseName').value = data.spouseName || '';
+    document.getElementById('edTrOwnerEmail').value = data.ownerEmail || '';
+    document.getElementById('edTrTinNo').value = data.tinNo || '';
+    document.getElementById('edTrBinNo').value = data.binNo || '';
+    document.getElementById('edTrPhotoBase64').value = data.photo || '';
+    document.getElementById('edTrPhotoPreview').src = data.photo || 'https://via.placeholder.com/100x120?text=Photo';
     document.getElementById('edTrCategory').value = data.category || '';
+    document.getElementById('edTrBizDetails').value = data.bizDetails || '';
     document.getElementById('edTrFiscalYear').value = data.fiscalYear || '২০২৫-২০২৬';
+    document.getElementById('edTrBizStartDate').value = data.bizStartDate || '';
     document.getElementById('edTrOwnerAddress').value = data.ownerAddress || '';
-    document.getElementById('edTrBizAddress').value = data.bizAddress || '';
+    document.getElementById('edTrBizPermanentAddress').value = data.bizPermanentAddress || data.bizAddress || '';
+    document.getElementById('edTrBizPresentAddress').value = data.bizPresentAddress || data.bizAddress || '';
+    document.getElementById('edTrCapital').value = data.capital || '';
+    document.getElementById('edTrEmployeeCount').value = data.employeeCount || '';
+    document.getElementById('edTrSignboardSize').value = data.signboardSize || '';
     document.getElementById('edTrCommTax').value = data.commTax || 0;
     document.getElementById('edTrSignTax').value = data.signTax || 0;
     document.getElementById('edTrDiscountAmount').value = data.discountAmount || 0;
@@ -591,11 +621,25 @@
       fatherName: document.getElementById('edTrFatherName').value.trim(),
       motherName: document.getElementById('edTrMotherName').value.trim(),
       nid: document.getElementById('edTrNid').value.trim(),
+      dob: document.getElementById('edTrDob').value,
       mobile: document.getElementById('edTrMobile').value.trim(),
+      gender: document.getElementById('edTrGender').value,
+      spouseName: document.getElementById('edTrSpouseName').value.trim(),
+      ownerEmail: document.getElementById('edTrOwnerEmail').value.trim(),
+      tinNo: document.getElementById('edTrTinNo').value.trim(),
+      binNo: document.getElementById('edTrBinNo').value.trim(),
+      photo: document.getElementById('edTrPhotoBase64').value,
       category: document.getElementById('edTrCategory').value.trim(),
+      bizDetails: document.getElementById('edTrBizDetails').value.trim(),
       fiscalYear: document.getElementById('edTrFiscalYear').value,
+      bizStartDate: document.getElementById('edTrBizStartDate').value,
       ownerAddress: document.getElementById('edTrOwnerAddress').value.trim(),
-      bizAddress: document.getElementById('edTrBizAddress').value.trim(),
+      bizAddress: document.getElementById('edTrBizPresentAddress').value.trim(),
+      bizPermanentAddress: document.getElementById('edTrBizPermanentAddress').value.trim(),
+      bizPresentAddress: document.getElementById('edTrBizPresentAddress').value.trim(),
+      capital: document.getElementById('edTrCapital').value,
+      employeeCount: document.getElementById('edTrEmployeeCount').value,
+      signboardSize: document.getElementById('edTrSignboardSize').value.trim(),
       commTax: document.getElementById('edTrCommTax').value,
       signTax: document.getElementById('edTrSignTax').value,
       discountAmount: document.getElementById('edTrDiscountAmount').value,

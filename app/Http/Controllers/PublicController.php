@@ -277,6 +277,8 @@ class PublicController extends Controller
                 'mother_name' => $request->motherName,
                 'nid' => $request->nid,
                 'dob' => $request->dob,
+                'gender' => $request->gender ?? 'পুরুষ',
+                'spouse_name' => $request->spouseName,
                 'mobile' => $request->mobile,
                 'owner_address' => $request->ownerAddress,
                 'owner_email' => $request->ownerEmail,
