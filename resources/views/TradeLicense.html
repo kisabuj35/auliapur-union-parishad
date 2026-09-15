@@ -175,11 +175,16 @@
   <!-- নতুন লাইসেন্স ফরম -->
   <div id="newTradeFormSection" class="card shadow-sm border-0 rounded-4 p-4 bg-white">
     <div class="text-center border-bottom pb-3 mb-4">
-      <h5 class="fw-bold text-success">নতুন ট্রেড লাইসেন্স আবেদন ফরম</h5>
-      <p class="text-muted m-0" style="font-size: 14px;">বরাবর, চেয়ারম্যান, ১১নং আউলিয়াপুর ইউনিয়ন পরিষদ। বিষয়: নতুন ট্রেড লাইসেন্স ইস্যুর আবেদন।</p>
+      <h5 class="fw-bold text-success">ট্রেড লাইসেন্সের জন্য আবেদনপত্র</h5>
+      <p class="text-muted m-0" style="font-size: 14px;">বরাবর, চেয়ারম্যান মহোদয়, ১১নং আউলিয়াপুর ইউনিয়ন পরিষদ। বিষয়: ব্যবসা প্রতিষ্ঠানের অনুকূলে ট্রেড লাইসেন্স ইস্যুর আবেদন।</p>
     </div>
 
     <form id="tradeApplyForm" onsubmit="event.preventDefault(); submitTradeLicenseForm();">
+      <div id="tradeRenewalField" class="alert alert-warning d-none mb-4">
+        <label class="form-label fw-bold">মূল ট্রেড লাইসেন্স নম্বর *</label>
+        <input type="text" id="trOriginalLicNo" class="form-control" placeholder="আগের লাইসেন্স নম্বর লিখুন">
+        <small>শুধু পূর্বে ইস্যুকৃত বৈধ ট্রেড লাইসেন্সের নম্বর ব্যবহার করুন।</small>
+      </div>
       <div class="row g-4">
         <div class="col-md-6 border-end">
           <h6 class="fw-bold text-primary border-bottom pb-2 mb-3"><i class="fa fa-user me-2"></i>মালিকের ব্যক্তিগত তথ্য</h6>
@@ -196,7 +201,12 @@
             <div class="col-md-6"><label class="form-label fw-bold">মোবাইল নম্বর *</label><input type="tel" id="trMobile" class="form-control" placeholder="017XXXXXXXX" required></div>
             <div class="col-md-6"><label class="form-label fw-bold">লিঙ্গ *</label><select id="trGender" class="form-select"><option value="পুরুষ">পুরুষ</option><option value="মহিলা">মহিলা</option></select></div>
           </div>
-          <div class="mb-3"><label class="form-label fw-bold">মালিকের স্থায়ী ঠিকানা *</label><input type="text" id="trOwnerAddress" class="form-control" placeholder="ওয়ার্ড, গ্রাম, ডাকঘর ইত্যাদি" required></div>
+          <div class="mb-3"><label class="form-label fw-bold">মালিকের স্থায়ী ঠিকানা *</label><textarea id="trOwnerAddress" class="form-control" rows="2" placeholder="বাড়ি/হোল্ডিং, ওয়ার্ড, গ্রাম, ডাকঘর, উপজেলা, জেলা" required></textarea></div>
+          <div class="row g-2 mb-3">
+            <div class="col-md-6"><label class="form-label fw-bold">ই-মেইল (ঐচ্ছিক)</label><input type="email" id="trOwnerEmail" class="form-control" placeholder="name@example.com"></div>
+            <div class="col-md-6"><label class="form-label fw-bold">TIN নম্বর (ঐচ্ছিক)</label><input type="text" id="trTinNo" class="form-control" placeholder="থাকলে লিখুন"></div>
+          </div>
+          <div class="mb-3"><label class="form-label fw-bold">BIN নম্বর (ঐচ্ছিক)</label><input type="text" id="trBinNo" class="form-control" placeholder="প্রযোজ্য হলে লিখুন"></div>
           <div class="mb-3">
             <label class="form-label fw-bold text-danger"><i class="fa fa-image me-1"></i> মালিকের ছবি</label>
             <input type="file" id="trPhotoInput" class="form-control" accept="image/*" onchange="previewTradePhoto(event, 'trPhotoPreview', 'trPhotoBase64')">
@@ -220,10 +230,18 @@
               <option value="অন্যান্য সাধারণ ব্যবসা|400|20">অন্যান্য সাধারণ ব্যবসা</option>
             </select>
           </div>
-          <div class="mb-3"><label class="form-label fw-bold">ব্যবসা প্রতিষ্ঠানের প্রধান ঠিকানা *</label><input type="text" id="trBizAddress" class="form-control" required></div>
+          <div class="mb-3"><label class="form-label fw-bold">ব্যবসা প্রতিষ্ঠানের স্থায়ী ঠিকানা *</label><textarea id="trBizPermanentAddress" class="form-control" rows="2" placeholder="বাড়ি/হোল্ডিং, ওয়ার্ড, গ্রাম, ডাকঘর, উপজেলা, জেলা" required></textarea></div>
+          <div class="mb-3"><label class="form-label fw-bold">ব্যবসা প্রতিষ্ঠানের অস্থায়ী/চলতি ঠিকানা *</label><textarea id="trBizPresentAddress" class="form-control" rows="2" placeholder="দোকান/মার্কেট, সড়ক, ওয়ার্ড, বাজার বা এলাকার নাম" required></textarea></div>
+          <input type="hidden" id="trBizAddress">
+          <div class="mb-3"><label class="form-label fw-bold">ব্যবসার প্রকৃতি ও পণ্য/সেবার বিবরণ *</label><textarea id="trBizDetails" class="form-control" rows="2" placeholder="ব্যবসার প্রকৃতি, প্রধান পণ্য বা সেবার সংক্ষিপ্ত বিবরণ" required></textarea></div>
           <div class="row g-2 mb-3">
             <div class="col-md-6"><label class="form-label fw-bold">ব্যবসা শুরুর তারিখ *</label><input type="date" id="trBizStartDate" class="form-control" required></div>
             <div class="col-md-6"><label class="form-label fw-bold">অর্থ বছর *</label><select id="trFiscalYear" class="form-select"><option value="২০২৫-২০২৬">২০২৫-২০২৬</option><option value="২০২৬-২০২৭" selected>২০২৬-২০২৭</option></select></div>
+          </div>
+          <div class="row g-2 mb-3">
+            <div class="col-md-4"><label class="form-label fw-bold">আনুমানিক মূলধন (৳)</label><input type="number" min="0" id="trCapital" class="form-control" placeholder="ঐচ্ছিক"></div>
+            <div class="col-md-4"><label class="form-label fw-bold">কর্মচারী সংখ্যা</label><input type="number" min="0" id="trEmployeeCount" class="form-control" placeholder="ঐচ্ছিক"></div>
+            <div class="col-md-4"><label class="form-label fw-bold">সাইনবোর্ডের মাপ</label><input type="text" id="trSignboardSize" class="form-control" placeholder="যেমন: ৬ × ৩ ফুট"></div>
           </div>
           
           <div class="card p-3 bg-light border-success mb-3">
@@ -290,9 +308,23 @@
 <iframe id="tradePrintIframe" style="display:none; width:0; height:0; border:0;"></iframe>
 
 <script>
+  var tradeMode = 'new';
+
   function switchTradeModule(mod) {
+    tradeMode = mod;
+    var renewalField = document.getElementById('tradeRenewalField');
     if(mod === 'new') {
       document.getElementById('newTradeFormSection').classList.remove('d-none');
+      renewalField.classList.add('d-none');
+      document.getElementById('trSubmitBtn').innerHTML = '<i class="fa fa-paper-plane me-1"></i> আবেদন জমা দিন';
+      document.getElementById('tabBtnNewTrade').classList.add('active');
+      document.getElementById('tabBtnRenewTrade').classList.remove('active');
+    } else {
+      renewalField.classList.remove('d-none');
+      document.getElementById('trOriginalLicNo').required = true;
+      document.getElementById('trSubmitBtn').innerHTML = '<i class="fa fa-sync-alt me-1"></i> নবায়নের আবেদন জমা দিন';
+      document.getElementById('tabBtnNewTrade').classList.remove('active');
+      document.getElementById('tabBtnRenewTrade').classList.add('active');
     }
   }
 
@@ -338,18 +370,28 @@
       nid: document.getElementById('trNid').value.trim(),
       dob: document.getElementById('trDob').value,
       mobile: document.getElementById('trMobile').value.trim(),
+      ownerEmail: document.getElementById('trOwnerEmail').value.trim(),
+      tinNo: document.getElementById('trTinNo').value.trim(),
+      binNo: document.getElementById('trBinNo').value.trim(),
       ownerAddress: document.getElementById('trOwnerAddress').value.trim(),
       category: catName,
-      bizAddress: document.getElementById('trBizAddress').value.trim(),
+      bizAddress: document.getElementById('trBizPresentAddress').value.trim(),
+      bizPermanentAddress: document.getElementById('trBizPermanentAddress').value.trim(),
+      bizPresentAddress: document.getElementById('trBizPresentAddress').value.trim(),
+      bizDetails: document.getElementById('trBizDetails').value.trim(),
       bizStartDate: document.getElementById('trBizStartDate').value,
       fiscalYear: document.getElementById('trFiscalYear').value,
+      capital: document.getElementById('trCapital').value,
+      employeeCount: document.getElementById('trEmployeeCount').value,
+      signboardSize: document.getElementById('trSignboardSize').value.trim(),
       commTax: document.getElementById('trCommTax').value,
       signTax: document.getElementById('trSignTax').value,
       totalFee: document.getElementById('trTotalFee').value,
       photo: document.getElementById('trPhotoBase64').value
     };
 
-    const res = await callBackendAPI('submitTradeLicenseApplication', formData);
+    if (tradeMode === 'renew') formData.originalLicNo = document.getElementById('trOriginalLicNo').value.trim();
+    const res = await callBackendAPI(tradeMode === 'renew' ? 'submitTradeRenewalApplication' : 'submitTradeLicenseApplication', formData);
     btn.disabled = false; btn.innerText = 'আবেদন জমা দিন';
 
     if (res && res.success) {
@@ -409,9 +451,12 @@
               <tr><td style="font-weight:bold;">জাতীয় পরিচয়পত্র নম্বর</td><td>:</td><td>${data.nid || '-'}</td></tr>
               <tr><td style="font-weight:bold;">মোবাইল নম্বর</td><td>:</td><td>${data.mobile || '-'}</td></tr>
               <tr><td style="font-weight:bold;">লাইসেন্সধারীর ঠিকানা</td><td>:</td><td>${data.ownerAddress || '-'}</td></tr>
+              <tr><td style="font-weight:bold;">ই-মেইল / TIN / BIN</td><td>:</td><td>${data.ownerEmail || '-'} / ${data.tinNo || '-'} / ${data.binNo || '-'}</td></tr>
               <tr><td style="font-weight:bold; color:#006837;">প্রতিষ্ঠানের নাম</td><td>:</td><td><strong style="color:#006837; font-size:16px;">“${data.orgName}”</strong></td></tr>
               <tr><td style="font-weight:bold;">ব্যবসার ধরন</td><td>:</td><td>${data.bizDetails || data.category}</td></tr>
-              <tr><td style="font-weight:bold;">ব্যবসা প্রতিষ্ঠানের ঠিকানা</td><td>:</td><td>${data.bizAddress}</td></tr>
+              <tr><td style="font-weight:bold;">ব্যবসা প্রতিষ্ঠানের স্থায়ী ঠিকানা</td><td>:</td><td>${data.bizPermanentAddress || data.bizAddress || '-'}</td></tr>
+              <tr><td style="font-weight:bold;">ব্যবসা প্রতিষ্ঠানের অস্থায়ী ঠিকানা</td><td>:</td><td>${data.bizPresentAddress || data.bizAddress || '-'}</td></tr>
+              <tr><td style="font-weight:bold;">মূলধন / কর্মচারী / সাইনবোর্ড</td><td>:</td><td>${data.capital || '-'} / ${data.employeeCount || '-'} / ${data.signboardSize || '-'}</td></tr>
               <tr><td style="font-weight:bold;">বৈধতার মেয়াদ</td><td>:</td><td><span style="font-weight:bold; color:#8B0000;">৩০ জুন, ${fiscalEndYear} ইং পর্যন্ত</span></td></tr>
               <tr>
                 <td style="font-weight:bold; vertical-align:top; padding-top:4px;">আর্থিক বিবরণ</td>

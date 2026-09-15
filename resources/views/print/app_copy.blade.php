@@ -86,6 +86,54 @@
     $serviceName = $record->type ?? $record->certificate_type ?? (isset($record->license_no) ? 'ট্রেড লাইসেন্স' : (isset($record->deceased_name) ? 'ওয়ারিশান সনদ' : 'নাগরিকত্ব সনদ'));
   @endphp
 
+  @if(isset($record->license_no))
+  <div class="app-paper">
+    <div class="header-box">
+      <div>
+        <h2 class="header-title">১১নং আউলিয়াপুর ইউনিয়ন পরিষদ কার্যালয়</h2>
+        <small>পটুয়াখালী সদর, পটুয়াখালী | ট্রেড লাইসেন্স আবেদন কপি</small>
+      </div>
+      <div style="text-align:right;"><strong>আবেদন আইডি</strong><br><span style="color:#0b5bc5;">{{ $record->app_id }}</span></div>
+    </div>
+
+    <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-weight:bold;">
+      <div>আবেদনের ধরন: {{ $record->is_renewal ? 'নবায়ন' : 'নতুন লাইসেন্স' }}</div>
+      <div>তারিখ: {{ $record->apply_date ?? date('d/m/Y') }} ইং</div>
+    </div>
+
+    <p style="margin:0; font-weight:bold;">বরাবর,</p>
+    <p style="margin:0;">চেয়ারম্যান মহোদয়,</p>
+    <p style="margin:0;">১১নং আউলিয়াপুর ইউনিয়ন পরিষদ কার্যালয়, পটুয়াখালী সদর, পটুয়াখালী।</p>
+    <p style="margin:8px 0; font-weight:bold; text-decoration:underline; color:#006837;">বিষয়: ব্যবসা প্রতিষ্ঠানের অনুকূলে ট্রেড লাইসেন্স {{ $record->is_renewal ? 'নবায়ন' : 'ইস্যু' }} করার আবেদন।</p>
+    <p style="text-align:justify; margin:0 0 8px;">জনাব, বিনীত নিবেদন এই যে, নিম্নস্বাক্ষরকারী উল্লিখিত ব্যবসা প্রতিষ্ঠানের জন্য প্রযোজ্য বিধি ও শর্ত মেনে ট্রেড লাইসেন্স {{ $record->is_renewal ? 'নবায়ন' : 'প্রদানের' }} আবেদন করছি। প্রয়োজনীয় তথ্য ও কাগজপত্র যাচাইপূর্বক লাইসেন্স {{ $record->is_renewal ? 'নবায়ন' : 'ইস্যু' }} করার জন্য অনুরোধ করছি।</p>
+
+    <table class="app-table">
+      <tr><th colspan="2" style="background:#dff3e8; text-align:center;">আবেদনকারী/লাইসেন্সধারীর তথ্য</th></tr>
+      <tr><th>নাম</th><td><strong>{{ $record->owner_name }}</strong></td></tr>
+      <tr><th>পিতা ও মাতার নাম</th><td>{{ $record->father_name ?? '-' }} / {{ $record->mother_name ?? '-' }}</td></tr>
+      <tr><th>NID ও মোবাইল</th><td>{{ toBn($record->nid ?? '-') }} / {{ toBn($record->mobile ?? '-') }}</td></tr>
+      <tr><th>স্থায়ী ঠিকানা</th><td>{{ $record->owner_address ?? '-' }}</td></tr>
+      @if(!empty($record->owner_email) || !empty($record->tin_no) || !empty($record->bin_no))
+      <tr><th>ই-মেইল / TIN / BIN</th><td>{{ $record->owner_email ?? '-' }} / {{ $record->tin_no ?? '-' }} / {{ $record->bin_no ?? '-' }}</td></tr>
+      @endif
+      <tr><th colspan="2" style="background:#e9f6ef; text-align:center;">ব্যবসা প্রতিষ্ঠানের তথ্য</th></tr>
+      <tr><th>প্রতিষ্ঠানের নাম</th><td><strong>{{ $record->org_name }}</strong></td></tr>
+      <tr><th>ব্যবসার ধরন ও প্রকৃতি</th><td>{{ $record->category ?? '-' }}<br>{{ $record->biz_details ?? '-' }}</td></tr>
+      <tr><th>স্থায়ী ঠিকানা</th><td>{{ $record->biz_permanent_address ?? $record->biz_address ?? '-' }}</td></tr>
+      <tr><th>অস্থায়ী/চলতি ঠিকানা</th><td>{{ $record->biz_present_address ?? $record->biz_address ?? '-' }}</td></tr>
+      <tr><th>শুরুর তারিখ / অর্থ বছর</th><td>{{ $record->biz_start_date ?? '-' }} / {{ $record->fiscal_year ?? '-' }}</td></tr>
+      <tr><th>মূলধন / কর্মচারী / সাইনবোর্ড</th><td>{{ $record->capital ?? '-' }} / {{ $record->employee_count ?? '-' }} / {{ $record->signboard_size ?? '-' }}</td></tr>
+      <tr><th colspan="2" style="background:#fff4d6; text-align:center;">আর্থিক বিবরণ</th></tr>
+      <tr><th>লাইসেন্স ফি</th><td>৳ {{ toBn(number_format($record->license_fee ?? 0, 0)) }}</td></tr>
+      <tr><th>ভ্যাট</th><td>৳ {{ toBn(number_format($record->vat_fee ?? 0, 0)) }}</td></tr>
+      <tr><th>বাণিজ্যিক কর / সাইনবোর্ড কর</th><td>৳ {{ toBn(number_format($record->comm_tax ?? 0, 0)) }} / ৳ {{ toBn(number_format($record->sign_tax ?? 0, 0)) }}</td></tr>
+      <tr><th>সর্বমোট প্রদেয়</th><td><strong>৳ {{ toBn(number_format($record->total_fee ?? 0, 0)) }}</strong></td></tr>
+    </table>
+
+    <p style="font-size:13.5px; font-weight:bold; margin:8px 0;">অঙ্গীকারনামা: আমি ঘোষণা করছি যে, উপরোক্ত তথ্য সত্য ও সঠিক এবং ব্যবসা পরিচালনার ক্ষেত্রে প্রচলিত আইন, বিধি ও ইউনিয়ন পরিষদের নির্দেশনা মেনে চলব।</p>
+    <div class="sign-section"><div class="sign-block">ইউপি সদস্য<br><small>১১নং আউলিয়াপুর ইউ.পি</small></div><div class="sign-block">আবেদনকারীর স্বাক্ষর<br><small>{{ $record->owner_name }}</small></div><div class="sign-block">গ্রহণকারী কর্মকর্তা<br><small>১১নং আউলিয়াপুর ইউ.পি</small></div></div>
+  </div>
+  @else
   <div class="app-paper">
     <div class="header-box">
       <div>
@@ -178,6 +226,7 @@
       </div>
     </div>
   </div>
+  @endif
 
 </body>
 </html>

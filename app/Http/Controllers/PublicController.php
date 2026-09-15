@@ -214,12 +214,19 @@ class PublicController extends Controller
                 'spouse_name' => $request->spouseName,
                 'mobile' => $request->mobile,
                 'owner_address' => $request->ownerAddress,
+                'owner_email' => $request->ownerEmail,
+                'tin_no' => $request->tinNo,
+                'bin_no' => $request->binNo,
                 'category' => $request->category,
                 'biz_details' => $request->bizDetails,
                 'biz_address' => $request->bizAddress,
+                'biz_permanent_address' => $request->bizPermanentAddress,
+                'biz_present_address' => $request->bizPresentAddress,
                 'biz_start_date' => $request->bizStartDate,
                 'fiscal_year' => $request->fiscalYear ?? '২০২৬-২০২৭',
                 'capital' => $request->capital,
+                'employee_count' => $request->employeeCount,
+                'signboard_size' => $request->signboardSize,
                 'license_fee' => 200,
                 'vat_fee' => 30,
                 'comm_tax' => $request->commTax ?? 0,
@@ -243,6 +250,17 @@ class PublicController extends Controller
     public function submitTradeRenewal(Request $request)
     {
         try {
+            $request->validate([
+                'originalLicNo' => ['required', 'string'],
+                'ownerName' => ['required', 'string'],
+                'orgName' => ['required', 'string'],
+                'mobile' => ['required', 'string'],
+            ]);
+            $original = DB::table('trade_licenses')->where('license_no', $request->originalLicNo)
+                ->where('is_renewal', false)->first();
+            if (!$original) {
+                return response()->json(['success' => false, 'error' => 'মূল ট্রেড লাইসেন্স নম্বরটি পাওয়া যায়নি।']);
+            }
             $rand = rand(100000, 999999);
             $renewalAppId = 'AUL-RN-' . $rand;
             $count = DB::table('trade_licenses')->count() + 1;
@@ -261,12 +279,19 @@ class PublicController extends Controller
                 'dob' => $request->dob,
                 'mobile' => $request->mobile,
                 'owner_address' => $request->ownerAddress,
+                'owner_email' => $request->ownerEmail,
+                'tin_no' => $request->tinNo,
+                'bin_no' => $request->binNo,
                 'category' => $request->category,
                 'biz_details' => $request->bizDetails,
                 'biz_address' => $request->bizAddress,
+                'biz_permanent_address' => $request->bizPermanentAddress,
+                'biz_present_address' => $request->bizPresentAddress,
                 'biz_start_date' => $request->bizStartDate,
                 'fiscal_year' => $request->fiscalYear,
                 'capital' => $request->capital,
+                'employee_count' => $request->employeeCount,
+                'signboard_size' => $request->signboardSize,
                 'license_fee' => 200,
                 'vat_fee' => 30,
                 'comm_tax' => $request->commTax ?? 0,

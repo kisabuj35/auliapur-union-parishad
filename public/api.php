@@ -42,14 +42,18 @@ $pdo->exec("CREATE TABLE IF NOT EXISTS trade_licenses (
     id INT AUTO_INCREMENT PRIMARY KEY,
     app_id VARCHAR(50) UNIQUE, license_no VARCHAR(100), receipt_no VARCHAR(50), org_name VARCHAR(255),
     owner_name VARCHAR(255), father_name VARCHAR(255), mother_name VARCHAR(255), nid VARCHAR(50),
-    dob VARCHAR(50), mobile VARCHAR(50), owner_address TEXT, category VARCHAR(255),
-    biz_details TEXT, biz_address TEXT, biz_start_date VARCHAR(50), fiscal_year VARCHAR(50),
-    capital VARCHAR(100), license_fee DECIMAL(10,2) DEFAULT 200, vat_fee DECIMAL(10,2) DEFAULT 30,
+    dob VARCHAR(50), mobile VARCHAR(50), owner_address TEXT, owner_email VARCHAR(255), tin_no VARCHAR(100), bin_no VARCHAR(100), category VARCHAR(255),
+    biz_details TEXT, biz_address TEXT, biz_permanent_address TEXT, biz_present_address TEXT, biz_start_date VARCHAR(50), fiscal_year VARCHAR(50),
+    capital VARCHAR(100), employee_count VARCHAR(50), signboard_size VARCHAR(100), license_fee DECIMAL(10,2) DEFAULT 200, vat_fee DECIMAL(10,2) DEFAULT 30,
     comm_tax DECIMAL(10,2) DEFAULT 0, sign_tax DECIMAL(10,2) DEFAULT 0, total_fee DECIMAL(10,2) DEFAULT 230,
     is_renewal TINYINT(1) DEFAULT 0, original_license_no VARCHAR(100), photo LONGTEXT,
     status VARCHAR(50) DEFAULT 'Pending', apply_date VARCHAR(50), signatory_role VARCHAR(100) DEFAULT 'চেয়ারম্যান',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )");
+
+foreach (['owner_email VARCHAR(255)', 'tin_no VARCHAR(100)', 'bin_no VARCHAR(100)', 'biz_permanent_address TEXT', 'biz_present_address TEXT', 'employee_count VARCHAR(50)', 'signboard_size VARCHAR(100)'] as $tradeColumn) {
+    try { $pdo->exec("ALTER TABLE trade_licenses ADD COLUMN {$tradeColumn}"); } catch (Exception $e) {}
+}
 
 $pdo->exec("CREATE TABLE IF NOT EXISTS family_certificates (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -487,12 +491,19 @@ if ($action === 'getTradeLicenseDetails') {
             'dob' => $row['dob'],
             'mobile' => $row['mobile'],
             'ownerAddress' => $row['owner_address'],
+            'ownerEmail' => $row['owner_email'] ?? '',
+            'tinNo' => $row['tin_no'] ?? '',
+            'binNo' => $row['bin_no'] ?? '',
             'category' => $row['category'],
             'bizDetails' => $row['biz_details'],
             'bizAddress' => $row['biz_address'],
+            'bizPermanentAddress' => $row['biz_permanent_address'] ?? $row['biz_address'],
+            'bizPresentAddress' => $row['biz_present_address'] ?? $row['biz_address'],
             'bizStartDate' => $row['biz_start_date'],
             'fiscalYear' => $row['fiscal_year'],
             'capital' => $row['capital'],
+            'employeeCount' => $row['employee_count'] ?? '',
+            'signboardSize' => $row['signboard_size'] ?? '',
             'licenseFee' => $row['license_fee'],
             'vatFee' => $row['vat_fee'],
             'commTax' => $row['comm_tax'],
@@ -584,18 +595,29 @@ if ($action === 'saveEditedApplication' || $action === 'updateApplicationData') 
 }
 
 // 🟢 ১২. ট্রেড লাইসেন্স সাবমিট ও আপডেট
-if ($action === 'submitTradeLicenseApplication') {
+if ($action === 'submitTradeLicenseApplication' || $action === 'submitTradeRenewalApplication') {
     $rand = rand(100000, 999999);
-    $appId = 'AUL-TR-' . $rand;
-    $licNo = '199278195100' . substr($rand, 0, 4);
+    $isRenewal = $action === 'submitTradeRenewalApplication';
+    $appId = ($isRenewal ? 'AUL-RN-' : 'AUL-TR-') . $rand;
+    $licNo = $isRenewal ? ($data['originalLicNo'] ?? '') : '199278195100' . substr($rand, 0, 4);
     $date = date('d/m/Y');
 
-    $stmt = $pdo->prepare("INSERT INTO trade_licenses (app_id, license_no, receipt_no, org_name, owner_name, father_name, mother_name, nid, dob, mobile, owner_address, category, biz_details, biz_address, biz_start_date, fiscal_year, capital, license_fee, vat_fee, comm_tax, sign_tax, total_fee, photo, status, apply_date, signatory_role) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+    if ($isRenewal) {
+        $check = $pdo->prepare("SELECT license_no FROM trade_licenses WHERE license_no = ? AND is_renewal = 0");
+        $check->execute([$licNo]);
+        if (!$check->fetchColumn()) {
+            echo json_encode(['success' => false, 'error' => 'মূল ট্রেড লাইসেন্স নম্বরটি পাওয়া যায়নি।']);
+            exit;
+        }
+    }
+
+    $stmt = $pdo->prepare("INSERT INTO trade_licenses (app_id, license_no, receipt_no, org_name, owner_name, father_name, mother_name, nid, dob, mobile, owner_address, owner_email, tin_no, bin_no, category, biz_details, biz_address, biz_permanent_address, biz_present_address, biz_start_date, fiscal_year, capital, employee_count, signboard_size, license_fee, vat_fee, comm_tax, sign_tax, total_fee, is_renewal, original_license_no, photo, status, apply_date, signatory_role) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
     $stmt->execute([
         $appId, $licNo, '01', $data['orgName'], $data['ownerName'], $data['fatherName'], $data['motherName'],
-        $data['nid'], $data['dob'], $data['mobile'], $data['ownerAddress'], $data['category'], $data['bizDetails'] ?? '',
-        $data['bizAddress'], $data['bizStartDate'] ?? '', $data['fiscalYear'] ?? '২০২৬-২০২৭', $data['capital'] ?? '',
-        200, 30, $data['commTax'] ?? 0, $data['signTax'] ?? 0, $data['totalFee'] ?? 230, $data['photo'] ?? '',
+        $data['nid'], $data['dob'], $data['mobile'], $data['ownerAddress'], $data['ownerEmail'] ?? '', $data['tinNo'] ?? '', $data['binNo'] ?? '',
+        $data['category'], $data['bizDetails'] ?? '', $data['bizPresentAddress'] ?? ($data['bizAddress'] ?? ''), $data['bizPermanentAddress'] ?? '', $data['bizPresentAddress'] ?? '',
+        $data['bizStartDate'] ?? '', $data['fiscalYear'] ?? '২০২৬-২০২৭', $data['capital'] ?? '', $data['employeeCount'] ?? '', $data['signboardSize'] ?? '',
+        200, 30, $data['commTax'] ?? 0, $data['signTax'] ?? 0, $data['totalFee'] ?? 230, $isRenewal ? 1 : 0, $isRenewal ? $licNo : null, $data['photo'] ?? '',
         'Pending', $date, 'চেয়ারম্যান'
     ]);
 
@@ -605,11 +627,12 @@ if ($action === 'submitTradeLicenseApplication') {
 
 if ($action === 'updateTradeLicenseData') {
     $appId = trim($data['appId'] ?? '');
-    $stmt = $pdo->prepare("UPDATE trade_licenses SET org_name=?, owner_name=?, father_name=?, mother_name=?, nid=?, mobile=?, category=?, fiscal_year=?, owner_address=?, biz_address=?, comm_tax=?, sign_tax=?, total_fee=? WHERE app_id=?");
+    $stmt = $pdo->prepare("UPDATE trade_licenses SET org_name=?, owner_name=?, father_name=?, mother_name=?, nid=?, mobile=?, owner_email=?, tin_no=?, bin_no=?, category=?, fiscal_year=?, owner_address=?, biz_address=?, biz_permanent_address=?, biz_present_address=?, biz_details=?, capital=?, employee_count=?, signboard_size=?, comm_tax=?, sign_tax=?, total_fee=? WHERE app_id=?");
     $stmt->execute([
         $data['orgName'] ?? '', $data['ownerName'] ?? '', $data['fatherName'] ?? '', $data['motherName'] ?? '',
-        $data['nid'] ?? '', $data['mobile'] ?? '', $data['category'] ?? '', $data['fiscalYear'] ?? '',
-        $data['ownerAddress'] ?? '', $data['bizAddress'] ?? '', $data['commTax'] ?? 0, $data['signTax'] ?? 0,
+        $data['nid'] ?? '', $data['mobile'] ?? '', $data['ownerEmail'] ?? '', $data['tinNo'] ?? '', $data['binNo'] ?? '', $data['category'] ?? '', $data['fiscalYear'] ?? '',
+        $data['ownerAddress'] ?? '', $data['bizAddress'] ?? '', $data['bizPermanentAddress'] ?? '', $data['bizPresentAddress'] ?? '', $data['bizDetails'] ?? '',
+        $data['capital'] ?? '', $data['employeeCount'] ?? '', $data['signboardSize'] ?? '', $data['commTax'] ?? 0, $data['signTax'] ?? 0,
         $data['totalFee'] ?? 0, $appId
     ]);
     echo json_encode(['success' => true]);

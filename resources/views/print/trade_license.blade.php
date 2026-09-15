@@ -200,9 +200,12 @@
           <tr><td style="font-weight:bold;">জাতীয় পরিচয়পত্র নম্বর</td><td>:</td><td>{{ toBn($data->nid ?? '-') }}</td></tr>
           <tr><td style="font-weight:bold;">মোবাইল নম্বর</td><td>:</td><td>{{ toBn($data->mobile ?? '-') }}</td></tr>
           <tr><td style="font-weight:bold;">লাইসেন্সধারীর ঠিকানা</td><td>:</td><td>{{ $data->owner_address ?? '-' }}</td></tr>
+          <tr><td style="font-weight:bold;">ই-মেইল / TIN / BIN</td><td>:</td><td>{{ $data->owner_email ?? '-' }} / {{ $data->tin_no ?? '-' }} / {{ $data->bin_no ?? '-' }}</td></tr>
           <tr><td style="font-weight:bold; color:#006837;">প্রতিষ্ঠানের নাম</td><td>:</td><td><strong style="color:#006837; font-size:16px;">“{{ $data->org_name }}”</strong></td></tr>
           <tr><td style="font-weight:bold;">ব্যবসার ধরন</td><td>:</td><td>{{ $data->biz_details ?? $data->category }}</td></tr>
-          <tr><td style="font-weight:bold;">ব্যবসা প্রতিষ্ঠানের ঠিকানা</td><td>:</td><td>{{ $data->biz_address }}</td></tr>
+          <tr><td style="font-weight:bold;">ব্যবসা প্রতিষ্ঠানের স্থায়ী ঠিকানা</td><td>:</td><td>{{ $data->biz_permanent_address ?? $data->biz_address }}</td></tr>
+          <tr><td style="font-weight:bold;">ব্যবসা প্রতিষ্ঠানের অস্থায়ী ঠিকানা</td><td>:</td><td>{{ $data->biz_present_address ?? $data->biz_address }}</td></tr>
+          <tr><td style="font-weight:bold;">মূলধন / কর্মচারী / সাইনবোর্ড</td><td>:</td><td>{{ $data->capital ?? '-' }} / {{ $data->employee_count ?? '-' }} / {{ $data->signboard_size ?? '-' }}</td></tr>
           <tr><td style="font-weight:bold;">বৈধতার মেয়াদ</td><td>:</td><td><span style="font-weight:bold; color:#8B0000;">৩০ জুন, {{ $fiscalEndYear }} ইং পর্যন্ত</span></td></tr>
           
           <!-- আর্থিক বিবরণী টেবিল -->
