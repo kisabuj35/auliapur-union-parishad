@@ -71,6 +71,77 @@
       border-top: 1.5px dashed #000;
       padding-top: 5px;
     }
+    .trade-app-header {
+      border: 1.5px solid #006837;
+      border-radius: 4px;
+      padding: 10px 14px;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .trade-app-header h2 {
+      margin: 0;
+      color: #006837;
+      font-size: 23px;
+      line-height: 1.3;
+    }
+    .trade-app-header p { margin: 2px 0 0; font-size: 13px; }
+    .trade-app-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 6px 10px;
+      margin-bottom: 10px;
+      border-top: 1px solid #cbd5e1;
+      border-bottom: 1px solid #cbd5e1;
+      font-size: 13px;
+      font-weight: bold;
+    }
+    .trade-app-letter { margin-bottom: 9px; font-size: 14px; line-height: 1.6; }
+    .trade-app-letter p { margin: 0; }
+    .trade-app-subject { margin-top: 5px !important; font-weight: bold; text-decoration: underline; color: #006837; }
+    .trade-app-intro { margin-top: 4px !important; text-align: justify; }
+    .trade-app-section-title {
+      background: #006837;
+      color: #fff;
+      padding: 5px 8px;
+      font-size: 15px;
+      font-weight: bold;
+      text-align: center;
+    }
+    .trade-app-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0;
+    }
+    .trade-app-table th, .trade-app-table td {
+      border: 1px solid #64748b;
+      padding: 4px 7px;
+      font-size: 13px;
+      line-height: 1.45;
+      vertical-align: top;
+    }
+    .trade-app-table th { width: 34%; background: #f0fdf4; text-align: left; }
+    .trade-app-columns {
+      display: grid;
+      grid-template-columns: 1.25fr 0.9fr;
+      gap: 10px;
+      margin-top: 10px;
+      align-items: start;
+    }
+    .trade-app-panel { border: 1px solid #64748b; }
+    .trade-app-panel .trade-app-table th,
+    .trade-app-panel .trade-app-table td { border-left: 0; border-right: 0; }
+    .trade-app-panel .trade-app-table tr:first-child th,
+    .trade-app-panel .trade-app-table tr:first-child td { border-top: 0; }
+    .trade-app-panel .trade-app-table tr:last-child th,
+    .trade-app-panel .trade-app-table tr:last-child td { border-bottom: 0; }
+    .trade-app-total th, .trade-app-total td { background: #fff7ed !important; font-weight: bold; font-size: 14px !important; }
+    .trade-app-discount th, .trade-app-discount td { color: #b91c1c; }
+    .trade-app-note { margin: 9px 0 0; font-size: 12.5px; line-height: 1.5; text-align: justify; }
+    @media print {
+      .trade-app-columns { break-inside: avoid; }
+      .trade-app-panel { break-inside: avoid; }
+    }
   </style>
 </head>
 <body onload="window.print();">
@@ -88,49 +159,69 @@
 
   @if(isset($record->license_no))
   <div class="app-paper">
-    <div class="header-box">
-      <div>
-        <h2 class="header-title">১১নং আউলিয়াপুর ইউনিয়ন পরিষদ কার্যালয়</h2>
-        <small>পটুয়াখালী সদর, পটুয়াখালী | ট্রেড লাইসেন্স আবেদন কপি</small>
-      </div>
-      <div style="text-align:right;"><strong>আবেদন আইডি</strong><br><span style="color:#0b5bc5;">{{ $record->app_id }}</span></div>
+    <div class="trade-app-header">
+      <h2>১১নং আউলিয়াপুর ইউনিয়ন পরিষদ কার্যালয়</h2>
+      <p>পটুয়াখালী সদর, পটুয়াখালী</p>
+      <p><strong>ট্রেড লাইসেন্স {{ $record->is_renewal ? 'নবায়ন' : 'ইস্যু' }}-এর আবেদনপত্র</strong></p>
     </div>
 
-    <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-weight:bold;">
-      <div>আবেদনের ধরন: {{ $record->is_renewal ? 'নবায়ন' : 'নতুন লাইসেন্স' }}</div>
-      <div>তারিখ: {{ $record->apply_date ?? date('d/m/Y') }} ইং</div>
+    <div class="trade-app-meta">
+      <span>আবেদন আইডি: <strong style="color:#0b5bc5;">{{ $record->app_id }}</strong></span>
+      <span>আবেদনের ধরন: {{ $record->is_renewal ? 'নবায়ন' : 'নতুন লাইসেন্স' }}</span>
+      <span>তারিখ: {{ $record->apply_date ?? date('d/m/Y') }} ইং</span>
     </div>
 
-    <p style="margin:0; font-weight:bold;">বরাবর,</p>
-    <p style="margin:0;">চেয়ারম্যান মহোদয়,</p>
-    <p style="margin:0;">১১নং আউলিয়াপুর ইউনিয়ন পরিষদ কার্যালয়, পটুয়াখালী সদর, পটুয়াখালী।</p>
-    <p style="margin:8px 0; font-weight:bold; text-decoration:underline; color:#006837;">বিষয়: ব্যবসা প্রতিষ্ঠানের অনুকূলে ট্রেড লাইসেন্স {{ $record->is_renewal ? 'নবায়ন' : 'ইস্যু' }} করার আবেদন।</p>
-    <p style="text-align:justify; margin:0 0 8px;">জনাব, বিনীত নিবেদন এই যে, নিম্নস্বাক্ষরকারী উল্লিখিত ব্যবসা প্রতিষ্ঠানের জন্য প্রযোজ্য বিধি ও শর্ত মেনে ট্রেড লাইসেন্স {{ $record->is_renewal ? 'নবায়ন' : 'প্রদানের' }} আবেদন করছি। প্রয়োজনীয় তথ্য ও কাগজপত্র যাচাইপূর্বক লাইসেন্স {{ $record->is_renewal ? 'নবায়ন' : 'ইস্যু' }} করার জন্য অনুরোধ করছি।</p>
+    <div class="trade-app-letter">
+      <p>বরাবর,</p>
+      <p><strong>চেয়ারম্যান মহোদয়</strong></p>
+      <p>১১নং আউলিয়াপুর ইউনিয়ন পরিষদ, পটুয়াখালী সদর, পটুয়াখালী।</p>
+      <p class="trade-app-subject">বিষয়: ব্যবসা প্রতিষ্ঠানের অনুকূলে ট্রেড লাইসেন্স {{ $record->is_renewal ? 'নবায়ন' : 'ইস্যু' }} প্রসঙ্গে।</p>
+      <p class="trade-app-intro">জনাব, যথাবিহিত সম্মানপূর্বক নিবেদন এই যে, নিম্নস্বাক্ষরকারী উল্লিখিত ব্যবসা প্রতিষ্ঠানের জন্য প্রযোজ্য আইন, বিধি ও ইউনিয়ন পরিষদের নির্ধারিত শর্তাবলি মেনে ট্রেড লাইসেন্স {{ $record->is_renewal ? 'নবায়নের' : 'ইস্যুর' }} আবেদন করছি। অতএব, প্রয়োজনীয় তথ্য ও কাগজপত্র যাচাইপূর্বক আবেদনটি সদয় বিবেচনা করে ট্রেড লাইসেন্স {{ $record->is_renewal ? 'নবায়ন' : 'প্রদানের' }} জন্য বিনীত অনুরোধ করছি।</p>
+    </div>
 
-    <table class="app-table">
-      <tr><th colspan="2" style="background:#dff3e8; text-align:center;">আবেদনকারী/লাইসেন্সধারীর তথ্য</th></tr>
-      <tr><th>নাম</th><td><strong>{{ $record->owner_name }}</strong></td></tr>
-      <tr><th>পিতা ও মাতার নাম</th><td>{{ $record->father_name ?? '-' }} / {{ $record->mother_name ?? '-' }}</td></tr>
-      <tr><th>NID ও মোবাইল</th><td>{{ toBn($record->nid ?? '-') }} / {{ toBn($record->mobile ?? '-') }}</td></tr>
-      <tr><th>স্থায়ী ঠিকানা</th><td>{{ $record->owner_address ?? '-' }}</td></tr>
-      @if(!empty($record->owner_email) || !empty($record->tin_no) || !empty($record->bin_no))
-      <tr><th>ই-মেইল / TIN / BIN</th><td>{{ $record->owner_email ?? '-' }} / {{ $record->tin_no ?? '-' }} / {{ $record->bin_no ?? '-' }}</td></tr>
-      @endif
-      <tr><th colspan="2" style="background:#e9f6ef; text-align:center;">ব্যবসা প্রতিষ্ঠানের তথ্য</th></tr>
-      <tr><th>প্রতিষ্ঠানের নাম</th><td><strong>{{ $record->org_name }}</strong></td></tr>
-      <tr><th>ব্যবসার ধরন ও প্রকৃতি</th><td>{{ $record->category ?? '-' }}<br>{{ $record->biz_details ?? '-' }}</td></tr>
-      <tr><th>স্থায়ী ঠিকানা</th><td>{{ $record->biz_permanent_address ?? $record->biz_address ?? '-' }}</td></tr>
-      <tr><th>অস্থায়ী/চলতি ঠিকানা</th><td>{{ $record->biz_present_address ?? $record->biz_address ?? '-' }}</td></tr>
-      <tr><th>শুরুর তারিখ / অর্থ বছর</th><td>{{ $record->biz_start_date ?? '-' }} / {{ $record->fiscal_year ?? '-' }}</td></tr>
-      <tr><th>মূলধন / কর্মচারী / সাইনবোর্ড</th><td>{{ $record->capital ?? '-' }} / {{ $record->employee_count ?? '-' }} / {{ $record->signboard_size ?? '-' }}</td></tr>
-      <tr><th colspan="2" style="background:#fff4d6; text-align:center;">আর্থিক বিবরণ</th></tr>
-      <tr><th>লাইসেন্স ফি</th><td>৳ {{ toBn(number_format($record->license_fee ?? 0, 0)) }}</td></tr>
-      <tr><th>ভ্যাট</th><td>৳ {{ toBn(number_format($record->vat_fee ?? 0, 0)) }}</td></tr>
-      <tr><th>বাণিজ্যিক কর / সাইনবোর্ড কর</th><td>৳ {{ toBn(number_format($record->comm_tax ?? 0, 0)) }} / ৳ {{ toBn(number_format($record->sign_tax ?? 0, 0)) }}</td></tr>
-      <tr><th>সর্বমোট প্রদেয়</th><td><strong>৳ {{ toBn(number_format($record->total_fee ?? 0, 0)) }}</strong></td></tr>
+    <div class="trade-app-section-title">আবেদনকারী/লাইসেন্সধারীর পূর্ণাঙ্গ তথ্য</div>
+    <table class="trade-app-table">
+      <tr><th>নাম</th><td><strong>{{ $record->owner_name }}</strong></td><th>লিঙ্গ</th><td>{{ $record->gender ?? '-' }}</td></tr>
+      <tr><th>পিতার নাম</th><td>{{ $record->father_name ?? '-' }}</td><th>মাতার নাম</th><td>{{ $record->mother_name ?? '-' }}</td></tr>
+      <tr><th>জন্ম তারিখ</th><td>{{ $record->dob ?? '-' }}</td><th>স্বামী/স্ত্রীর নাম</th><td>{{ $record->spouse_name ?? '-' }}</td></tr>
+      <tr><th>জাতীয় পরিচয়পত্র নম্বর</th><td>{{ toBn($record->nid ?? '-') }}</td><th>মোবাইল নম্বর</th><td>{{ toBn($record->mobile ?? '-') }}</td></tr>
+      <tr><th>ই-মেইল</th><td>{{ $record->owner_email ?? '-' }}</td><th>TIN / BIN</th><td>{{ $record->tin_no ?? '-' }} / {{ $record->bin_no ?? '-' }}</td></tr>
+      <tr><th>স্থায়ী ঠিকানা</th><td colspan="3">{{ $record->owner_address ?? '-' }}</td></tr>
     </table>
 
-    <p style="font-size:13.5px; font-weight:bold; margin:8px 0;">অঙ্গীকারনামা: আমি ঘোষণা করছি যে, উপরোক্ত তথ্য সত্য ও সঠিক এবং ব্যবসা পরিচালনার ক্ষেত্রে প্রচলিত আইন, বিধি ও ইউনিয়ন পরিষদের নির্দেশনা মেনে চলব।</p>
+    <div class="trade-app-columns">
+      <div class="trade-app-panel">
+        <div class="trade-app-section-title">ব্যবসা প্রতিষ্ঠানের তথ্য</div>
+        <table class="trade-app-table">
+          <tr><th>প্রতিষ্ঠানের নাম</th><td><strong>{{ $record->org_name }}</strong></td></tr>
+          <tr><th>ব্যবসার ধরন</th><td>{{ $record->category ?? '-' }}</td></tr>
+          <tr><th>ব্যবসার প্রকৃতি ও পণ্য/সেবা</th><td>{{ $record->biz_details ?? '-' }}</td></tr>
+          <tr><th>স্থায়ী ঠিকানা</th><td>{{ $record->biz_permanent_address ?? $record->biz_address ?? '-' }}</td></tr>
+          <tr><th>অস্থায়ী/চলতি ঠিকানা</th><td>{{ $record->biz_present_address ?? $record->biz_address ?? '-' }}</td></tr>
+          <tr><th>ব্যবসা শুরুর তারিখ</th><td>{{ $record->biz_start_date ?? '-' }}</td></tr>
+          <tr><th>অর্থ বছর</th><td>{{ $record->fiscal_year ?? '-' }}</td></tr>
+          <tr><th>মূলধন</th><td>{{ $record->capital ?? '-' }} টাকা</td></tr>
+          <tr><th>কর্মচারী সংখ্যা</th><td>{{ $record->employee_count ?? '-' }}</td></tr>
+          <tr><th>সাইনবোর্ডের মাপ</th><td>{{ $record->signboard_size ?? '-' }}</td></tr>
+        </table>
+      </div>
+
+      <div class="trade-app-panel">
+        <div class="trade-app-section-title">আর্থিক বিবরণ</div>
+        <table class="trade-app-table">
+          <tr><th>ট্রেড লাইসেন্স ফি</th><td>৳ {{ toBn(number_format($record->license_fee ?? 0, 0)) }}</td></tr>
+          <tr><th>ভ্যাট</th><td>৳ {{ toBn(number_format($record->vat_fee ?? 0, 0)) }}</td></tr>
+          <tr><th>বাণিজ্যিক কর</th><td>৳ {{ toBn(number_format($record->comm_tax ?? 0, 0)) }}</td></tr>
+          <tr><th>সাইনবোর্ড কর</th><td>৳ {{ toBn(number_format($record->sign_tax ?? 0, 0)) }}</td></tr>
+          @if(($record->discount_amount ?? 0) > 0)
+          <tr class="trade-app-discount"><th>ডিসকাউন্ট</th><td>- ৳ {{ toBn(number_format($record->discount_amount, 0)) }}<br><small>{{ $record->discount_reason ?? '' }}</small></td></tr>
+          @endif
+          <tr class="trade-app-total"><th>সর্বমোট প্রদেয়</th><td>৳ {{ toBn(number_format($record->total_fee ?? 0, 0)) }}</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <p class="trade-app-note"><strong>অঙ্গীকারনামা:</strong> আমি ঘোষণা করছি যে, উপরোক্ত তথ্যাদি আমার জ্ঞান ও বিশ্বাসমতে সত্য ও সঠিক। ব্যবসা পরিচালনার ক্ষেত্রে প্রচলিত আইন, বিধি এবং ইউনিয়ন পরিষদের সকল নির্দেশনা যথাযথভাবে পালন করব। কোনো তথ্য অসত্য প্রমাণিত হলে কর্তৃপক্ষ প্রচলিত আইন অনুযায়ী ব্যবস্থা গ্রহণ করতে পারবেন।</p>
     <div class="sign-section"><div class="sign-block">ইউপি সদস্য<br><small>১১নং আউলিয়াপুর ইউ.পি</small></div><div class="sign-block">আবেদনকারীর স্বাক্ষর<br><small>{{ $record->owner_name }}</small></div><div class="sign-block">গ্রহণকারী কর্মকর্তা<br><small>১১নং আউলিয়াপুর ইউ.পি</small></div></div>
   </div>
   @else
