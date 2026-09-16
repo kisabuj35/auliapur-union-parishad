@@ -46,6 +46,17 @@
       page-break-after: avoid !important;
       page-break-inside: avoid !important;
     }
+    .trade-cert-frame::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(174, 25, 25, 0.34) 0.8px, transparent 1px), radial-gradient(circle, rgba(212, 167, 44, 0.24) 0.65px, transparent 0.9px) !important;
+      background-size: 12px 12px, 12px 12px !important;
+      background-position: 0 0, 6px 6px !important;
+      opacity: 1 !important;
+      pointer-events: none;
+      z-index: 0;
+    }
     .trade-cert-frame::after {
       content: "";
       position: absolute;
@@ -162,9 +173,7 @@
     $label = fn($bn, $en) => $language === 'en' ? $en : $bn;
     $fiscalParts = explode('-', $data->fiscal_year ?? '২০২৫-২০২৬');
     $fiscalEndYear = count($fiscalParts) > 1 ? $fiscalParts[1] : ($language === 'en' ? '2026' : '২০২৬');
-    $serial = ((int)($data->receipt_no ?? 0) > 1 || (int)($data->id ?? 0) <= 1)
-      ? ($data->receipt_no ?? '1')
-      : $data->id;
+    $serial = str_pad((string)($data->id ?? 1), 3, '0', STR_PAD_LEFT);
     
     $qrPayload = "১১নং আউলিযাপুর ইউনিয়ন পরিষদ\nট্রেড লাইসেন্স নং: " . ($data->license_no ?? $data->app_id) . "\nপ্রতিষ্ঠান: {$data->org_name}\nমালিক: {$data->owner_name}\nমোবাইল: {$data->mobile}\nমেয়াদ: ৩০ জুন {$fiscalEndYear} ইং পর্যন্ত\nঅনলাইন ভেরিফায়েড";
     $qrCodeUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' . urlencode($qrPayload);

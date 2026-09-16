@@ -485,9 +485,7 @@ if ($action === 'getTradeLicenseDetails') {
     $row = $stmt->fetch();
 
     if ($row) {
-        $serial = ((int)($row['receipt_no'] ?? 0) > 1 || (int)$row['id'] <= 1)
-            ? ($row['receipt_no'] ?? '1')
-            : (string)$row['id'];
+        $serial = str_pad((string)$row['id'], 3, '0', STR_PAD_LEFT);
         echo json_encode([
             'found' => true,
             'appId' => $row['app_id'],
@@ -616,7 +614,7 @@ if ($action === 'submitTradeLicenseApplication' || $action === 'submitTradeRenew
     $licNo = $isRenewal ? trim($data['originalLicNo'] ?? '') : '199278195100' . substr($rand, 0, 4);
     $date = date('d/m/Y');
 
-    $receiptNo = str_pad((int)$pdo->query("SELECT COALESCE(MAX(CAST(receipt_no AS UNSIGNED)), 0) + 1 FROM trade_licenses")->fetchColumn(), 2, '0', STR_PAD_LEFT);
+    $receiptNo = str_pad((int)$pdo->query("SELECT COALESCE(MAX(CAST(receipt_no AS UNSIGNED)), 0) + 1 FROM trade_licenses")->fetchColumn(), 3, '0', STR_PAD_LEFT);
 
     if ($isRenewal) {
         $englishDigits = ['0','1','2','3','4','5','6','7','8','9'];

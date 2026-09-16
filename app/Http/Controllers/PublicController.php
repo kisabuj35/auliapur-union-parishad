@@ -197,7 +197,7 @@ class PublicController extends Controller
             $appId = 'AUL-TR-' . $rand;
             $licNo = '199278195100' . substr($rand, 0, 4);
             $count = DB::table('trade_licenses')->count() + 1;
-            $receiptNo = str_pad($count, 2, '0', STR_PAD_LEFT);
+            $receiptNo = str_pad($count, 3, '0', STR_PAD_LEFT);
             $date = date('d/m/Y');
 
             DB::table('trade_licenses')->insert([
@@ -264,7 +264,7 @@ class PublicController extends Controller
             $rand = rand(100000, 999999);
             $renewalAppId = 'AUL-RN-' . $rand;
             $count = DB::table('trade_licenses')->count() + 1;
-            $receiptNo = str_pad($count, 2, '0', STR_PAD_LEFT);
+            $receiptNo = str_pad($count, 3, '0', STR_PAD_LEFT);
             $date = date('d/m/Y');
 
             DB::table('trade_licenses')->insert([

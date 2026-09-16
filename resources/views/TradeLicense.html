@@ -41,6 +41,18 @@
     pointer-events: none;
     z-index: 3;
   }
+
+  .trade-cert-frame::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(174, 25, 25, 0.34) 0.8px, transparent 1px), radial-gradient(circle, rgba(212, 167, 44, 0.24) 0.65px, transparent 0.9px) !important;
+    background-size: 12px 12px, 12px 12px !important;
+    background-position: 0 0, 6px 6px !important;
+    opacity: 1 !important;
+    pointer-events: none;
+    z-index: 0;
+  }
   
   .trade-watermark-img {
     position: absolute;
@@ -505,7 +517,7 @@
           </table>
 
           <div class="cert-meta-bar">
-            <div><strong>ক্রমিক নং:</strong> <span style="font-weight:bold; color:#8B0000;">${data.receiptNo || data.id || '১'}</span></div>
+            <div><strong>ক্রমিক নং:</strong> <span style="font-weight:bold; color:#8B0000;">${data.receiptNo || '০০১'}</span></div>
             <div><span class="fiscal-year-pill">অর্থ বছর: ${data.fiscalYear || '২০২৫-২০২৬'}</span></div>
             <div><strong>লাইসেন্স ইস্যুর তারিখ:</strong> <span style="font-weight:bold; color:#000;">${data.applyDate} ইং</span></div>
           </div>
@@ -594,6 +606,7 @@
           * { box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
           html, body { width: 210mm; height: 297mm; margin: 0 !important; padding: 0 !important; background: #ffffff; font-family: 'Nikosh', 'Kalpurush', sans-serif; overflow: hidden !important; }
           .trade-cert-frame { border: 2px solid #8B0000 !important; outline: 1px solid #d4a72c !important; outline-offset: 4px; padding: 12mm 15mm 10mm 15mm !important; background-color: #fff !important; background-image: radial-gradient(circle, rgba(174, 25, 25, 0.28) 0.75px, transparent 0.9px), radial-gradient(circle, rgba(212, 167, 44, 0.2) 0.6px, transparent 0.8px) !important; background-size: 14px 14px, 14px 14px !important; background-position: 0 0, 7px 7px !important; position: relative !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; height: 295mm !important; max-height: 295mm !important; width: 210mm !important; margin: 0 auto !important; overflow: hidden !important; }
+          .trade-cert-frame::before { content: ""; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(174, 25, 25, 0.34) 0.8px, transparent 1px), radial-gradient(circle, rgba(212, 167, 44, 0.24) 0.65px, transparent 0.9px) !important; background-size: 12px 12px, 12px 12px !important; background-position: 0 0, 6px 6px !important; opacity: 1 !important; pointer-events: none; z-index: 0; }
           .trade-cert-frame::after { content: ""; position: absolute; inset: 5px; border: 1px solid rgba(139, 0, 0, 0.35); pointer-events: none; z-index: 3; }
           .trade-watermark-img { position: absolute !important; top: 52% !important; left: 50% !important; transform: translate(-50%, -50%) !important; width: 540px !important; opacity: 0.105 !important; z-index: 1 !important; }
           .trade-cert-inner { position: relative !important; z-index: 2 !important; height: 100% !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; }
