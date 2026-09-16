@@ -155,9 +155,13 @@
     $applicantName = $record->name ?? $record->applicant_name ?? $record->owner_name ?? '-';
     $fatherName = $record->father_name ?? $record->father_spouse ?? '-';
     $serviceName = $record->type ?? $record->certificate_type ?? (isset($record->license_no) ? 'ট্রেড লাইসেন্স' : (isset($record->deceased_name) ? 'ওয়ারিশান সনদ' : 'নাগরিকত্ব সনদ'));
+    $isTrade = ($isTrade ?? false)
+      || isset($record->license_no)
+      || str_starts_with((string)($record->app_id ?? ''), 'AUL-TR-')
+      || str_starts_with((string)($record->app_id ?? ''), 'AUL-RN-');
   @endphp
 
-  @if($isTrade)
+  @if(isset($record->license_no) || str_starts_with((string)($record->app_id ?? ''), 'AUL-TR-') || str_starts_with((string)($record->app_id ?? ''), 'AUL-RN-'))
   <div class="app-paper">
     <div class="trade-app-header">
       <h2>১১নং আউলিয়াপুর ইউনিয়ন পরিষদ কার্যালয়</h2>
