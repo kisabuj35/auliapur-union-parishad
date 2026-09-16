@@ -105,21 +105,25 @@
   .ribbon-fold-right { right: 0px; border-top-color: #300202; border-right-color: #300202; }
 
   .cert-meta-bar {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 25% 50% 25%;
     align-items: center;
     border-bottom: 2px solid #8B0000;
-    padding: 3px 6px;
-    font-size: 14px;
+    padding: 3px 4px;
+    font-size: 11px;
     margin-top: 2px;
+    min-height: 24px;
   }
+  .cert-meta-bar > div { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+  .cert-meta-bar > div:nth-child(2) { text-align: center; }
+  .cert-meta-bar > div:nth-child(3) { text-align: right; }
 
   .fiscal-year-pill {
     background: #8B0000 !important;
     color: #ffffff !important;
-    font-size: 13px;
+    font-size: 11px;
     font-weight: bold;
-    padding: 2px 16px;
+    padding: 2px 10px;
     border-radius: 4px;
     display: inline-block;
   }
@@ -490,9 +494,9 @@
             <tr>
               <td style="width:75px; vertical-align:middle;"><img src="https://lh3.googleusercontent.com/d/1_LMOoAtirVZeGxE4sz_CVQtQpInPPQTs" width="90" height="90"></td>
               <td style="text-align:center; vertical-align:middle;">
-                <div style="font-size:13px; font-weight:bold; color:#333;">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার (স্থানীয় সরকার বিভাগ)</div>
-                <h1 style="font-size:30px; font-weight:bold; color:#8B0000; margin:0; line-height:1.15;">১১নং আউলিয়াপুর ইউনিয়ন পরিষদ</h1>
-                <div style="font-size:15.5px; font-weight:bold; color:#005a2b;">উপজেলা: পটুয়াখালী সদর, জেলা: পটুয়াখালী</div>
+                <div style="font-size:10px; font-weight:bold; color:#333;">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার (স্থানীয় সরকার বিভাগ)</div>
+                <h1 style="font-size:24px; font-weight:bold; color:#8B0000; margin:0; line-height:1.15;">১১নং আউলিয়াপুর ইউনিয়ন পরিষদ</h1>
+                <div style="font-size:12px; font-weight:bold; color:#005a2b;">উপজেলা: পটুয়াখালী সদর, জেলা: পটুয়াখালী</div>
               </td>
               <td style="width:75px; vertical-align:middle; text-align:right;">
                 <img src="${data.photo || 'https://via.placeholder.com/96x112'}" style="width:92px; height:108px; border:2px solid #8B0000; object-fit:cover; padding:1px; border-radius:3px; background:#fff;">
@@ -501,7 +505,7 @@
           </table>
 
           <div class="cert-meta-bar">
-            <div><strong>রসিদ নং:</strong> <span style="font-weight:bold; color:#8B0000;">${data.receiptNo || '০১'}</span></div>
+            <div><strong>ক্রমিক নং:</strong> <span style="font-weight:bold; color:#8B0000;">${data.receiptNo || data.id || '১'}</span></div>
             <div><span class="fiscal-year-pill">অর্থ বছর: ${data.fiscalYear || '২০২৫-২০২৬'}</span></div>
             <div><strong>লাইসেন্স ইস্যুর তারিখ:</strong> <span style="font-weight:bold; color:#000;">${data.applyDate} ইং</span></div>
           </div>
@@ -598,8 +602,11 @@
           .gorgeous-3d-ribbon::before, .gorgeous-3d-ribbon::after { content: "" !important; position: absolute !important; top: 7px !important; border: 17px solid #4a0505 !important; z-index: -1 !important; }
           .gorgeous-3d-ribbon::before { left: -25px !important; border-right-width: 14px !important; border-left-color: transparent !important; }
           .gorgeous-3d-ribbon::after { right: -25px !important; border-left-width: 14px !important; border-right-color: transparent !important; }
-          .cert-meta-bar { display: flex !important; justify-content: space-between !important; border-bottom: 2px solid #8B0000 !important; padding: 3px 6px !important; font-size: 14px !important; }
-          .fiscal-year-pill { background: #8B0000 !important; color: #ffffff !important; font-size: 13px !important; font-weight: bold !important; padding: 2px 16px !important; border-radius: 4px !important; }
+          .cert-meta-bar { display: grid !important; grid-template-columns: 25% 50% 25% !important; align-items: center !important; border-bottom: 2px solid #8B0000 !important; padding: 3px 4px !important; font-size: 11px !important; min-height: 24px !important; }
+          .cert-meta-bar > div { min-width: 0 !important; overflow: hidden !important; text-overflow: ellipsis !important; }
+          .cert-meta-bar > div:nth-child(2) { text-align: center !important; }
+          .cert-meta-bar > div:nth-child(3) { text-align: right !important; }
+          .fiscal-year-pill { background: #8B0000 !important; color: #ffffff !important; font-size: 11px !important; font-weight: bold !important; padding: 2px 10px !important; border-radius: 4px !important; }
           .trade-body-table { width: 100% !important; font-size: 15px !important; line-height: 1.6 !important; border-collapse: collapse !important; }
           .trade-body-table td { padding: 2.5px 2px !important; }
           .trade-table-fee-grid { width: 72% !important; border-collapse: collapse !important; background: #ffffff !important; }

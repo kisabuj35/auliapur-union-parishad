@@ -405,6 +405,7 @@ if ($action === 'getCitizenshipDetails') {
 
         echo json_encode([
             'found' => true,
+            'id' => (int)$row['id'],
             'appId' => $row['app_id'],
             'certNo' => $certNo,
             'name' => $row['name'],
@@ -484,11 +485,14 @@ if ($action === 'getTradeLicenseDetails') {
     $row = $stmt->fetch();
 
     if ($row) {
+        $serial = ((int)($row['receipt_no'] ?? 0) > 1 || (int)$row['id'] <= 1)
+            ? ($row['receipt_no'] ?? '1')
+            : (string)$row['id'];
         echo json_encode([
             'found' => true,
             'appId' => $row['app_id'],
             'licNo' => $row['license_no'],
-            'receiptNo' => $row['receipt_no'],
+            'receiptNo' => $serial,
             'orgName' => $row['org_name'],
             'ownerName' => $row['owner_name'],
             'fatherName' => $row['father_name'],

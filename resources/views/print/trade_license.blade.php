@@ -102,20 +102,24 @@
     .gorgeous-3d-ribbon::before { left: -25px !important; border-right-width: 14px !important; border-left-color: transparent !important; }
     .gorgeous-3d-ribbon::after { right: -25px !important; border-left-width: 14px !important; border-right-color: transparent !important; }
     .cert-meta-bar {
-      display: flex !important;
-      justify-content: space-between !important;
+      display: grid !important;
+      grid-template-columns: 25% 50% 25% !important;
       align-items: center !important;
       border-bottom: 2px solid #8B0000 !important;
-      padding: 3px 6px !important;
-      font-size: 14px !important;
+      padding: 3px 4px !important;
+      font-size: 11px !important;
       margin-top: 2px !important;
+      min-height: 24px !important;
     }
+    .cert-meta-bar > div { min-width: 0 !important; overflow: hidden !important; text-overflow: ellipsis !important; }
+    .cert-meta-bar > div:nth-child(2) { text-align: center !important; }
+    .cert-meta-bar > div:nth-child(3) { text-align: right !important; }
     .fiscal-year-pill {
       background: #8B0000 !important;
       color: #ffffff !important;
-      font-size: 13px;
+      font-size: 11px;
       font-weight: bold;
-      padding: 2px 16px;
+      padding: 2px 10px;
       border-radius: 4px;
       display: inline-block;
     }
@@ -158,6 +162,9 @@
     $label = fn($bn, $en) => $language === 'en' ? $en : $bn;
     $fiscalParts = explode('-', $data->fiscal_year ?? '২০২৫-২০২৬');
     $fiscalEndYear = count($fiscalParts) > 1 ? $fiscalParts[1] : ($language === 'en' ? '2026' : '২০২৬');
+    $serial = ((int)($data->receipt_no ?? 0) > 1 || (int)($data->id ?? 0) <= 1)
+      ? ($data->receipt_no ?? '1')
+      : $data->id;
     
     $qrPayload = "১১নং আউলিযাপুর ইউনিয়ন পরিষদ\nট্রেড লাইসেন্স নং: " . ($data->license_no ?? $data->app_id) . "\nপ্রতিষ্ঠান: {$data->org_name}\nমালিক: {$data->owner_name}\nমোবাইল: {$data->mobile}\nমেয়াদ: ৩০ জুন {$fiscalEndYear} ইং পর্যন্ত\nঅনলাইন ভেরিফায়েড";
     $qrCodeUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' . urlencode($qrPayload);
@@ -176,9 +183,9 @@
             <img src="https://lh3.googleusercontent.com/d/1_LMOoAtirVZeGxE4sz_CVQtQpInPPQTs" width="90" height="90" alt="Logo" style="object-fit:contain;">
           </td>
           <td style="text-align:center; vertical-align:middle;">
-            <div style="font-size:13px; font-weight:bold; color:#333; margin-bottom:1px;">{{ $label('গণপ্রজাতন্ত্রী বাংলাদেশ সরকার (স্থানীয় সরকার বিভাগ)', 'Government of the People’s Republic of Bangladesh (Local Government Division)') }}</div>
-            <h1 style="font-size:30px; font-weight:bold; color:#8B0000; margin:0; line-height:1.15; letter-spacing:0.5px;">{{ $label('১১নং আউলিয়াপুর ইউনিয়ন পরিষদ', '11 No. Auliapur Union Parishad') }}</h1>
-            <div style="font-size:15.5px; font-weight:bold; color:#005a2b; margin-top:2px;">{{ $label('উপজেলা: পটুয়াখালী সদর, জেলা: পটুয়াখালী', 'Upazila: Patuakhali Sadar, District: Patuakhali') }}</div>
+            <div style="font-size:10px; font-weight:bold; color:#333; margin-bottom:1px;">{{ $label('গণপ্রজাতন্ত্রী বাংলাদেশ সরকার (স্থানীয় সরকার বিভাগ)', 'Government of the People’s Republic of Bangladesh (Local Government Division)') }}</div>
+            <h1 style="font-size:24px; font-weight:bold; color:#8B0000; margin:0; line-height:1.15; letter-spacing:0;">{{ $label('১১নং আউলিয়াপুর ইউনিয়ন পরিষদ', '11 No. Auliapur Union Parishad') }}</h1>
+            <div style="font-size:12px; font-weight:bold; color:#005a2b; margin-top:2px;">{{ $label('উপজেলা: পটুয়াখালী সদর, জেলা: পটুয়াখালী', 'Upazila: Patuakhali Sadar, District: Patuakhali') }}</div>
           </td>
           <td style="width:75px; vertical-align:middle; text-align:right;">
             <img src="{{ $ownerPhoto }}" style="width:92px; height:108px; border:2px solid #8B0000; object-fit:cover; padding:1px; border-radius:3px; background:#fff;">
@@ -189,7 +196,7 @@
       <!-- মেটা বার -->
       <div class="cert-meta-bar">
         <div style="flex:1; text-align:left; white-space:nowrap;">
-          <strong>{{ $label('রসিদ নং:', 'Receipt No:') }}</strong> <span style="font-weight:bold; color:#8B0000;">{{ $number($data->receipt_no ?? '1') }}</span>
+          <strong>{{ $label('ক্রমিক নং:', 'Serial No:') }}</strong> <span style="font-weight:bold; color:#8B0000;">{{ $number($serial) }}</span>
         </div>
         <div style="flex:1; text-align:center; white-space:nowrap;">
           <span class="fiscal-year-pill">{{ $label('অর্থ বছর:', 'Fiscal Year:') }} {{ $number($data->fiscal_year ?? '২০২৫-২০২৬') }}</span>
