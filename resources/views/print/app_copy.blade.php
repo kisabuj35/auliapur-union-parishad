@@ -96,6 +96,18 @@
       font-size: 13px;
       font-weight: bold;
     }
+    .trade-applicant-summary {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 20px;
+      border: 1px solid #64748b;
+      padding: 7px 10px;
+      margin-bottom: 12px;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+    .trade-applicant-summary div { border-bottom: 1px dotted #94a3b8; padding: 2px 0; }
+    .trade-applicant-summary div:nth-last-child(-n+2) { border-bottom: 0; }
     .trade-app-letter { margin-bottom: 9px; font-size: 14px; line-height: 1.6; }
     .trade-app-letter p { margin: 0; }
     .trade-app-subject { margin-top: 5px !important; font-weight: bold; text-decoration: underline; color: #006837; }
@@ -171,6 +183,15 @@
       <span>তারিখ: {{ $record->apply_date ?? date('d/m/Y') }} ইং</span>
     </div>
 
+    <div class="trade-applicant-summary">
+      <div><strong>আবেদনকারীর নাম:</strong> {{ $record->owner_name }}</div>
+      <div><strong>পিতার নাম:</strong> {{ $record->father_name ?? '-' }}</div>
+      <div><strong>ঠিকানা:</strong> {{ $record->owner_address ?? '-' }}</div>
+      <div><strong>এনআইডি নম্বর:</strong> {{ toBn($record->nid ?? '-') }}</div>
+      <div><strong>ফোন নম্বর:</strong> {{ toBn($record->mobile ?? '-') }}</div>
+      <div><strong>প্রতিষ্ঠানের নাম:</strong> {{ $record->org_name }}</div>
+    </div>
+
     <div class="trade-app-letter">
       <p>বরাবর,</p>
       <p><strong>চেয়ারম্যান মহোদয়</strong></p>
@@ -178,16 +199,6 @@
       <p class="trade-app-subject">বিষয়: ব্যবসা প্রতিষ্ঠানের অনুকূলে ট্রেড লাইসেন্স {{ $record->is_renewal ? 'নবায়ন' : 'ইস্যু' }} প্রসঙ্গে।</p>
       <p class="trade-app-intro">জনাব, যথাবিহিত সম্মানপূর্বক নিবেদন এই যে, নিম্নস্বাক্ষরকারী উল্লিখিত ব্যবসা প্রতিষ্ঠানের জন্য প্রযোজ্য আইন, বিধি ও ইউনিয়ন পরিষদের নির্ধারিত শর্তাবলি মেনে ট্রেড লাইসেন্স {{ $record->is_renewal ? 'নবায়নের' : 'ইস্যুর' }} আবেদন করছি। অতএব, প্রয়োজনীয় তথ্য ও কাগজপত্র যাচাইপূর্বক আবেদনটি সদয় বিবেচনা করে ট্রেড লাইসেন্স {{ $record->is_renewal ? 'নবায়ন' : 'প্রদানের' }} জন্য বিনীত অনুরোধ করছি।</p>
     </div>
-
-    <div class="trade-app-section-title">আবেদনকারী/লাইসেন্সধারীর পূর্ণাঙ্গ তথ্য</div>
-    <table class="trade-app-table">
-      <tr><th>নাম</th><td><strong>{{ $record->owner_name }}</strong></td><th>লিঙ্গ</th><td>{{ $record->gender ?? '-' }}</td></tr>
-      <tr><th>পিতার নাম</th><td>{{ $record->father_name ?? '-' }}</td><th>মাতার নাম</th><td>{{ $record->mother_name ?? '-' }}</td></tr>
-      <tr><th>জন্ম তারিখ</th><td>{{ $record->dob ?? '-' }}</td><th>স্বামী/স্ত্রীর নাম</th><td>{{ $record->spouse_name ?? '-' }}</td></tr>
-      <tr><th>জাতীয় পরিচয়পত্র নম্বর</th><td>{{ toBn($record->nid ?? '-') }}</td><th>মোবাইল নম্বর</th><td>{{ toBn($record->mobile ?? '-') }}</td></tr>
-      <tr><th>ই-মেইল</th><td>{{ $record->owner_email ?? '-' }}</td><th>TIN / BIN</th><td>{{ $record->tin_no ?? '-' }} / {{ $record->bin_no ?? '-' }}</td></tr>
-      <tr><th>স্থায়ী ঠিকানা</th><td colspan="3">{{ $record->owner_address ?? '-' }}</td></tr>
-    </table>
 
     <div class="trade-app-columns">
       <div class="trade-app-panel">

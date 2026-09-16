@@ -394,6 +394,13 @@
             <i class="fa fa-search"></i>
             <input type="text" id="tradeSearchInput" placeholder="প্রতিষ্ঠান, মালিকের নাম বা মোবাইল দিয়ে খুঁজুন..." oninput="filterTradeTable()">
           </div>
+          <label class="d-flex align-items-center gap-1 small fw-bold mb-0" title="প্রিন্টের ভাষা">
+            <i class="fa fa-language text-info"></i>
+            <select id="tradePrintLanguage" class="form-select form-select-sm" aria-label="প্রিন্টের ভাষা">
+              <option value="bn">বাংলা</option>
+              <option value="en">English</option>
+            </select>
+          </label>
           <button class="btn btn-dark btn-sm fw-bold rounded-pill px-3" onclick="loadTradeLicenses()"><i class="fa fa-sync me-1"></i> রিফ্রেশ</button>
         </div>
 
@@ -946,7 +953,7 @@
     var renderList = Array.isArray(list) ? list : (rawDataStore.trade || []);
     if (!renderList.length) { tbody.innerHTML = '<tr><td colspan="8" class="text-center py-3 text-muted">কোন লাইসেন্স নেই</td></tr>'; return; }
     renderList.slice(0, PAGE_SIZE).forEach(t => {
-      var act = renderActionButtons(t.appId, t.status, 'showTradeCertPreview', 'openEditTradeModal');
+      var act = renderActionButtons(t.appId, t.status, 'showTradeCertPreview', 'openEditTradeModal', "document.getElementById('tradePrintLanguage').value");
       tbody.innerHTML += `<tr><td><strong>${t.appId}</strong></td><td><span class="badge bg-light text-dark border">${t.licNo || '-'}</span></td><td>${t.orgName}</td><td>${t.ownerName}</td><td>${t.mobile}</td><td>৳${t.totalFee}</td><td>${act.badge}</td><td>${act.actions}</td></tr>`;
     });
   }
@@ -1149,7 +1156,7 @@
   }
 
   // 🟢 অ্যাকশন বাটন রেন্ডারার
-  function renderActionButtons(appId, status, printCallback, editCallback) {
+  function renderActionButtons(appId, status, printCallback, editCallback, printArgument) {
     var session = getActiveSession() || {};
     var permissions = session.permissions || {};
     var isSuperAdmin = session.role === 'SuperAdmin';
@@ -1160,7 +1167,8 @@
     var approveBtn = canApprove ? `<button class="btn-act-icon approve" onclick="changeStatus('${appId}','Approved')" title="অনুমোদন"><i class="fa fa-check"></i></button>` : '';
     var editBtn = canEdit ? `<button class="btn-act-icon edit" onclick="${editCallback}('${appId}')" title="সংশোধন"><i class="fa fa-edit"></i></button>` : '';
     var rejectBtn = canReject ? `<button class="btn-act-icon reject" onclick="changeStatus('${appId}','Rejected')" title="বাতিল"><i class="fa fa-times"></i></button>` : '';
-    var printBtn = (status === 'Approved') ? `<button class="btn btn-sm btn-dark ms-1 fw-bold" onclick="${printCallback}('${appId}')"><i class="fa fa-print me-1"></i>প্রিন্ট</button>` : '';
+    var printCall = printArgument ? `${printCallback}('${appId}', ${printArgument})` : `${printCallback}('${appId}')`;
+    var printBtn = (status === 'Approved') ? `<button class="btn btn-sm btn-dark ms-1 fw-bold" onclick="${printCall}"><i class="fa fa-print me-1"></i>প্রিন্ট</button>` : '';
 
     return { badge: badge, actions: `<div class="d-flex align-items-center">${approveBtn}${editBtn}${rejectBtn}${printBtn}</div>` };
   }

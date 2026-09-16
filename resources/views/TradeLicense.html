@@ -182,8 +182,9 @@
     <form id="tradeApplyForm" onsubmit="event.preventDefault(); submitTradeLicenseForm();">
       <div id="tradeRenewalField" class="alert alert-warning d-none mb-4">
         <label class="form-label fw-bold">মূল ট্রেড লাইসেন্স নম্বর *</label>
-        <input type="text" id="trOriginalLicNo" class="form-control" placeholder="আগের লাইসেন্স নম্বর লিখুন">
+        <input type="text" id="trOriginalLicNo" class="form-control" placeholder="আগের লাইসেন্স নম্বর লিখুন" autocomplete="off" oninput="lookupTradeRenewal(this.value)">
         <small>শুধু পূর্বে ইস্যুকৃত বৈধ ট্রেড লাইসেন্সের নম্বর ব্যবহার করুন।</small>
+        <div id="tradeRenewalLookupStatus" class="small mt-1"></div>
       </div>
       <div class="row g-4">
         <div class="col-md-6 border-end">
@@ -325,6 +326,45 @@
 
 <script>
   var tradeMode = 'new';
+  var renewalLookupTimer;
+
+  function setTradeField(id, value) {
+    var field = document.getElementById(id);
+    if (field) field.value = value == null ? '' : value;
+  }
+
+  async function lookupTradeRenewal(value) {
+    clearTimeout(renewalLookupTimer);
+    var status = document.getElementById('tradeRenewalLookupStatus');
+    if (!value.trim()) { status.innerText = ''; return; }
+    renewalLookupTimer = setTimeout(async function() {
+      status.className = 'small mt-1 text-muted';
+      status.innerText = 'তথ্য খোঁজা হচ্ছে...';
+      var data = await callBackendAPI('getTradeLicenseDetails', value.trim());
+      if (!data || !data.found || data.isRenewal) {
+        status.className = 'small mt-1 text-danger';
+        status.innerText = 'এই লাইসেন্স নম্বরের তথ্য পাওয়া যায়নি।';
+        return;
+      }
+      setTradeField('trOwnerName', data.ownerName); setTradeField('trFatherName', data.fatherName);
+      setTradeField('trMotherName', data.motherName); setTradeField('trNid', data.nid);
+      setTradeField('trDob', data.dob); setTradeField('trMobile', data.mobile);
+      setTradeField('trGender', data.gender || 'পুরুষ'); setTradeField('trSpouseName', data.spouseName);
+      setTradeField('trOwnerEmail', data.ownerEmail); setTradeField('trTinNo', data.tinNo); setTradeField('trBinNo', data.binNo);
+      setTradeField('trOwnerAddress', data.ownerAddress); setTradeField('trOrgName', data.orgName);
+      setTradeField('trBizDetails', data.bizDetails); setTradeField('trBizPermanentAddress', data.bizPermanentAddress);
+      setTradeField('trBizPresentAddress', data.bizPresentAddress); setTradeField('trBizAddress', data.bizAddress);
+      setTradeField('trBizStartDate', data.bizStartDate); setTradeField('trFiscalYear', data.fiscalYear);
+      setTradeField('trCapital', data.capital); setTradeField('trEmployeeCount', data.employeeCount);
+      setTradeField('trSignboardSize', data.signboardSize); setTradeField('trCommTax', data.commTax || 0);
+      setTradeField('trSignTax', data.signTax || 0); setTradeField('trTotalFee', data.totalFee || 0);
+      var category = document.getElementById('trCategorySelect');
+      if (category) Array.from(category.options).forEach(function(option) { if (option.value.split('|')[0] === data.category) category.value = option.value; });
+      calculateTradeFee('trCategorySelect','dispCommTax','dispSignTax','dispTotalFee','trCommTax','trSignTax','trTotalFee');
+      status.className = 'small mt-1 text-success';
+      status.innerText = 'মূল লাইসেন্সের তথ্য পূরণ হয়েছে। প্রয়োজন হলে সংশোধন করুন।';
+    }, 350);
+  }
 
   function switchTradeModule(mod) {
     tradeMode = mod;
@@ -422,9 +462,13 @@
   }
 
   // 🟢 ১-ক্লিকে সরাসরি প্রিন্ট
-  async function showTradeCertPreview(appIdOrLicNo) {
+  async function showTradeCertPreview(appIdOrLicNo, language) {
     const data = await callBackendAPI('getTradeLicenseDetails', appIdOrLicNo);
     if (!data || !data.found) return alert('ট্রেড লাইসেন্স ডাটা পাওয়া যায়নি!');
+    if (language === 'en') {
+      window.open('/print/trade/' + encodeURIComponent(data.appId) + '?lang=en', '_blank', 'noopener');
+      return;
+    }
 
     var fiscalParts = (data.fiscalYear || '২০২৫-২০২৬').split('-');
     var fiscalEndYear = fiscalParts.length > 1 ? fiscalParts[1] : '২০২৬';
@@ -557,10 +601,17 @@
     `);
     doc.close();
 
-    setTimeout(function() {
+    var printImages = Array.from(doc.images).map(function(image) {
+      return image.complete ? Promise.resolve() : new Promise(function(resolve) {
+        image.addEventListener('load', resolve, { once: true });
+        image.addEventListener('error', resolve, { once: true });
+      });
+    });
+    var printFonts = doc.fonts && doc.fonts.ready ? doc.fonts.ready : Promise.resolve();
+    Promise.all([printFonts].concat(printImages)).then(function() {
       iframe.contentWindow.focus();
       iframe.contentWindow.print();
-    }, 500);
+    });
   }
 
   // 🟢 এডিট মোডাল ওপেন করা

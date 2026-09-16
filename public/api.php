@@ -476,8 +476,11 @@ if ($action === 'getFamilyDetails') {
 // 🟢 ৯. ট্রেড লাইসেন্স বিবরণ
 if ($action === 'getTradeLicenseDetails') {
     $q = trim(is_array($data) ? ($data['appId'] ?? $data['licNo'] ?? '') : $data);
-    $stmt = $pdo->prepare("SELECT * FROM trade_licenses WHERE app_id = ? OR license_no = ?");
-    $stmt->execute([$q, $q]);
+    $englishDigits = ['0','1','2','3','4','5','6','7','8','9'];
+    $banglaDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+    $normalizedQ = str_replace($banglaDigits, $englishDigits, $q);
+    $stmt = $pdo->prepare("SELECT * FROM trade_licenses WHERE app_id = ? OR license_no = ? OR license_no = ?");
+    $stmt->execute([$q, $q, $normalizedQ]);
     $row = $stmt->fetch();
 
     if ($row) {
@@ -606,12 +609,17 @@ if ($action === 'submitTradeLicenseApplication' || $action === 'submitTradeRenew
     $rand = rand(100000, 999999);
     $isRenewal = $action === 'submitTradeRenewalApplication';
     $appId = ($isRenewal ? 'AUL-RN-' : 'AUL-TR-') . $rand;
-    $licNo = $isRenewal ? ($data['originalLicNo'] ?? '') : '199278195100' . substr($rand, 0, 4);
+    $licNo = $isRenewal ? trim($data['originalLicNo'] ?? '') : '199278195100' . substr($rand, 0, 4);
     $date = date('d/m/Y');
 
+    $receiptNo = str_pad((int)$pdo->query("SELECT COALESCE(MAX(CAST(receipt_no AS UNSIGNED)), 0) + 1 FROM trade_licenses")->fetchColumn(), 2, '0', STR_PAD_LEFT);
+
     if ($isRenewal) {
-        $check = $pdo->prepare("SELECT license_no FROM trade_licenses WHERE license_no = ? AND is_renewal = 0");
-        $check->execute([$licNo]);
+        $englishDigits = ['0','1','2','3','4','5','6','7','8','9'];
+        $banglaDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+        $normalizedLicNo = str_replace($banglaDigits, $englishDigits, $licNo);
+        $check = $pdo->prepare("SELECT license_no FROM trade_licenses WHERE (license_no = ? OR license_no = ?) AND is_renewal = 0");
+        $check->execute([$licNo, $normalizedLicNo]);
         if (!$check->fetchColumn()) {
             echo json_encode(['success' => false, 'error' => 'মূল ট্রেড লাইসেন্স নম্বরটি পাওয়া যায়নি।']);
             exit;
@@ -620,7 +628,7 @@ if ($action === 'submitTradeLicenseApplication' || $action === 'submitTradeRenew
 
     $stmt = $pdo->prepare("INSERT INTO trade_licenses (app_id, license_no, receipt_no, org_name, owner_name, father_name, mother_name, nid, dob, gender, spouse_name, mobile, owner_address, owner_email, tin_no, bin_no, category, biz_details, biz_address, biz_permanent_address, biz_present_address, biz_start_date, fiscal_year, capital, employee_count, signboard_size, license_fee, vat_fee, comm_tax, sign_tax, discount_amount, discount_reason, total_fee, is_renewal, original_license_no, photo, status, apply_date, signatory_role) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
     $stmt->execute([
-        $appId, $licNo, '01', $data['orgName'], $data['ownerName'], $data['fatherName'], $data['motherName'],
+        $appId, $licNo, $receiptNo, $data['orgName'], $data['ownerName'], $data['fatherName'], $data['motherName'],
         $data['nid'], $data['dob'], $data['gender'] ?? 'পুরুষ', $data['spouseName'] ?? '', $data['mobile'], $data['ownerAddress'], $data['ownerEmail'] ?? '', $data['tinNo'] ?? '', $data['binNo'] ?? '',
         $data['category'], $data['bizDetails'] ?? '', $data['bizPresentAddress'] ?? ($data['bizAddress'] ?? ''), $data['bizPermanentAddress'] ?? '', $data['bizPresentAddress'] ?? '',
         $data['bizStartDate'] ?? '', $data['fiscalYear'] ?? '২০২৬-২০২৭', $data['capital'] ?? '', $data['employeeCount'] ?? '', $data['signboardSize'] ?? '',

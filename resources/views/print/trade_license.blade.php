@@ -131,7 +131,7 @@
     }
   </style>
 </head>
-<body onload="window.print();">
+<body onload="printTradeLicenseWhenReady();">
 
   @php
     function toBn($num) {
@@ -139,8 +139,16 @@
       $bn = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
       return str_replace($en, $bn, $num);
     }
+    function toEn($num) {
+      $en = ['0','1','2','3','4','5','6','7','8','9'];
+      $bn = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+      return str_replace($bn, $en, $num);
+    }
+    $language = request()->query('lang', 'bn') === 'en' ? 'en' : 'bn';
+    $number = $language === 'en' ? 'toEn' : 'toBn';
+    $label = fn($bn, $en) => $language === 'en' ? $en : $bn;
     $fiscalParts = explode('-', $data->fiscal_year ?? '২০২৫-২০২৬');
-    $fiscalEndYear = count($fiscalParts) > 1 ? $fiscalParts[1] : '২০২৬';
+    $fiscalEndYear = count($fiscalParts) > 1 ? $fiscalParts[1] : ($language === 'en' ? '2026' : '২০২৬');
     
     $qrPayload = "১১নং আউলিযাপুর ইউনিয়ন পরিষদ\nট্রেড লাইসেন্স নং: " . ($data->license_no ?? $data->app_id) . "\nপ্রতিষ্ঠান: {$data->org_name}\nমালিক: {$data->owner_name}\nমোবাইল: {$data->mobile}\nমেয়াদ: ৩০ জুন {$fiscalEndYear} ইং পর্যন্ত\nঅনলাইন ভেরিফায়েড";
     $qrCodeUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' . urlencode($qrPayload);
@@ -159,9 +167,9 @@
             <img src="https://lh3.googleusercontent.com/d/1_LMOoAtirVZeGxE4sz_CVQtQpInPPQTs" width="90" height="90" alt="Logo" style="object-fit:contain;">
           </td>
           <td style="text-align:center; vertical-align:middle;">
-            <div style="font-size:13px; font-weight:bold; color:#333; margin-bottom:1px;">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার (স্থানীয় সরকার বিভাগ)</div>
-            <h1 style="font-size:30px; font-weight:bold; color:#8B0000; margin:0; line-height:1.15; letter-spacing:0.5px;">১১নং আউলিয়াপুর ইউনিয়ন পরিষদ</h1>
-            <div style="font-size:15.5px; font-weight:bold; color:#005a2b; margin-top:2px;">উপজেলা: পটুয়াখালী সদর, জেলা: পটুয়াখালী</div>
+            <div style="font-size:13px; font-weight:bold; color:#333; margin-bottom:1px;">{{ $label('গণপ্রজাতন্ত্রী বাংলাদেশ সরকার (স্থানীয় সরকার বিভাগ)', 'Government of the People’s Republic of Bangladesh (Local Government Division)') }}</div>
+            <h1 style="font-size:30px; font-weight:bold; color:#8B0000; margin:0; line-height:1.15; letter-spacing:0.5px;">{{ $label('১১নং আউলিয়াপুর ইউনিয়ন পরিষদ', '11 No. Auliapur Union Parishad') }}</h1>
+            <div style="font-size:15.5px; font-weight:bold; color:#005a2b; margin-top:2px;">{{ $label('উপজেলা: পটুয়াখালী সদর, জেলা: পটুয়াখালী', 'Upazila: Patuakhali Sadar, District: Patuakhali') }}</div>
           </td>
           <td style="width:75px; vertical-align:middle; text-align:right;">
             <img src="{{ $ownerPhoto }}" style="width:92px; height:108px; border:2px solid #8B0000; object-fit:cover; padding:1px; border-radius:3px; background:#fff;">
@@ -172,58 +180,58 @@
       <!-- মেটা বার -->
       <div class="cert-meta-bar">
         <div style="flex:1; text-align:left; white-space:nowrap;">
-          <strong>রসিদ নং:</strong> <span style="font-weight:bold; color:#8B0000;">{{ toBn($data->receipt_no ?? '০১') }}</span>
+          <strong>{{ $label('রসিদ নং:', 'Receipt No:') }}</strong> <span style="font-weight:bold; color:#8B0000;">{{ $number($data->receipt_no ?? '1') }}</span>
         </div>
         <div style="flex:1; text-align:center; white-space:nowrap;">
-          <span class="fiscal-year-pill">অর্থ বছর: {{ $data->fiscal_year ?? '২০২৫-২০২৬' }}</span>
+          <span class="fiscal-year-pill">{{ $label('অর্থ বছর:', 'Fiscal Year:') }} {{ $number($data->fiscal_year ?? '২০২৫-২০২৬') }}</span>
         </div>
         <div style="flex:1; text-align:right; white-space:nowrap;">
-          <strong>{{ $data->is_renewal ? 'লাইসেন্স নবায়নের তারিখ' : 'লাইসেন্স ইস্যুর তারিখ' }}:</strong>
-          <span style="font-weight:bold; color:#000;">{{ $data->apply_date }} ইং</span>
+          <strong>{{ $data->is_renewal ? $label('লাইসেন্স নবায়নের তারিখ', 'Renewal Date') : $label('লাইসেন্স ইস্যুর তারিখ', 'Issue Date') }}:</strong>
+          <span style="font-weight:bold; color:#000;">{{ $number($data->apply_date) }}</span>
         </div>
       </div>
 
       <!-- ৩ডি রিবন -->
       <div class="ribbon-container-3d">
         <div class="gorgeous-3d-ribbon">
-          <span>{{ $data->is_renewal ? 'নবায়নকৃত ট্রেড লাইসেন্স' : 'ট্রেড লাইসেন্স' }}</span>
+          <span>{{ $data->is_renewal ? $label('নবায়নকৃত ট্রেড লাইসেন্স', 'Renewed Trade License') : $label('ট্রেড লাইসেন্স', 'Trade License') }}</span>
         </div>
       </div>
 
       <!-- মূল তথ্য ছক -->
       <div style="padding: 0 10px;">
         <table class="trade-body-table">
-          <tr><td style="width:26%; font-weight:bold;">ট্রেড লাইসেন্স নম্বর</td><td style="width:2%;">:</td><td style="width:72%;"><strong style="color:#8B0000; font-size:16px;">{{ toBn($data->license_no ?? $data->app_id) }}</strong></td></tr>
-          <tr><td style="font-weight:bold;">লাইসেন্সধারীর নাম</td><td>:</td><td><strong style="color:#000;">{{ $data->owner_name }}</strong></td></tr>
-          <tr><td style="font-weight:bold;">পিতার নাম</td><td>:</td><td>{{ $data->father_name ?? '-' }}</td></tr>
-          <tr><td style="font-weight:bold;">মাতার নাম</td><td>:</td><td>{{ $data->mother_name ?? '-' }}</td></tr>
-          <tr><td style="font-weight:bold;">জাতীয় পরিচয়পত্র নম্বর</td><td>:</td><td>{{ toBn($data->nid ?? '-') }}</td></tr>
-          <tr><td style="font-weight:bold;">মোবাইল নম্বর</td><td>:</td><td>{{ toBn($data->mobile ?? '-') }}</td></tr>
-          <tr><td style="font-weight:bold;">লাইসেন্সধারীর ঠিকানা</td><td>:</td><td>{{ $data->owner_address ?? '-' }}</td></tr>
+          <tr><td style="width:26%; font-weight:bold;">{{ $label('ট্রেড লাইসেন্স নম্বর', 'Trade License No.') }}</td><td style="width:2%;">:</td><td style="width:72%;"><strong style="color:#8B0000; font-size:16px;">{{ $number($data->license_no ?? $data->app_id) }}</strong></td></tr>
+          <tr><td style="font-weight:bold;">{{ $label('লাইসেন্সধারীর নাম', 'License Holder') }}</td><td>:</td><td><strong style="color:#000;">{{ $data->owner_name }}</strong></td></tr>
+          <tr><td style="font-weight:bold;">{{ $label('পিতার নাম', 'Father’s Name') }}</td><td>:</td><td>{{ $data->father_name ?? '-' }}</td></tr>
+          <tr><td style="font-weight:bold;">{{ $label('মাতার নাম', 'Mother’s Name') }}</td><td>:</td><td>{{ $data->mother_name ?? '-' }}</td></tr>
+          <tr><td style="font-weight:bold;">{{ $label('জাতীয় পরিচয়পত্র নম্বর', 'NID No.') }}</td><td>:</td><td>{{ $number($data->nid ?? '-') }}</td></tr>
+          <tr><td style="font-weight:bold;">{{ $label('মোবাইল নম্বর', 'Mobile No.') }}</td><td>:</td><td>{{ $number($data->mobile ?? '-') }}</td></tr>
+          <tr><td style="font-weight:bold;">{{ $label('লাইসেন্সধারীর ঠিকানা', 'Holder’s Address') }}</td><td>:</td><td>{{ $data->owner_address ?? '-' }}</td></tr>
           <tr><td style="font-weight:bold;">ই-মেইল / TIN / BIN</td><td>:</td><td>{{ $data->owner_email ?? '-' }} / {{ $data->tin_no ?? '-' }} / {{ $data->bin_no ?? '-' }}</td></tr>
-          <tr><td style="font-weight:bold; color:#006837;">প্রতিষ্ঠানের নাম</td><td>:</td><td><strong style="color:#006837; font-size:16px;">“{{ $data->org_name }}”</strong></td></tr>
-          <tr><td style="font-weight:bold;">ব্যবসার ধরন</td><td>:</td><td>{{ $data->biz_details ?? $data->category }}</td></tr>
-          <tr><td style="font-weight:bold;">ব্যবসা শুরুর তারিখ</td><td>:</td><td>{{ $data->biz_start_date ?: '-' }}</td></tr>
-          <tr><td style="font-weight:bold;">ব্যবসা প্রতিষ্ঠানের স্থায়ী ঠিকানা</td><td>:</td><td>{{ $data->biz_permanent_address ?? $data->biz_address }}</td></tr>
-          <tr><td style="font-weight:bold;">ব্যবসা প্রতিষ্ঠানের অস্থায়ী ঠিকানা</td><td>:</td><td>{{ $data->biz_present_address ?? $data->biz_address }}</td></tr>
-          <tr><td style="font-weight:bold;">মূলধন / কর্মচারী / সাইনবোর্ড</td><td>:</td><td>{{ $data->capital ?? '-' }} / {{ $data->employee_count ?? '-' }} / {{ $data->signboard_size ?? '-' }}</td></tr>
-          <tr><td style="font-weight:bold;">বৈধতার মেয়াদ</td><td>:</td><td><span style="font-weight:bold; color:#8B0000;">৩০ জুন, {{ $fiscalEndYear }} ইং পর্যন্ত</span></td></tr>
+          <tr><td style="font-weight:bold; color:#006837;">{{ $label('প্রতিষ্ঠানের নাম', 'Business Name') }}</td><td>:</td><td><strong style="color:#006837; font-size:16px;">“{{ $data->org_name }}”</strong></td></tr>
+          <tr><td style="font-weight:bold;">{{ $label('ব্যবসার ধরন', 'Business Type') }}</td><td>:</td><td>{{ $data->biz_details ?? $data->category }}</td></tr>
+          <tr><td style="font-weight:bold;">{{ $label('ব্যবসা শুরুর তারিখ', 'Business Start Date') }}</td><td>:</td><td>{{ $number($data->biz_start_date ?: '-') }}</td></tr>
+          <tr><td style="font-weight:bold;">{{ $label('ব্যবসা প্রতিষ্ঠানের স্থায়ী ঠিকানা', 'Permanent Business Address') }}</td><td>:</td><td>{{ $data->biz_permanent_address ?? $data->biz_address }}</td></tr>
+          <tr><td style="font-weight:bold;">{{ $label('ব্যবসা প্রতিষ্ঠানের অস্থায়ী ঠিকানা', 'Present Business Address') }}</td><td>:</td><td>{{ $data->biz_present_address ?? $data->biz_address }}</td></tr>
+          <tr><td style="font-weight:bold;">{{ $label('মূলধন / কর্মচারী / সাইনবোর্ড', 'Capital / Employees / Signboard') }}</td><td>:</td><td>{{ $number($data->capital ?? '-') }} / {{ $number($data->employee_count ?? '-') }} / {{ $data->signboard_size ?? '-' }}</td></tr>
+          <tr><td style="font-weight:bold;">{{ $label('বৈধতার মেয়াদ', 'Valid Until') }}</td><td>:</td><td><span style="font-weight:bold; color:#8B0000;">{{ $label('৩০ জুন,', '30 June,') }} {{ $number($fiscalEndYear) }} {{ $label('ইং পর্যন্ত', 'onwards') }}</span></td></tr>
           
           <!-- আর্থিক বিবরণী টেবিল -->
           <tr>
-            <td style="font-weight:bold; vertical-align:top; padding-top:4px;">আর্থিক বিবরণ</td>
+            <td style="font-weight:bold; vertical-align:top; padding-top:4px;">{{ $label('আর্থিক বিবরণ', 'Fee Details') }}</td>
             <td style="vertical-align:top; padding-top:4px;">:</td>
             <td style="padding-top:4px;">
               <table class="trade-table-fee-grid">
-                <tr style="background:#f3f4f6;"><th style="width:65%;">আদায়ের বিবরণ</th><th style="text-align:right; width:35%;">পরিমাণ</th></tr>
-                <tr><td>ট্রেড লাইসেন্স ফি / নবায়ন ফি</td><td style="text-align:right;">৳ {{ toBn(number_format($data->license_fee, 0)) }}</td></tr>
-                <tr><td>ভ্যাট (১৫%)</td><td style="text-align:right;">৳ {{ toBn(number_format($data->vat_fee, 0)) }}</td></tr>
-                <tr><td>বাণিজ্যিক কর (বার্ষিক)</td><td style="text-align:right;">৳ {{ toBn(number_format($data->comm_tax, 0)) }}</td></tr>
-                <tr><td>সাইনবোর্ড কর (বার্ষিক)</td><td style="text-align:right;">৳ {{ toBn(number_format($data->sign_tax, 0)) }}</td></tr>
+                <tr style="background:#f3f4f6;"><th style="width:65%;">{{ $label('আদায়ের বিবরণ', 'Fee Description') }}</th><th style="text-align:right; width:35%;">{{ $label('পরিমাণ', 'Amount') }}</th></tr>
+                <tr><td>{{ $label('ট্রেড লাইসেন্স ফি / নবায়ন ফি', 'Trade License / Renewal Fee') }}</td><td style="text-align:right;">৳ {{ $number(number_format($data->license_fee, 0)) }}</td></tr>
+                <tr><td>{{ $label('ভ্যাট (১৫%)', 'VAT (15%)') }}</td><td style="text-align:right;">৳ {{ $number(number_format($data->vat_fee, 0)) }}</td></tr>
+                <tr><td>{{ $label('বাণিজ্যিক কর (বার্ষিক)', 'Commercial Tax (Annual)') }}</td><td style="text-align:right;">৳ {{ $number(number_format($data->comm_tax, 0)) }}</td></tr>
+                <tr><td>{{ $label('সাইনবোর্ড কর (বার্ষিক)', 'Signboard Tax (Annual)') }}</td><td style="text-align:right;">৳ {{ $number(number_format($data->sign_tax, 0)) }}</td></tr>
                 @if (($data->discount_amount ?? 0) > 0)
                   <tr><td>ডিসকাউন্ট{{ !empty($data->discount_reason) ? ' (' . $data->discount_reason . ')' : '' }}</td><td style="text-align:right;">- ৳ {{ toBn(number_format($data->discount_amount, 0)) }}</td></tr>
                 @endif
-                <tr style="font-weight:bold; background:#fff2f2;"><td>সর্বমোট</td><td style="text-align:right; color:#8B0000; font-size:14px;">৳ {{ toBn(number_format($data->total_fee, 0)) }}</td></tr>
+                <tr style="font-weight:bold; background:#fff2f2;"><td>{{ $label('সর্বমোট', 'Total') }}</td><td style="text-align:right; color:#8B0000; font-size:14px;">৳ {{ $number(number_format($data->total_fee, 0)) }}</td></tr>
               </table>
             </td>
           </tr>
@@ -262,4 +270,16 @@
   </div>
 
 </body>
+<script>
+  function printTradeLicenseWhenReady() {
+    var images = Array.from(document.images).map(function(image) {
+      return image.complete ? Promise.resolve() : new Promise(function(resolve) {
+        image.addEventListener('load', resolve, { once: true });
+        image.addEventListener('error', resolve, { once: true });
+      });
+    });
+    var fonts = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+    Promise.all([fonts].concat(images)).then(function() { window.print(); });
+  }
+</script>
 </html>
