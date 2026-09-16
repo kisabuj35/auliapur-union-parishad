@@ -319,6 +319,7 @@
       <div class="mb-3"><span class="badge bg-success-subtle text-success border border-success px-4 py-2 fs-5 fw-bold" id="successAppId">AUL-000000</span></div>
       <div class="d-flex justify-content-center gap-2">
         <button class="btn btn-outline-dark fw-bold px-3 btn-sm rounded-pill" onclick="navigator.clipboard.writeText(document.getElementById('successAppId').innerText); Swal.fire({icon:'success', title:'কপি হয়েছে!', timer:1200, showConfirmButton:false});"><i class="fa fa-copy me-1"></i> কপি</button>
+        <button class="btn btn-info text-white fw-bold px-3 btn-sm rounded-pill" id="successAppCopyBtn" onclick="printSubmittedApplicationCopy()"><i class="fa fa-print me-1"></i> আবেদন কপি প্রিন্ট</button>
         <button class="btn btn-success fw-bold px-4 btn-sm rounded-pill" data-bs-dismiss="modal" onclick="navToSection('publicHome')">ঠিক আছে</button>
       </div>
     </div>
@@ -326,6 +327,11 @@
 </div>
 
 <script>
+  function printSubmittedApplicationCopy() {
+    var appId = document.getElementById('successAppId').innerText.trim();
+    if (appId) window.location.assign('/print/application-copy/' + encodeURIComponent(appId));
+  }
+
   // সেকশন নেভিগেশন
   function navToSection(secId) {
     document.querySelectorAll('.view-section').forEach(el => el.classList.add('d-none'));
@@ -375,7 +381,7 @@
         else if (item.type.includes('পারিবারিক') || item.type.includes('উত্তরাধিকারী')) printBtn = `<a href="/print/family/${item.appId}" target="_blank" class="btn btn-sm btn-primary fw-bold"><i class="fa fa-print me-1"></i> সনদ প্রিন্ট</a>`;
         else printBtn = `<a href="/print/general/${item.appId}" target="_blank" class="btn btn-sm btn-success fw-bold"><i class="fa fa-print me-1"></i> প্রত্যয়ন প্রিন্ট</a>`;
       } else {
-        printBtn = `<a href="/print/application-copy/${item.appId}" target="_blank" class="btn btn-sm btn-outline-secondary fw-bold"><i class="fa fa-file-lines me-1"></i> আবেদন কপি প্রিন্ট</a>`;
+        printBtn = `<a href="/print/application-copy/${item.appId}" class="btn btn-sm btn-outline-secondary fw-bold"><i class="fa fa-file-lines me-1"></i> আবেদন কপি প্রিন্ট</a>`;
       }
 
       html += `

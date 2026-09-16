@@ -455,6 +455,12 @@
     if (res && res.success) {
       document.getElementById('tradeApplyForm').reset();
       document.getElementById('successAppId').innerText = res.appId;
+      var appCopyBtn = document.getElementById('successAppCopyBtn');
+      if (appCopyBtn) {
+        appCopyBtn.onclick = function() {
+          window.location.assign('/print/application-copy/' + encodeURIComponent(res.appId));
+        };
+      }
       bootstrap.Modal.getOrCreateInstance(document.getElementById('successModal')).show();
     } else {
       alert('ত্রুটি: ' + (res ? res.error : 'আবেদন জমা দেওয়া যায়নি'));
