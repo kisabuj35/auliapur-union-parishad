@@ -157,7 +157,7 @@
     $serviceName = $record->type ?? $record->certificate_type ?? (isset($record->license_no) ? 'ট্রেড লাইসেন্স' : (isset($record->deceased_name) ? 'ওয়ারিশান সনদ' : 'নাগরিকত্ব সনদ'));
   @endphp
 
-  @if(isset($record->license_no))
+  @if($isTrade)
   <div class="app-paper">
     <div class="trade-app-header">
       <h2>১১নং আউলিয়াপুর ইউনিয়ন পরিষদ কার্যালয়</h2>

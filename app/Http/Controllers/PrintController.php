@@ -71,14 +71,16 @@ class PrintController extends Controller
     // ৬. দাখিলকৃত আবেদন কপি প্রিন্ট ভিউ (পেন্ডিং অবস্থায় যাচাইয়ের জন্য)
     public function printAppCopy($appId)
     {
-        // পাঁচটি টেবিল থেকে যেকোনো একটিতে ডাটাটি আছে কি না খুঁজে নেওয়া
-        $record = DB::table('citizenships')->where('app_id', $appId)->first()
-            ?? DB::table('trade_licenses')->where('app_id', $appId)->first()
-            ?? DB::table('family_certificates')->where('app_id', $appId)->first()
-            ?? DB::table('warishans')->where('app_id', $appId)->first()
-            ?? DB::table('general_applications')->where('app_id', $appId)->first();
+        // Prefix-based lookup keeps trade applications on the trade-specific layout.
+        $isTrade = str_starts_with($appId, 'AUL-TR-') || str_starts_with($appId, 'AUL-RN-');
+        $record = $isTrade
+            ? DB::table('trade_licenses')->where('app_id', $appId)->first()
+            : DB::table('citizenships')->where('app_id', $appId)->first()
+                ?? DB::table('family_certificates')->where('app_id', $appId)->first()
+                ?? DB::table('warishans')->where('app_id', $appId)->first()
+                ?? DB::table('general_applications')->where('app_id', $appId)->first();
 
         if (!$record) abort(404, 'আবেদন কপি পাওয়া যায়নি!');
-        return view('print.app_copy', compact('record'));
+        return view('print.app_copy', compact('record', 'isTrade'));
     }
 }
