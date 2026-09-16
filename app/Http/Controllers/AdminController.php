@@ -88,6 +88,32 @@ class AdminController extends Controller
             || DB::table('warishans')->where('app_id', $appId)->update(['status' => $status])
             || DB::table('general_applications')->where('app_id', $appId)->update(['status' => $status]);
 
+        if ($status === 'Approved') {
+            $cit = DB::table('citizenships')->where('app_id', $appId)->first();
+            if ($cit) {
+                preg_match('/(19\d{2}|20\d{2})/', (string)$cit->dob, $matches);
+                $year = $matches[1] ?? date('Y');
+                $certNo = $cit->cert_no ?: $year . '7819510' . substr(preg_replace('/\D/', '', $appId), -4);
+                DB::table('citizenships')->where('id', $cit->id)->update(['cert_no' => $certNo]);
+            }
+
+            $trade = DB::table('trade_licenses')->where('app_id', $appId)->first();
+            if ($trade) {
+                $licNo = $trade->license_no ?: ($trade->is_renewal ? $trade->original_license_no : '199278195100' . str_pad($trade->id, 4, '0', STR_PAD_LEFT));
+                DB::table('trade_licenses')->where('id', $trade->id)->update(['license_no' => $licNo]);
+            }
+
+            $war = DB::table('warishans')->where('app_id', $appId)->first();
+            if ($war) {
+                $smarakNo = $war->smarak_no ?: 'আ/ইউ/পটুয়া/সদর/' . date('Y') . '/' . str_pad($war->id, 3, '0', STR_PAD_LEFT);
+                DB::table('warishans')->where('id', $war->id)->update(['smarak_no' => $smarakNo]);
+            }
+        } else {
+            DB::table('citizenships')->where('app_id', $appId)->update(['cert_no' => null]);
+            DB::table('trade_licenses')->where('app_id', $appId)->update(['license_no' => null]);
+            DB::table('warishans')->where('app_id', $appId)->update(['smarak_no' => null]);
+        }
+
         return response()->json(['success' => (bool)$updated]);
     }
 
@@ -106,16 +132,16 @@ class AdminController extends Controller
 
     // ৫. তালিকা প্রদর্শনের API সমূহ
     public function getCitizenshipList() {
-        return response()->json(DB::table('citizenships')->orderBy('id', 'desc')->get());
+        return response()->json(DB::table('citizenships')->selectRaw("*, IF(status='Approved', cert_no, NULL) as cert_no")->orderBy('id', 'desc')->get());
     }
     public function getTradeList() {
-        return response()->json(DB::table('trade_licenses')->orderBy('id', 'desc')->get());
+        return response()->json(DB::table('trade_licenses')->selectRaw("*, IF(status='Approved', license_no, NULL) as license_no")->orderBy('id', 'desc')->get());
     }
     public function getFamilyList() {
         return response()->json(DB::table('family_certificates')->orderBy('id', 'desc')->get());
     }
     public function getWarishanList() {
-        return response()->json(DB::table('warishans')->orderBy('id', 'desc')->get());
+        return response()->json(DB::table('warishans')->selectRaw("*, IF(status='Approved', smarak_no, NULL) as smarak_no")->orderBy('id', 'desc')->get());
     }
     public function getGeneralList() {
         return response()->json(DB::table('general_applications')->orderBy('id', 'desc')->get());

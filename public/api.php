@@ -188,10 +188,10 @@ if ($action === 'trackApplication') {
 
     // ১. নাগরিকত্ব সনদ
     try {
-        $stmt = $pdo->prepare("SELECT app_id as appId, cert_no as certNo, '' as smarakNo, 'নাগরিকত্ব সনদ' as type, 'নাগরিকত্ব সনদ' as serviceType, name as applicantName, name, father_name as fatherName, mother_name as motherName, '' as deceasedName, mobile, nid, status, apply_date as applyDate, ward_no as wardNo, village, post_office as postOffice 
+        $stmt = $pdo->prepare("SELECT app_id as appId, IF(status='Approved', cert_no, NULL) as certNo, '' as smarakNo, 'নাগরিকত্ব সনদ' as type, 'নাগরিকত্ব সনদ' as serviceType, name as applicantName, name, father_name as fatherName, mother_name as motherName, '' as deceasedName, mobile, nid, status, apply_date as applyDate, ward_no as wardNo, village, post_office as postOffice
             FROM citizenships 
             WHERE app_id LIKE ? OR app_id LIKE ? 
-               OR cert_no LIKE ? OR cert_no LIKE ? 
+               OR (status='Approved' AND (cert_no LIKE ? OR cert_no LIKE ?))
                OR mobile LIKE ? OR mobile LIKE ? 
                OR nid LIKE ? OR nid LIKE ? 
                OR name LIKE ?");
@@ -201,10 +201,10 @@ if ($action === 'trackApplication') {
 
     // ২. ট্রেড লাইসেন্স
     try {
-        $stmt = $pdo->prepare("SELECT app_id as appId, license_no as licNo, license_no as certNo, '' as smarakNo, IF(is_renewal=1, 'ট্রেড লাইসেন্স নবায়ন', 'ট্রেড লাইসেন্স') as type, IF(is_renewal=1, 'ট্রেড লাইসেন্স নবায়ন', 'ট্রেড লাইসেন্স') as serviceType, CONCAT(owner_name, ' (', org_name, ')') as applicantName, owner_name as name, father_name as fatherName, mother_name as motherName, '' as deceasedName, mobile, nid, status, apply_date as applyDate, '' as wardNo, biz_address as village, '' as postOffice 
+        $stmt = $pdo->prepare("SELECT app_id as appId, IF(status='Approved', license_no, NULL) as licNo, IF(status='Approved', license_no, NULL) as certNo, '' as smarakNo, IF(is_renewal=1, 'ট্রেড লাইসেন্স নবায়ন', 'ট্রেড লাইসেন্স') as type, IF(is_renewal=1, 'ট্রেড লাইসেন্স নবায়ন', 'ট্রেড লাইসেন্স') as serviceType, CONCAT(owner_name, ' (', org_name, ')') as applicantName, owner_name as name, father_name as fatherName, mother_name as motherName, '' as deceasedName, mobile, nid, status, apply_date as applyDate, '' as wardNo, biz_address as village, '' as postOffice
             FROM trade_licenses 
             WHERE app_id LIKE ? OR app_id LIKE ? 
-               OR license_no LIKE ? OR license_no LIKE ? 
+               OR (status='Approved' AND (license_no LIKE ? OR license_no LIKE ?))
                OR mobile LIKE ? OR mobile LIKE ? 
                OR nid LIKE ? OR nid LIKE ? 
                OR owner_name LIKE ? OR org_name LIKE ?");
@@ -226,10 +226,10 @@ if ($action === 'trackApplication') {
 
     // ৪. ওয়ারিশান সনদ (বাতিল স্ট্যাটাস স্বয়ংক্রিয় ভেরিফিকেশন সহ)
     try {
-        $stmt = $pdo->prepare("SELECT app_id as appId, smarak_no as certNo, smarak_no as smarakNo, 'ওয়ারিশান সনদ' as type, 'ওয়ারিশান সনদ' as serviceType, applicant_name as applicantName, applicant_name as name, father_spouse as fatherName, '' as motherName, deceased_name as deceasedName, mobile, nid, status, date as applyDate, deceased_ward_no as wardNo, deceased_village as village, deceased_post_office as postOffice 
+        $stmt = $pdo->prepare("SELECT app_id as appId, IF(status='Approved', smarak_no, NULL) as certNo, IF(status='Approved', smarak_no, NULL) as smarakNo, 'ওয়ারিশান সনদ' as type, 'ওয়ারিশান সনদ' as serviceType, applicant_name as applicantName, applicant_name as name, father_spouse as fatherName, '' as motherName, deceased_name as deceasedName, mobile, nid, status, date as applyDate, deceased_ward_no as wardNo, deceased_village as village, deceased_post_office as postOffice
             FROM warishans 
             WHERE app_id LIKE ? OR app_id LIKE ? 
-               OR smarak_no LIKE ? OR smarak_no LIKE ? 
+               OR (status='Approved' AND (smarak_no LIKE ? OR smarak_no LIKE ?))
                OR mobile LIKE ? OR mobile LIKE ? 
                OR nid LIKE ? OR nid LIKE ? 
                OR applicant_name LIKE ? OR deceased_name LIKE ?");
@@ -373,33 +373,35 @@ if ($action === 'submitCitizenshipDirect') {
     $rand6 = rand(100000, 999999);
     $appId = 'AUL-' . $rand6;
     $dobYear = extractDobYear($data['dob'] ?? '');
-    $certNo = $dobYear . '7819510' . substr($rand6, 0, 4);
     $date = date('d/m/Y');
 
     $stmt = $pdo->prepare("INSERT INTO citizenships (app_id, cert_no, name, nid, father_name, mother_name, dob, marital_status, spouse_name, mobile, ward_no, village, post_office, division, language, status, apply_date, signatory_role) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
     $stmt->execute([
-        $appId, $certNo, $data['name'], $data['nid'], $data['fatherName'], $data['motherName'],
+        $appId, null, $data['name'], $data['nid'], $data['fatherName'], $data['motherName'],
         $data['dob'], $data['maritalStatus'] ?? 'অবিবাহিত', $data['spouseName'] ?? '', $data['mobile'],
         $data['wardNo'], $data['village'], $data['postOffice'] ?? 'আউলিয়াপুর ময়দান', 'বরিশাল',
         $data['language'] ?? 'bn', 'Pending', $date, 'চেয়ারম্যান'
     ]);
 
-    echo json_encode(['success' => true, 'appId' => $appId, 'certNo' => $certNo]);
+    echo json_encode(['success' => true, 'appId' => $appId]);
     exit;
 }
 
 // 🟢 ৭. নাগরিকত্ব বিবরণ (Print)
 if ($action === 'getCitizenshipDetails') {
     $q = trim(is_array($data) ? ($data['appId'] ?? '') : $data);
-    $stmt = $pdo->prepare("SELECT * FROM citizenships WHERE app_id = ? OR cert_no = ?");
+    $stmt = $pdo->prepare("SELECT * FROM citizenships WHERE app_id = ? OR (status='Approved' AND cert_no = ?)");
     $stmt->execute([$q, $q]);
     $row = $stmt->fetch();
 
     if ($row) {
         $dobYear = extractDobYear($row['dob']);
-        $certNo = $row['cert_no'];
-        if (!empty($dobYear) && substr($certNo, 0, 4) !== $dobYear) {
-            $certNo = $dobYear . substr($certNo, 4);
+        $certNo = null;
+        if ($row['status'] === 'Approved') {
+            $certNo = $row['cert_no'] ?: $dobYear . '7819510' . substr(preg_replace('/\D/', '', $row['app_id']), -4);
+            if (!empty($dobYear) && substr($certNo, 0, 4) !== $dobYear) {
+                $certNo = $dobYear . substr($certNo, 4);
+            }
             $pdo->prepare("UPDATE citizenships SET cert_no = ? WHERE id = ?")->execute([$certNo, $row['id']]);
         }
 
@@ -480,7 +482,7 @@ if ($action === 'getTradeLicenseDetails') {
     $englishDigits = ['0','1','2','3','4','5','6','7','8','9'];
     $banglaDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
     $normalizedQ = str_replace($banglaDigits, $englishDigits, $q);
-    $stmt = $pdo->prepare("SELECT * FROM trade_licenses WHERE app_id = ? OR license_no = ? OR license_no = ?");
+    $stmt = $pdo->prepare("SELECT * FROM trade_licenses WHERE app_id = ? OR (status='Approved' AND (license_no = ? OR license_no = ?))");
     $stmt->execute([$q, $q, $normalizedQ]);
     $row = $stmt->fetch();
 
@@ -489,7 +491,7 @@ if ($action === 'getTradeLicenseDetails') {
         echo json_encode([
             'found' => true,
             'appId' => $row['app_id'],
-            'licNo' => $row['license_no'],
+            'licNo' => $row['status'] === 'Approved' ? $row['license_no'] : null,
             'receiptNo' => $serial,
             'orgName' => $row['org_name'],
             'ownerName' => $row['owner_name'],
@@ -536,7 +538,7 @@ if ($action === 'getTradeLicenseDetails') {
 // 🟢 ১০. ওয়ারিশান বিবরণ
 if ($action === 'getWarishanDetails') {
     $q = trim(is_array($data) ? ($data['appId'] ?? '') : $data);
-    $stmt = $pdo->prepare("SELECT * FROM warishans WHERE app_id = ? OR smarak_no = ?");
+    $stmt = $pdo->prepare("SELECT * FROM warishans WHERE app_id = ? OR (status='Approved' AND smarak_no = ?)");
     $stmt->execute([$q, $q]);
     $row = $stmt->fetch();
 
@@ -555,7 +557,7 @@ if ($action === 'getWarishanDetails') {
             'wardNo' => $row['ward_no'],
             'village' => $row['village'],
             'postOffice' => $row['post_office'],
-            'smarakNo' => $row['smarak_no'],
+            'smarakNo' => $row['status'] === 'Approved' ? $row['smarak_no'] : null,
             'warishanTree' => $tree,
             'deceasedWardNo' => $row['deceased_ward_no'],
             'deceasedVillage' => $row['deceased_village'],
@@ -611,7 +613,7 @@ if ($action === 'submitTradeLicenseApplication' || $action === 'submitTradeRenew
     $rand = rand(100000, 999999);
     $isRenewal = $action === 'submitTradeRenewalApplication';
     $appId = ($isRenewal ? 'AUL-RN-' : 'AUL-TR-') . $rand;
-    $licNo = $isRenewal ? trim($data['originalLicNo'] ?? '') : '199278195100' . substr($rand, 0, 4);
+    $licNo = $isRenewal ? trim($data['originalLicNo'] ?? '') : null;
     $date = date('d/m/Y');
 
     $receiptNo = str_pad((int)$pdo->query("SELECT COALESCE(MAX(CAST(receipt_no AS UNSIGNED)), 0) + 1 FROM trade_licenses")->fetchColumn(), 3, '0', STR_PAD_LEFT);
@@ -630,7 +632,7 @@ if ($action === 'submitTradeLicenseApplication' || $action === 'submitTradeRenew
 
     $stmt = $pdo->prepare("INSERT INTO trade_licenses (app_id, license_no, receipt_no, org_name, owner_name, father_name, mother_name, nid, dob, gender, spouse_name, mobile, owner_address, owner_email, tin_no, bin_no, category, biz_details, biz_address, biz_permanent_address, biz_present_address, biz_start_date, fiscal_year, capital, employee_count, signboard_size, license_fee, vat_fee, comm_tax, sign_tax, discount_amount, discount_reason, total_fee, is_renewal, original_license_no, photo, status, apply_date, signatory_role) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
     $stmt->execute([
-        $appId, $licNo, $receiptNo, $data['orgName'], $data['ownerName'], $data['fatherName'], $data['motherName'],
+        $appId, null, $receiptNo, $data['orgName'], $data['ownerName'], $data['fatherName'], $data['motherName'],
         $data['nid'], $data['dob'], $data['gender'] ?? 'পুরুষ', $data['spouseName'] ?? '', $data['mobile'], $data['ownerAddress'], $data['ownerEmail'] ?? '', $data['tinNo'] ?? '', $data['binNo'] ?? '',
         $data['category'], $data['bizDetails'] ?? '', $data['bizPresentAddress'] ?? ($data['bizAddress'] ?? ''), $data['bizPermanentAddress'] ?? '', $data['bizPresentAddress'] ?? '',
         $data['bizStartDate'] ?? '', $data['fiscalYear'] ?? '২০২৬-২০২৭', $data['capital'] ?? '', $data['employeeCount'] ?? '', $data['signboardSize'] ?? '',
@@ -638,7 +640,7 @@ if ($action === 'submitTradeLicenseApplication' || $action === 'submitTradeRenew
         'Pending', $date, 'চেয়ারম্যান'
     ]);
 
-    echo json_encode(['success' => true, 'appId' => $appId, 'licNo' => $licNo]);
+    echo json_encode(['success' => true, 'appId' => $appId]);
     exit;
 }
 
@@ -694,19 +696,16 @@ if ($action === 'submitWarishanApplication') {
     $appId = 'AUL-WAR-' . $rand;
     $date = date('d/m/Y');
     
-    $count = $pdo->query("SELECT COUNT(*) FROM warishans")->fetchColumn() + 1;
-    $smarakNo = 'আ/ইউ/পটুয়া/সদর/' . date('Y') . '/' . str_pad($count, 3, '0', STR_PAD_LEFT);
-
     $stmt = $pdo->prepare("INSERT INTO warishans (app_id, applicant_name, father_spouse, deceased_name, deceased_father, deceased_relation, deceased_ward_no, deceased_village, deceased_post_office, nid, mobile, ward_no, village, post_office, smarak_no, warishan_tree_json, status, date, signatory_role) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
     $stmt->execute([
         $appId, $data['applicantName'], $data['fatherSpouseName'], $data['deceasedName'], $data['deceasedFather'],
         $data['deceasedRelation'] ?? 'পুত্র', $data['deceasedWardNo'] ?? '০১', $data['deceasedVillage'] ?? '',
         $data['deceasedPostOffice'] ?? 'বাদুরা হাট-৮৬০০', $data['nid'], $data['mobile'], $data['wardNo'], $data['village'],
-        $data['postOffice'] ?? 'আউলিয়াপুর ময়দান', $smarakNo, json_encode($data['warishanTree'] ?? []),
+        $data['postOffice'] ?? 'আউলিয়াপুর ময়দান', null, json_encode($data['warishanTree'] ?? []),
         'Pending', $date, 'চেয়ারম্যান'
     ]);
 
-    echo json_encode(['success' => true, 'appId' => $appId, 'smarakNo' => $smarakNo]);
+    echo json_encode(['success' => true, 'appId' => $appId]);
     exit;
 }
 
@@ -782,11 +781,11 @@ if ($action === 'getMasterDashboardStats') {
 
 // 🟢 ১৭. তালিকার API সমূহ
 if ($action === 'getCitizenshipApps') {
-    echo json_encode($pdo->query("SELECT app_id as appId, cert_no as certNo, name, father_name as fatherName, mobile, status FROM citizenships ORDER BY id DESC")->fetchAll());
+    echo json_encode($pdo->query("SELECT app_id as appId, IF(status='Approved', cert_no, NULL) as certNo, name, father_name as fatherName, mobile, status FROM citizenships ORDER BY id DESC")->fetchAll());
     exit;
 }
 if ($action === 'getTradeLicenses' || $action === 'getTradeRenewals') {
-    echo json_encode($pdo->query("SELECT app_id as appId, license_no as licNo, org_name as orgName, owner_name as ownerName, father_name as fatherName, mobile, total_fee as totalFee, status, is_renewal as isRenewal FROM trade_licenses ORDER BY id DESC")->fetchAll());
+    echo json_encode($pdo->query("SELECT app_id as appId, IF(status='Approved', license_no, NULL) as licNo, org_name as orgName, owner_name as ownerName, father_name as fatherName, mobile, total_fee as totalFee, status, is_renewal as isRenewal FROM trade_licenses ORDER BY id DESC")->fetchAll());
     exit;
 }
 if ($action === 'getFamilyApps') {
@@ -794,7 +793,7 @@ if ($action === 'getFamilyApps') {
     exit;
 }
 if ($action === 'getWarishanApps') {
-    echo json_encode($pdo->query("SELECT app_id as appId, smarak_no as smarakNo, applicant_name as applicantName, deceased_name as deceasedName, deceased_father as deceasedFather, mobile, village, status FROM warishans ORDER BY id DESC")->fetchAll());
+    echo json_encode($pdo->query("SELECT app_id as appId, IF(status='Approved', smarak_no, NULL) as smarakNo, applicant_name as applicantName, deceased_name as deceasedName, deceased_father as deceasedFather, mobile, village, status FROM warishans ORDER BY id DESC")->fetchAll());
     exit;
 }
 if ($action === 'getAllApplications') {
@@ -812,6 +811,33 @@ if ($action === 'updateAppStatus') {
     $pdo->prepare("UPDATE family_certificates SET status=? WHERE app_id=?")->execute([$status, $appId]);
     $pdo->prepare("UPDATE warishans SET status=? WHERE app_id=?")->execute([$status, $appId]);
     $pdo->prepare("UPDATE general_applications SET status=? WHERE app_id=?")->execute([$status, $appId]);
+
+    if ($status === 'Approved') {
+        $cit = $pdo->prepare("SELECT id, dob, cert_no FROM citizenships WHERE app_id=?");
+        $cit->execute([$appId]);
+        if ($row = $cit->fetch()) {
+            $certNo = $row['cert_no'] ?: extractDobYear($row['dob']) . '7819510' . substr(preg_replace('/\D/', '', $appId), -4);
+            $pdo->prepare("UPDATE citizenships SET cert_no=? WHERE id=?")->execute([$certNo, $row['id']]);
+        }
+
+        $trade = $pdo->prepare("SELECT id, is_renewal, original_license_no, license_no FROM trade_licenses WHERE app_id=?");
+        $trade->execute([$appId]);
+        if ($row = $trade->fetch()) {
+            $licNo = $row['license_no'] ?: ($row['is_renewal'] ? $row['original_license_no'] : '199278195100' . str_pad($row['id'], 4, '0', STR_PAD_LEFT));
+            $pdo->prepare("UPDATE trade_licenses SET license_no=? WHERE id=?")->execute([$licNo, $row['id']]);
+        }
+
+        $war = $pdo->prepare("SELECT id, smarak_no FROM warishans WHERE app_id=?");
+        $war->execute([$appId]);
+        if ($row = $war->fetch()) {
+            $smarakNo = $row['smarak_no'] ?: 'আ/ইউ/পটুয়া/সদর/' . date('Y') . '/' . str_pad($row['id'], 3, '0', STR_PAD_LEFT);
+            $pdo->prepare("UPDATE warishans SET smarak_no=? WHERE id=?")->execute([$smarakNo, $row['id']]);
+        }
+    } else {
+        $pdo->prepare("UPDATE citizenships SET cert_no=NULL WHERE app_id=?")->execute([$appId]);
+        $pdo->prepare("UPDATE trade_licenses SET license_no=NULL WHERE app_id=?")->execute([$appId]);
+        $pdo->prepare("UPDATE warishans SET smarak_no=NULL WHERE app_id=?")->execute([$appId]);
+    }
 
     echo json_encode(['success' => true]);
     exit;

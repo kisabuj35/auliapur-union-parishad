@@ -31,7 +31,9 @@ class PublicController extends Controller
         // ক. নাগরিকত্ব সনদ থেকে অনুসন্ধান
         $cit = DB::table('citizenships')
             ->where('app_id', 'LIKE', "%{$cleanQuery}%")
-            ->orWhere('cert_no', 'LIKE', "%{$cleanQuery}%")
+            ->orWhere(function ($numberQuery) use ($cleanQuery) {
+                $numberQuery->where('status', 'Approved')->where('cert_no', 'LIKE', "%{$cleanQuery}%");
+            })
             ->orWhere('mobile', 'LIKE', "%{$cleanQuery}%")
             ->orWhere('nid', 'LIKE', "%{$cleanQuery}%")
             ->orWhere('name', 'LIKE', "%{$query}%")
@@ -39,7 +41,7 @@ class PublicController extends Controller
         foreach ($cit as $row) {
             $results[] = [
                 'appId' => $row->app_id,
-                'certNo' => $row->cert_no,
+                'certNo' => $row->status === 'Approved' ? $row->cert_no : null,
                 'type' => 'নাগরিকত্ব সনদ',
                 'applicantName' => $row->name,
                 'fatherName' => $row->father_name,
@@ -53,7 +55,9 @@ class PublicController extends Controller
         // খ. ট্রেড লাইসেন্স থেকে অনুসন্ধান
         $trade = DB::table('trade_licenses')
             ->where('app_id', 'LIKE', "%{$cleanQuery}%")
-            ->orWhere('license_no', 'LIKE', "%{$cleanQuery}%")
+            ->orWhere(function ($numberQuery) use ($cleanQuery) {
+                $numberQuery->where('status', 'Approved')->where('license_no', 'LIKE', "%{$cleanQuery}%");
+            })
             ->orWhere('mobile', 'LIKE', "%{$cleanQuery}%")
             ->orWhere('nid', 'LIKE', "%{$cleanQuery}%")
             ->orWhere('owner_name', 'LIKE', "%{$query}%")
@@ -62,7 +66,7 @@ class PublicController extends Controller
         foreach ($trade as $row) {
             $results[] = [
                 'appId' => $row->app_id,
-                'licNo' => $row->license_no,
+                'licNo' => $row->status === 'Approved' ? $row->license_no : null,
                 'type' => $row->is_renewal ? 'ট্রেড লাইসেন্স নবায়ন' : 'ট্রেড লাইসেন্স',
                 'applicantName' => $row->owner_name . ' (' . $row->org_name . ')',
                 'fatherName' => $row->father_name,
@@ -99,6 +103,9 @@ class PublicController extends Controller
             ->where('app_id', 'LIKE', "%{$cleanQuery}%")
             ->orWhere('mobile', 'LIKE', "%{$cleanQuery}%")
             ->orWhere('nid', 'LIKE', "%{$cleanQuery}%")
+            ->orWhere(function ($numberQuery) use ($cleanQuery) {
+                $numberQuery->where('status', 'Approved')->where('smarak_no', 'LIKE', "%{$cleanQuery}%");
+            })
             ->orWhere('applicant_name', 'LIKE', "%{$query}%")
             ->orWhere('deceased_name', 'LIKE', "%{$query}%")
             ->get();
@@ -110,6 +117,7 @@ class PublicController extends Controller
                 'fatherName' => $row->father_spouse,
                 'mobile' => $row->mobile,
                 'nid' => $row->nid,
+                'smarakNo' => $row->status === 'Approved' ? $row->smarak_no : null,
                 'status' => $row->status,
                 'applyDate' => $row->date
             ];
@@ -157,12 +165,11 @@ class PublicController extends Controller
                 preg_match('/\d{4}/', $request->dob, $matches);
                 if (!empty($matches)) $dobYear = $matches[0];
             }
-            $certNo = $dobYear . '7819510' . $rand;
             $date = date('d/m/Y');
 
             DB::table('citizenships')->insert([
                 'app_id' => $appId,
-                'cert_no' => $certNo,
+                'cert_no' => null,
                 'name' => $request->name,
                 'nid' => $request->nid,
                 'father_name' => $request->fatherName,
@@ -183,7 +190,7 @@ class PublicController extends Controller
                 'updated_at' => now(),
             ]);
 
-            return response()->json(['success' => true, 'appId' => $appId, 'certNo' => $certNo]);
+            return response()->json(['success' => true, 'appId' => $appId]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'error' => $e->getMessage()]);
         }
@@ -195,14 +202,13 @@ class PublicController extends Controller
         try {
             $rand = rand(100000, 999999);
             $appId = 'AUL-TR-' . $rand;
-            $licNo = '199278195100' . substr($rand, 0, 4);
             $count = DB::table('trade_licenses')->count() + 1;
             $receiptNo = str_pad($count, 3, '0', STR_PAD_LEFT);
             $date = date('d/m/Y');
 
             DB::table('trade_licenses')->insert([
                 'app_id' => $appId,
-                'license_no' => $licNo,
+                'license_no' => null,
                 'receipt_no' => $receiptNo,
                 'org_name' => $request->orgName,
                 'owner_name' => $request->ownerName,
@@ -240,7 +246,7 @@ class PublicController extends Controller
                 'updated_at' => now(),
             ]);
 
-            return response()->json(['success' => true, 'appId' => $appId, 'licNo' => $licNo]);
+            return response()->json(['success' => true, 'appId' => $appId]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'error' => $e->getMessage()]);
         }
@@ -269,7 +275,7 @@ class PublicController extends Controller
 
             DB::table('trade_licenses')->insert([
                 'app_id' => $renewalAppId,
-                'license_no' => $request->originalLicNo,
+                'license_no' => null,
                 'receipt_no' => $receiptNo,
                 'org_name' => $request->orgName,
                 'owner_name' => $request->ownerName,
@@ -309,7 +315,7 @@ class PublicController extends Controller
                 'updated_at' => now(),
             ]);
 
-            return response()->json(['success' => true, 'appId' => $renewalAppId, 'licNo' => $request->originalLicNo]);
+            return response()->json(['success' => true, 'appId' => $renewalAppId]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'error' => $e->getMessage()]);
         }
@@ -366,8 +372,6 @@ class PublicController extends Controller
         try {
             $appId = 'AUL-WAR-' . rand(1000, 9999);
             $date = date('d/m/Y');
-            $count = DB::table('warishans')->count() + 1;
-            $smarakNo = 'আ/ইউ/পটুয়া/সদর/' . date('Y') . '/' . str_pad($count, 3, '0', STR_PAD_LEFT);
 
             DB::table('warishans')->insert([
                 'app_id' => $appId,
@@ -387,7 +391,7 @@ class PublicController extends Controller
                 'deceased_union' => $request->deceasedUnion ?? '১১নং আউলিয়াপুর ইউনিয়ন',
                 'deceased_upazila' => $request->deceasedUpazila ?? 'পটুয়াখালী সদর',
                 'deceased_district' => $request->deceasedDistrict ?? 'পটুয়াখালী',
-                'smarak_no' => $smarakNo,
+                'smarak_no' => null,
                 'warishan_tree_json' => json_encode($request->warishanTree ?? []),
                 'status' => 'Pending',
                 'date' => $date,

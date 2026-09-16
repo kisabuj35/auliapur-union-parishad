@@ -26,6 +26,7 @@ class PrintController extends Controller
     {
         $data = DB::table('citizenships')->where('app_id', $appId)->first();
         if (!$data) abort(404, 'আবেদনটি পাওয়া যায়নি!');
+        if ($data->status !== 'Approved') abort(403, 'অনুমোদিত আবেদন ছাড়া সনদ প্রিন্ট করা যাবে না!');
         $settings = $this->getSettings();
         return view('print.citizenship', compact('data', 'settings'));
     }
@@ -35,6 +36,7 @@ class PrintController extends Controller
     {
         $data = DB::table('trade_licenses')->where('app_id', $appId)->first();
         if (!$data) abort(404, 'ট্রেড লাইসেন্স ডাটা পাওয়া যায়নি!');
+        if ($data->status !== 'Approved') abort(403, 'অনুমোদিত আবেদন ছাড়া ট্রেড লাইসেন্স প্রিন্ট করা যাবে না!');
         $settings = $this->getSettings();
         return view('print.trade_license', compact('data', 'settings'));
     }
@@ -44,6 +46,7 @@ class PrintController extends Controller
     {
         $data = DB::table('family_certificates')->where('app_id', $appId)->first();
         if (!$data) abort(404, 'পারিবারিক আবেদন পাওয়া যায়নি!');
+        if ($data->status !== 'Approved') abort(403, 'অনুমোদিত আবেদন ছাড়া সনদ প্রিন্ট করা যাবে না!');
         $members = json_decode($data->members_json ?? '[]', true);
         $settings = $this->getSettings();
         return view('print.family', compact('data', 'members', 'settings'));
@@ -54,6 +57,7 @@ class PrintController extends Controller
     {
         $data = DB::table('warishans')->where('app_id', $appId)->first();
         if (!$data) abort(404, 'ওয়ারিশান সনদ পাওয়া যায়নি!');
+        if ($data->status !== 'Approved') abort(403, 'অনুমোদিত আবেদন ছাড়া সনদ প্রিন্ট করা যাবে না!');
         $tree = json_decode($data->warishan_tree_json ?? '[]', true);
         $settings = $this->getSettings();
         return view('print.warishan', compact('data', 'tree', 'settings'));
@@ -64,6 +68,7 @@ class PrintController extends Controller
     {
         $data = DB::table('general_applications')->where('app_id', $appId)->first();
         if (!$data) abort(404, 'প্রত্যয়নপত্র পাওয়া যায়নি!');
+        if ($data->status !== 'Approved') abort(403, 'অনুমোদিত আবেদন ছাড়া প্রত্যয়নপত্র প্রিন্ট করা যাবে না!');
         $settings = $this->getSettings();
         return view('print.general', compact('data', 'settings'));
     }
