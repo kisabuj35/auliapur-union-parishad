@@ -25,14 +25,14 @@
       overflow: hidden !important;
     }
     .trade-cert-frame {
-      border: 3px solid #8B0000 !important;
-      outline: 2px dashed #b8860b !important;
+      border: 2px solid #8B0000 !important;
+      outline: 1px solid #d4a72c !important;
       outline-offset: 4px;
-      padding: 14mm 16mm 12mm 16mm !important;
-      background-color: #ffffff !important;
-      background-image: radial-gradient(#8B0000 0.5px, transparent 0.5px), radial-gradient(#b8860b 0.4px, #ffffff 0.4px) !important;
-      background-size: 20px 20px !important;
-      background-position: 0 0, 10px 10px !important;
+      padding: 12mm 15mm 10mm 15mm !important;
+      background-color: #fff !important;
+      background-image: radial-gradient(circle, rgba(174, 25, 25, 0.28) 0.75px, transparent 0.9px), radial-gradient(circle, rgba(212, 167, 44, 0.2) 0.6px, transparent 0.8px) !important;
+      background-size: 14px 14px, 14px 14px !important;
+      background-position: 0 0, 7px 7px !important;
       position: relative !important;
       box-sizing: border-box !important;
       display: flex !important;
@@ -46,14 +46,22 @@
       page-break-after: avoid !important;
       page-break-inside: avoid !important;
     }
+    .trade-cert-frame::after {
+      content: "";
+      position: absolute;
+      inset: 5px;
+      border: 1px solid rgba(139, 0, 0, 0.35);
+      pointer-events: none;
+      z-index: 3;
+    }
     .trade-watermark-img {
       position: absolute !important;
       top: 52% !important;
       left: 50% !important;
       transform: translate(-50%, -50%) !important;
-      width: 500px !important;
+      width: 540px !important;
       max-width: 88% !important;
-      opacity: 0.08 !important;
+      opacity: 0.105 !important;
       pointer-events: none;
       z-index: 1;
     }
@@ -73,25 +81,26 @@
     .gorgeous-3d-ribbon {
       position: relative !important;
       display: inline-block !important;
-      background: linear-gradient(180deg, #a71414 0%, #7d0b0b 100%) !important;
+      background: linear-gradient(180deg, #b51f1f 0%, #861010 100%) !important;
       color: #ffffff !important;
       font-size: 23px !important;
       font-weight: bold !important;
-      padding: 4px 46px !important;
+      padding: 5px 54px !important;
       letter-spacing: 1px !important;
       box-shadow: 0 4px 6px rgba(0,0,0,0.3) !important;
       z-index: 2 !important;
       border-radius: 2px !important;
+      text-shadow: 0 1px 1px rgba(0,0,0,0.45) !important;
     }
     .gorgeous-3d-ribbon::before, .gorgeous-3d-ribbon::after {
       content: "" !important;
       position: absolute !important;
-      top: 6px !important;
-      border: 16px solid #4a0505 !important;
+      top: 7px !important;
+      border: 17px solid #4a0505 !important;
       z-index: -1 !important;
     }
-    .gorgeous-3d-ribbon::before { left: -22px !important; border-right-width: 12px !important; border-left-color: transparent !important; }
-    .gorgeous-3d-ribbon::after { right: -22px !important; border-left-width: 12px !important; border-right-color: transparent !important; }
+    .gorgeous-3d-ribbon::before { left: -25px !important; border-right-width: 14px !important; border-left-color: transparent !important; }
+    .gorgeous-3d-ribbon::after { right: -25px !important; border-left-width: 14px !important; border-right-color: transparent !important; }
     .cert-meta-bar {
       display: flex !important;
       justify-content: space-between !important;
